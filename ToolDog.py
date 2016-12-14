@@ -152,7 +152,7 @@ def json_from_file(json_file):
 
     json_file: path to the file [string]
     '''
-    print ("loading tool from local JSON file: " + json_file)
+    print ("Loading tool from local JSON file: " + json_file)
     # parse file in JSON format
     with open(json_file,'r') as tool_file:
         json_tool = json.load(tool_file)
@@ -163,40 +163,44 @@ def json_from_file(json_file):
 if __name__ == "__main__":
 
     ## Parse arguments
-    parser = argparse.ArgumentParser(description = 'Generates XML template for Galaxy ' + \
-                                     'from https://bio.tools entry.')
-    parser.add_argument('-i', '--id', help='ID of the tool entry on https://bio.tools', dest='ID')
-    parser.add_argument('-v', '--version', help='Version of the tool entry', dest='VERSION')
-    parser.add_argument('-j', '--json_file', help='Path to JSON file (Giving a JSON file skips '+ \
-                        'the query from https://bio.tools', dest='JSON_FILE')
-   
+    parser = argparse.ArgumentParser(description = 'Generates XML template for Galaxy ')
+    subparsers = parser.add_subparsers(dest='COMMAND', help='COMMAND')
+    subparsers.required = True
+
+    # Parser for online tool entry
+    parser_onl = subparsers.add_parser('online', help='import tool from https://bio.tools')
+    parser_onl.add_argument('-i', '--id', help='ID of the tool entry on https://bio.tools',\
+                            dest='ID', required=True)
+    parser_onl.add_argument('-v', '--version', help='Version of the tool entry', \
+                            dest='VERSION', required=True)
+
+    # Parser for local import
+    parser_loc = subparsers.add_parser('local', help='import tool from local JSON file')
+    parser_loc.add_argument('-j', '--json_file', help='Path to JSON file (Giving a JSON ' + \
+                            'file skips the query from https://bio.tools', dest='JSON_FILE', \
+                            required=True)
+  
     try:
-        # No args display help message
-        if len(sys.argv) == 1:
-           parser.print_help()
-           sys.exit(1)
         args = parser.parse_args()
-    except:
-        parser.print_help()
+    except SystemExit:
+        if len(sys.argv) == 1:
+            parser.print_help()
+        elif sys.argv[1] == 'online':
+            parser_onl.print_help()
+        elif sys.argv[1] == 'local':
+            parser_loc.print_help()
+        else:
+            parser.print_help()
         sys.exit(1)
- 
+
     ## Extra tests for arguments
-    '''
-    Must test here whether the information is given through a JSON file or if a 
-    request need to be done from bio.tools.
-    '''
-    if args.JSON_FILE is None:
-        if ((args.ID is None) | (args.VERSION is None)):
-            sys.stderr.write("ERROR: You need to specify either the ID (-i/--id) and version " + \
-                             "(-v/--version) of an entry from bio.tools OR a JSON file (-j/--json_file). Exit.")
-            sys.exit(1)
 
     ###########################################################
 
     ## MAIN
 
     # Get JSON of the tool
-    if args.JSON_FILE is None:
+    if args.COMMAND == 'online':
         json_tool = json_from_biotools(args.ID,args.VERSION)
-    else:
+    elif args.COMMAND == 'local':
         json_tool = json_from_file(args.JSON_FILE)
