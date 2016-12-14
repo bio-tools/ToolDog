@@ -25,7 +25,56 @@ import requests
 
 ###########  Constant(s)  ###########
 
-###########  Function(s) and Class(es)  ###########
+###########  Class(es)  ###########
+
+class Biotool:
+
+    def __init__(self, name, tool_id, version, description, homepage):
+         self.name = name
+         self.tool_id = tool_id
+         self.version = version
+         self.description = description
+         self.homepage = homepage
+         self.functions = [] # List of Function objects
+         self.topics = []    # List of Topic objects
+         self.informations = None
+
+class Informations:
+
+    def __init__(self, publication, documentation, contacts=[], credits=[]):
+        self.publication = publication
+        self.documentation = documentation
+        self.contacts = contacts # List of contacts (hash for the moment, make class ?)
+        self.credits = credits # List of credits (hash for the moment)
+
+
+class Function:
+
+    def __init__(self, edam):
+        self.edam = edam 
+
+
+class Topic:
+
+    def __init__(self, edam):
+        self.edam = edam
+
+
+class Data:
+
+    def __init__(self, type, format, description=None, is_input=False):
+        self.type = type
+        self.format = format
+        self.description = description
+        self.is_input = is_input
+
+class Edam:
+
+    def __init__(self, uri, term):
+        self.uri = uri
+        self.term = term
+
+###########  Function(s)  ###########
 
 def json_from_biotools(tool_id,tool_version):
     '''
@@ -90,10 +139,8 @@ if __name__ == "__main__":
 
     ## MAIN
 
-    # Get the JSON of the tool
+    # Get JSON of the tool
     if args.JSON_FILE is None:
         json_tool = json_from_biotools(args.ID,args.VERSION)
     else:
         json_tool = json_from_file(args.JSON_FILE)
-
-    #print (json_tool['description'])
