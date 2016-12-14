@@ -41,38 +41,94 @@ class Biotool:
 
 class Informations:
 
-    def __init__(self, publication, documentation, contacts=[], credits=[]):
+    def __init__(self, publication, documentation, credits=None):
         self.publication = publication
         self.documentation = documentation
-        self.contacts = contacts # List of contacts (hash for the moment, make class ?)
-        self.credits = credits # List of credits (hash for the moment)
+        self.credits = credits # Credits object
+        self.contacts = [] # List of Contact objects
+
+
+class Credits:
+
+    def __init__(self):
+        self.affiliation = []
+        self.contributor = []
+        self.developer = []
+        self.funding = []
+        self.infrastructure = []
+        self.institution = []
+
+
+class Contact:
+
+    def __init__(self,contact):
+        self.email = contact['contactEmail']
+        self.name = contact['contactName']
+        # self.role = contact['contactRole']
+        # self.tel = contact['contactTel']
+        # self.url = contact['contactURL']
 
 
 class Function:
 
-    def __init__(self, edam):
-        self.edam = edam 
-
-
-class Topic:
-
-    def __init__(self, edam):
-        self.edam = edam
+    def __init__(self,operation):
+        self.operation = operation
+        self.inputs = [] # List of Inputs objects
+        self.outputs = [] # List of Outputs objects
 
 
 class Data:
 
-    def __init__(self, type, format, description=None, is_input=False):
+    def __init__(self, type, format, description=None):
         self.type = type
         self.format = format
         self.description = description
-        self.is_input = is_input
+
+class Input(Data):
+
+    def __init__(self, type, format, description=None):
+        Data.__init__(self, type, format, description)
+
+
+class Output(Data):
+
+    def __init__(self, type, format, description=None):
+        Data.__init__(self, type, format, description)
+
 
 class Edam:
 
     def __init__(self, uri, term):
         self.uri = uri
         self.term = term
+
+    def get_edam_id(self):
+        '''
+        Get the EDAM id from the url
+        '''
+        return self.uri.split('/')[-1]
+
+class Operation(Edam):
+
+    def __init__(self, uri, term):
+        Edam.__init__(self, uri, term)
+
+class Data_type(Edam):
+
+    def __init__(self, uri, term):
+        Edam.__init__(self, uri, term)
+
+class Format(Edam):
+
+    def __init__(self, uri, term):
+        Edam.__init__(self, uri, term)
+
+class Topic(Edam):
+
+    def __init__(self, uri, term):
+        Edam.__init__(self, uri, term)
+
+
 
 ###########  Function(s)  ###########
 
