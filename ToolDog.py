@@ -88,9 +88,31 @@ class Biotool:
         Generate XML file using galaxyxml (reference) from Biotool object    
     
         biotool: Biotool [OBJECT]
+
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+        WARNING: The generation of XML is only done now using the first function description
+                 of the entry. I wish to generate as many XMLs as number of described functions.
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
         '''
         # Initialize XML
-        tool = gxt.Tool(biotool.name,biotool.tool_id,biotool.version,biotool.description,"COMMAND", version_command="COMMAND --version")
+        tool = gxt.Tool(biotool.name,biotool.tool_id,biotool.version,biotool.description,\
+                        "COMMAND", version_command="COMMAND --version")
+
+        # Write the ontology for functions and topics
+        edam_topics = gxtp.EdamTopics()
+        for t in self.topics:
+            edam_topics.append(gxtp.EdamTopic(t.get_edam_id()))
+        tool.edam_topics = edam_topics
+        edam_operations = gxtp.EdamOperations()
+        for f in self.functions:
+            for o in f.operations:
+                edam_operations.append(gxtp.EdamOperation(o.get_edam_id()))
+        tool.edam_operations = edam_operations
+
+        # Write Inputs based on the description        
+        tool.inputs = self.functions[0].generate_inputs_xml()
+
+        # Write Help part of the XML
         tool.help = (biotool.description + '\n' + biotool.homepage)
 
         # Write XML in current directory (id.xml)
@@ -157,6 +179,16 @@ class Function:
             # Create Output object and appends to the list
             self.outputs.append(Output(o['dataType'],o['dataFormat'],o['dataDescription']))
 
+    def generate_inputs_xml(self):
+        '''
+        
+        '''
+        inputs = gxtp.Inputs()
+        cpt = 1
+        for i in self.inputs:
+            inputs.append(i.generate_xml(cpt))
+            cpt += 1
+        return inputs
 
 class Data:
 
@@ -166,7 +198,7 @@ class Data:
         formats: [LIST] of [DICT] of EDAM ontology for data formats with uri and term
         description: [STRING]
         '''
-        self.data_type = Data_type(data_type)
+        self.data_type = Data_type(data_type) # Data_type object
         self.formats = [] # List of Format objects
         for f in formats:
             self.formats.append(Format(f))
@@ -174,24 +206,37 @@ class Data:
 
 class Input(Data):
 
-    def __init__(self, data_type, format, description=None):
+    def __init__(self, data_type, formats, description=None):
         '''
         data_type: [DICT] of EDAM ontology for data types with uri and term
-        format: [DICT] of EDAM ontology for data formats with uri and term
+        formats: [LIST] of [DICT] of EDAM ontology for data formats with uri and term
         description: [STRING]
         '''
-        Data.__init__(self, data_type, format, description)
+        Data.__init__(self, data_type, formats, description)
+
+    def generate_xml(self,cpt):
+        '''
+        
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+        WARNING: The generation of XML is only done now using the first format description
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+        '''
+        name = 'INPUT' + str(cpt)
+        param = gxtp.DataParam(name, label=self.data_type.term, \
+                               help=self.description, format=self.formats[0].term)
+        param.command_line_override = '--' + name + ' $' + name
+        return param
 
 
 class Output(Data):
 
-    def __init__(self, data_type, format, description=None):
+    def __init__(self, data_type, formats, description=None):
         '''
         data_type: [DICT] of EDAM ontology for data types with uri and term
-        format: [DICT] of EDAM ontology for data formats with uri and term
+        formats: [LIST] of [DICT] of EDAM ontology for data formats with uri and term
         description: [STRING]
         '''
-        Data.__init__(self, data_type, format, description)
+        Data.__init__(self, data_type, formats, description)
 
 
 class Edam:
