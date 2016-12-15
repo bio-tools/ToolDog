@@ -232,11 +232,11 @@ def json_from_biotools(tool_id,tool_version):
     '''
     Import JSON of a tool from https://bio.tools
 
-    tool_id: [string]
-    tool_version: [string]
+    tool_id: [STRING]
+    tool_version: [STRING]
     '''
     biotools_link = "https://bio.tools/api/tool/" + tool_id + "/version/" + tool_version
-    print ("Loading " + tool_id + ' version ' + tool_version + " from https://bio.tools")
+    # print ("Loading " + tool_id + ' version ' + tool_version + " from https://bio.tools")
     # Access the entry with requests and get the JSON part
     http_tool = requests.get(biotools_link)
     json_tool = http_tool.json()
@@ -246,13 +246,33 @@ def json_from_file(json_file):
     '''
     Import JSON of a tool from a local file
 
-    json_file: path to the file [string]
+    json_file: path to the file [STRING]
     '''
-    print ("Loading tool from local JSON file: " + json_file)
+    # print ("Loading tool from local JSON file: " + json_file)
     # parse file in JSON format
     with open(json_file,'r') as tool_file:
         json_tool = json.load(tool_file)
+    tool_file.close()
     return json_tool
+
+
+def json_to_biotool(json):
+    '''
+    Takes JSON file from bio.tools and loads it content to Biotool object
+
+    json: json file from bio.tools [DICT]
+
+    RETURN: Biotool [OBJECT]
+    '''
+    # Initialize Biotool object with basic parameters
+    biotool = Biotool(json['name'],json['id'],json['version'],json['description'],json['homepage'])
+    # Add informations
+    biotool.set_informations(json['credits'],json['contact'],json['publications'],json['docs'])
+    # Add Function(s)
+    biotool.add_functions(json['function'])
+    # Add Topics(s)  
+    biotool.add_topics(json['topic'])
+    return biotool
 
 ###########  Main  ###########
 
@@ -300,3 +320,6 @@ if __name__ == "__main__":
         json_tool = json_from_biotools(args.ID,args.VERSION)
     elif args.COMMAND == 'local':
         json_tool = json_from_file(args.JSON_FILE)
+
+    # Load Biotool object
+    biotool = json_to_biotool(json_tool)
