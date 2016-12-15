@@ -19,6 +19,8 @@ import json
 
 # External libraries
 import requests
+import galaxyxml.tool as gxt
+import galaxyxml.tool.parameters as gxtp
 
 # Class and Objects
 
@@ -80,6 +82,21 @@ class Biotool:
         '''
         for t in topics:
             self.topics.append(Topic(t))
+
+    def generate_xml(self):
+        '''
+        Generate XML file using galaxyxml (reference) from Biotool object    
+    
+        biotool: Biotool [OBJECT]
+        '''
+        # Initialize XML
+        tool = gxt.Tool(biotool.name,biotool.tool_id,biotool.version,biotool.description,"COMMAND", version_command="COMMAND --version")
+        tool.help = (biotool.description + '\n' + biotool.homepage)
+
+        # Write XML in current directory (id.xml)
+        outfile = open(self.tool_id + '.xml','w')
+        outfile.write(tool.export().decode('utf-8'))
+        outfile.close()
 
 
 class Informations:
@@ -323,3 +340,6 @@ if __name__ == "__main__":
 
     # Load Biotool object
     biotool = json_to_biotool(json_tool)
+
+    # Write corresponding XML
+    biotool.generate_xml()
