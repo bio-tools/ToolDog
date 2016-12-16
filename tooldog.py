@@ -140,12 +140,12 @@ class Credit:
     def __init__(self, credit):
         self.comment = credit['comment'] # [STRING]
         self.email = credit['email'] # [STRING]
-        self.gridId = credit['gridId'] # [STRING]
+        self.grid_id = credit['gridId'] # [STRING]
         self.name = credit['name'] # [STRING]
-        self.typeEntity = credit['typeEntity'] # [STRING]
-        self.typeRole = credit['typeRole'] # [STRING]
+        self.type_entity = credit['typeEntity'] # [STRING]
+        self.type_role = credit['typeRole'] # [STRING]
         self.url = credit['url'] # [STRING]
-        self.orcidId = credit['orcidId'] # [STRING]
+        self.orcid_id = credit['orcidId'] # [STRING]
 
 
 class Publication:
