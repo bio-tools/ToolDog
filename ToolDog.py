@@ -46,21 +46,26 @@ class Biotool:
          self.homepage = homepage
          self.functions = [] # List of Function objects
          self.topics = []    # List of Topic objects
-         self.informations = None # Information object
+         self.informations = None # Informations object
 
     def set_informations(self, credits, contacts, publications, docs): 
         '''
         Add an information object to the biotool
 
-        credits: [DICT]
+        credits: [LIST] of [DICT] with different credits
         contacts: list of contacts [LIST]
-        publications: different IDs for publications [DICT] 
-        doc: link for the document [STRING]
+        publications: [LIST] of [DICT] of different IDs for publications 
+        doc: [LIST] of [DICT] with different documentations
         '''
-        self.informations = Informations(publications['publicationsPrimaryID'],\
-                                         docs['docsHome'], credits)
+        self.informations = Informations()
         for c in contacts:
             self.informations.contacts.append(Contact(c))
+        for c in credits:
+            self.informations.documentations.append(Credit(c))
+        for p in publications:
+            self.informations.publications.append(Publication(p))
+        for d in docs:
+            self.informations.documentations.append(Documentation(d))
 
     def add_functions(self, functions):
         '''
@@ -70,7 +75,7 @@ class Biotool:
         '''
         for f in functions:
             # Create Function object
-            function = Function(f['functionName'])
+            function = Function(f['operation'])
             function.add_inputs(f['input'])
             function.add_outputs(f['output'])
             # Append object to the biotool
@@ -123,29 +128,48 @@ class Biotool:
 
 class Informations:
 
-    def __init__(self, publication, documentation, credits):
-        self.publication = publication
-        self.documentation = documentation
-        self.credits = Credits(credits) # Credits object
+    def __init__(self):
+        self.publications = [] # List of Publication objects
+        self.documentations = [] # List of Documentation objects
         self.contacts = [] # List of Contact objects
+        self.credits = [] # List of Credit objects
 
 
-class Credits:
+class Credit:
 
-    def __init__(self, credits):
-        self.affiliation = credits['creditsAffiliation']
-        self.contributor = credits['creditsContributor']
-        self.developer = credits['creditsDeveloper']
-        self.funding = credits['creditsFunding']
-        self.infrastructure = credits['creditsInfrastructure']
-        self.institution = credits['creditsInstitution']
+    def __init__(self, credit):
+        self.comment = credit['comment'] # [STRING]
+        self.email = credit['email'] # [STRING]
+        self.gridId = credit['gridId'] # [STRING]
+        self.name = credit['name'] # [STRING]
+        self.typeEntity = credit['typeEntity'] # [STRING]
+        self.typeRole = credit['typeRole'] # [STRING]
+        self.url = credit['url'] # [STRING]
+        self.orcidId = credit['orcidId'] # [STRING]
+
+
+class Publication:
+
+    def __init__(self, publication):
+        self.doi = publication['doi'] # [STRING]
+        self.pmid = publication['pmid'] # [STRING]
+        self.pmcid = publication['pmcid'] # [STRING]
+        self.type = publication['type'] # [STRING]
+
+
+class Documentation:
+
+    def __init__(self, documentation):
+        self.url = documentation['url'] # [STRING]
+        self.type = documentation['type'] # [STRING]
+        self.comment = documentation['comment'] # [STRING]
 
 
 class Contact:
 
     def __init__(self,contact):
-        self.email = contact['contactEmail']
-        self.name = contact['contactName']
+        self.email = contact['email']
+        self.name = contact['name']
         # self.role = contact['contactRole']
         # self.tel = contact['contactTel']
         # self.url = contact['contactURL']
@@ -169,7 +193,7 @@ class Function:
         '''
         for i in inputs:
             # Create Input object and appends to the list
-            self.inputs.append(Input(i['dataType'],i['dataFormat'],i['dataDescription']))
+            self.inputs.append(Input(i['data'],i['format']))
 
     def add_outputs(self, outputs):
         '''
@@ -177,7 +201,7 @@ class Function:
         '''
         for o in outputs:
             # Create Output object and appends to the list
-            self.outputs.append(Output(o['dataType'],o['dataFormat'],o['dataDescription']))
+            self.outputs.append(Output(o['data'],o['format']))
 
     def generate_inputs_xml(self):
         '''
@@ -329,7 +353,7 @@ def json_to_biotool(json):
     # Initialize Biotool object with basic parameters
     biotool = Biotool(json['name'],json['id'],json['version'],json['description'],json['homepage'])
     # Add informations
-    biotool.set_informations(json['credits'],json['contact'],json['publications'],json['docs'])
+    biotool.set_informations(json['credit'],json['contact'],json['publication'],json['documentation'])
     # Add Function(s)
     biotool.add_functions(json['function'])
     # Add Topics(s)  
