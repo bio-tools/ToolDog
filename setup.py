@@ -13,6 +13,7 @@ setup(name="tooldog",
         author_email='kehillio@pasteur.Fr',
         dependency_links=['git+https://github.com/erasche/galaxyxml#egg=galaxyxml'],
         install_requires=['requests','galaxyxml'],
+        packages=["tooldog"],
         classifiers=[
             'Development Status :: 2 - Pre-Alpha',
             'Topic :: Scientific/Engineering :: Bio-Informatics',
