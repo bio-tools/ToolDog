@@ -61,7 +61,7 @@ class Biotool:
         for c in contacts:
             self.informations.contacts.append(Contact(c))
         for c in credits:
-            self.informations.documentations.append(Credit(c))
+            self.informations.credits.append(Credit(c))
         for p in publications:
             self.informations.publications.append(Publication(p))
         for d in docs:
