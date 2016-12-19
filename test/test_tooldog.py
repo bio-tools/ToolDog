@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 ## Author(s): Kenzo-Hugo Hillion
 ## Contact(s): kehillio@pasteur.fr
@@ -25,6 +25,10 @@ import tooldog
 
 ###########  Constant(s)  ###########
 
+# Declare one ontology for all the test
+EDAM = {'uri':'http://edamontology.org/topic_0091',
+        'term':'bioinformatics'}
+
 ###########  Function(s)  ###########
 
 ###########  Class(es)  ###########
@@ -48,41 +52,39 @@ class TestBiotool(unittest.TestCase):
     #def test_set_infromations(self):
 
     def test_add_functions(self):
-        edam = {'uri':'one_uri', 'term':'one_term'}
-        function = [{'operation':[edam],
-                     'input':[{'data':edam, 'format':[edam]}],
-                     'output':[{'data':edam, 'format':[edam]}]}]
+        function = [{'operation':[EDAM],
+                     'input':[{'data':EDAM, 'format':[EDAM]}],
+                     'output':[{'data':EDAM, 'format':[EDAM]}]}]
         self.biotool.add_functions(function)
         # Check function
-        self.assertEqual(self.biotool.functions[0].operations[0].uri,'one_uri')
-        self.assertEqual(self.biotool.functions[0].operations[0].term,'one_term')
+        self.assertEqual(self.biotool.functions[0].operations[0].uri, EDAM['uri'])
+        self.assertEqual(self.biotool.functions[0].operations[0].term, EDAM['term'])
         # Check inputs
         self.assertEqual(self.biotool.functions[0].inputs[0].data_type.uri,\
-                         'one_uri')
+                         EDAM['uri'])
         self.assertEqual(self.biotool.functions[0].inputs[0].data_type.term, \
-                         'one_term')
+                         EDAM['term'])
         self.assertEqual(self.biotool.functions[0].inputs[0].formats[0].uri,\
-                         'one_uri')
+                         EDAM['uri'])
         self.assertEqual(self.biotool.functions[0].inputs[0].formats[0].term, \
-                         'one_term')
+                         EDAM['term'])
         self.assertIsNone(self.biotool.functions[0].inputs[0].description)
         # Check outputs
         self.assertEqual(self.biotool.functions[0].outputs[0].data_type.uri, \
-                         'one_uri')
+                         EDAM['uri'])
         self.assertEqual(self.biotool.functions[0].outputs[0].data_type.term, \
-                         'one_term')
+                         EDAM['term'])
         self.assertEqual(self.biotool.functions[0].outputs[0].formats[0].uri, \
-                         'one_uri')
+                         EDAM['uri'])
         self.assertEqual(self.biotool.functions[0].outputs[0].formats[0].term, \
-                         'one_term')
+                         EDAM['term'])
         self.assertIsNone(self.biotool.functions[0].outputs[0].description)
 
     def test_add_topics(self):
-        edam = {'uri':'one_uri', 'term':'one_term'}
-        topics =[edam]
+        topics =[EDAM]
         self.biotool.add_topics(topics)
-        self.assertEqual(self.biotool.topics[0].uri, 'one_uri')
-        self.assertEqual(self.biotool.topics[0].term, 'one_term')
+        self.assertEqual(self.biotool.topics[0].uri, EDAM['uri'])
+        self.assertEqual(self.biotool.topics[0].term, EDAM['term'])
 
     #def test_generate_xml(self):
 
@@ -147,45 +149,48 @@ class TestContact(unittest.TestCase):
 class TestFunction(unittest.TestCase):
 
     def setUp(self):
-        self.edams = [{'uri':'first_uri', 'term':'first_term'}, \
-                 {'uri':'second_uri', 'term':'second_term'}]
-        self.function = tooldog.Function(self.edams)
+        self.function = tooldog.Function([EDAM])
 
     def test_init(self):
-        self.assertEqual(self.function.operations[0].uri,self.edams[0]['uri'])
-        self.assertEqual(self.function.operations[0].term,self.edams[0]['term'])
-        self.assertEqual(self.function.operations[1].uri,self.edams[1]['uri'])
-        self.assertEqual(self.function.operations[1].term,self.edams[1]['term'])
+        self.assertEqual(self.function.operations[0].uri, EDAM['uri'])
+        self.assertEqual(self.function.operations[0].term, EDAM['term'])
         self.assertListEqual(self.function.inputs,[])
         self.assertListEqual(self.function.outputs,[])
 
     def test_add_inputs(self):
-        inputs = [{'data':self.edams[0],
-                   'format': self.edams}]
+        inputs = [{'data':EDAM,
+                   'format': [EDAM]}]
         self.function.add_inputs(inputs)
-        self.assertEqual(self.function.inputs[0].data_type.uri, 'first_uri')
-        self.assertEqual(self.function.inputs[0].data_type.term, 'first_term')
-        self.assertEqual(self.function.inputs[0].formats[0].uri, 'first_uri')
-        self.assertEqual(self.function.inputs[0].formats[0].term, 'first_term')
-        self.assertEqual(self.function.inputs[0].formats[1].uri, 'second_uri')
-        self.assertEqual(self.function.inputs[0].formats[1].term, 'second_term')
+        self.assertEqual(self.function.inputs[0].data_type.uri, EDAM['uri'])
+        self.assertEqual(self.function.inputs[0].data_type.term, EDAM['term'])
+        self.assertEqual(self.function.inputs[0].formats[0].uri, EDAM['uri'])
+        self.assertEqual(self.function.inputs[0].formats[0].term, EDAM['term'])
         self.assertIsNone(self.function.inputs[0].description)
+
+    def test_add_outputs(self):
+        outputs = [{'data': EDAM,
+                   'format': [EDAM]}]
+        self.function.add_outputs(outputs)
+        self.assertEqual(self.function.outputs[0].data_type.uri, EDAM['uri'])
+        self.assertEqual(self.function.outputs[0].data_type.term, EDAM['term'])
+        self.assertEqual(self.function.outputs[0].formats[0].uri, EDAM['uri'])
+        self.assertEqual(self.function.outputs[0].formats[0].term, EDAM['term'])
+        self.assertIsNone(self.function.outputs[0].description)
+
+    #def generate_inputs_xml(self):
         
 
 class TestData(unittest.TestCase):
 
     def test_init(self):
-        data_type = {'uri':'uri_data', 'term':'term_data'}
-        formats = [{'uri':'first_uri', 'term':'first_term'}, \
-                 {'uri':'second_uri', 'term':'second_term'}]
+        data_type = EDAM
+        formats = [EDAM]
         description = 'a description of a data with spaces.'
         data = tooldog.Data(data_type, formats, description)
-        self.assertEqual(data.data_type.uri, data_type['uri'])
-        self.assertEqual(data.data_type.term, data_type['term'])
-        self.assertEqual(data.formats[0].uri, formats[0]['uri'])
-        self.assertEqual(data.formats[0].term, formats[0]['term'])
-        self.assertEqual(data.formats[1].uri, formats[1]['uri'])
-        self.assertEqual(data.formats[1].term, formats[1]['term'])
+        self.assertEqual(data.data_type.uri, EDAM['uri'])
+        self.assertEqual(data.data_type.term, EDAM['term'])
+        self.assertEqual(data.formats[0].uri, EDAM['uri'])
+        self.assertEqual(data.formats[0].term, EDAM['term'])
         self.assertEqual(data.description, description)
 
 class TestInput(TestData):
@@ -201,11 +206,15 @@ class TestOutput(TestData):
 
 class TestEdam(unittest.TestCase):
 
+    def setUp(self):
+        self.edam = tooldog.Edam(EDAM)
+
     def test_init(self):
-        dict_edam = {'uri':'one_uri', 'term':'one_term'}
-        edam = tooldog.Edam(dict_edam)
-        self.assertEqual(edam.uri, dict_edam['uri'])
-        self.assertEqual(edam.term, dict_edam['term'])
+        self.assertEqual(self.edam.uri, EDAM['uri'])
+        self.assertEqual(self.edam.term, EDAM['term'])
+
+    def test_get_edam_id(self):
+        self.assertEqual(self.edam.get_edam_id(), 'topic_0091')
         
 class TestOperation(TestEdam):
 

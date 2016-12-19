@@ -53,7 +53,7 @@ class Biotool:
         Add an information object to the biotool
 
         credits: [LIST] of [DICT] with different credits
-        contacts: list of contacts [LIST]
+        contacts: [LIST] of [DICT] of contacts
         publications: [LIST] of [DICT] of different IDs for publications 
         doc: [LIST] of [DICT] with different documentations
         '''
