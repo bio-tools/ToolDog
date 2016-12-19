@@ -237,9 +237,38 @@ class TestTopic(TestEdam):
         TestEdam.test_init(self)
 
 
-        
-        
+class TestImportJson(TestEdam):
 
+    def test_json_from_file(self):
+        j = tooldog.json_from_file('MacSyFinder.json')
+        self.assertEqual(len(j.keys()), 32)
+        self.assertEqual(j['version'], '1.0.2')
+        self.assertEqual(j['name'], 'MacSyFinder')
+        self.assertEqual(j['owner'], 'bneron')
+        self.assertEqual(j['id'], 'MacSyFinder')
+
+    def test_json_to_biotool(self):
+        j = tooldog.json_from_file('MacSyFinder.json')
+        bt = tooldog.json_to_biotool(j)
+        # Check few arguments of biotool object
+        self.assertEqual(bt.name, 'MacSyFinder')
+        self.assertEqual(bt.tool_id, 'MacSyFinder')
+        self.assertEqual(bt.version, '1.0.2')
+        # Check few arguments from Information object
+        self.assertEqual(bt.informations.contacts[0].name, 'Bertrand Néron')
+        self.assertEqual(bt.informations.credits[0].name, 'Institut Pasteur')
+        self.assertEqual(bt.informations.documentations[0].type, \
+                         'Citation instructions')
+        self.assertEqual(bt.informations.publications[0].doi, \
+                         'doi:10.1371/journal.pone.0110726')
+        # Check few arguments from function
+        self.assertEqual(bt.functions[0].operations[0].term, \
+                         'Prediction and recognition (protein)')
+        self.assertEqual(bt.functions[0].inputs[0].data_type.term, \
+                         'Protein sequence record')
+        self.assertEqual(bt.functions[0].outputs[0].data_type.term, 'Report')
+        # Check few arguments from topics
+        self.assertEqual(bt.topics[0].term, 'Functional genomics')
 
 
 ###########  Main  ###########
