@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 ## Author(s): Kenzo-Hugo Hillion
 ## Contact(s): kehillio@pasteur.fr
@@ -93,11 +93,6 @@ class Biotool:
         Generate XML file using galaxyxml (reference) from Biotool object    
     
         biotool: Biotool [OBJECT]
-
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-        WARNING: The generation of XML is only done now using the first function description
-                 of the entry. I wish to generate as many XMLs as number of described functions.
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
         '''
         # Initialize XML
         tool = gxt.Tool(biotool.name,biotool.tool_id,biotool.version,biotool.description,\
@@ -168,8 +163,8 @@ class Documentation:
 class Contact:
 
     def __init__(self,contact):
-        self.email = contact['email']
-        self.name = contact['name']
+        self.email = contact['email'] # [STRING]
+        self.name = contact['name'] # [STRING]
         # self.role = contact['contactRole']
         # self.tel = contact['contactTel']
         # self.url = contact['contactURL']
@@ -205,7 +200,7 @@ class Function:
 
     def generate_inputs_xml(self):
         '''
-        
+        Build XML from inputs with the Galaxy syntax from Function object
         '''
         inputs = gxtp.Inputs()
         cpt = 1
@@ -240,10 +235,9 @@ class Input(Data):
 
     def generate_xml(self,cpt):
         '''
-        
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-        WARNING: The generation of XML is only done now using the first format description
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+        Build XML from Input object with the Galaxy syntax.
+
+        cpt: counter to give different ID to inputs (e.g. INPUT1, INPUT2...) [INT]
         '''
         name = 'INPUT' + str(cpt)
         param = gxtp.DataParam(name, label=self.data_type.term, \
