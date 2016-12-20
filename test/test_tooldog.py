@@ -18,10 +18,9 @@ import sys
 import unittest
 
 # External libraries
-import tooldog
 
 # Class and Objects
-
+from tooldog import main, model
 
 ###########  Constant(s)  ###########
 
@@ -36,7 +35,7 @@ EDAM = {'uri':'http://edamontology.org/topic_0091',
 class TestBiotool(unittest.TestCase):
 
     def setUp(self):
-        self.biotool = tooldog.Biotool('name','an_id','a_version','a description '+\
+        self.biotool = model.Biotool('name','an_id','a_version','a description '+\
                                        'with spaces.', 'http://urltohomepage.com')
 
     def test_init(self):
@@ -49,7 +48,36 @@ class TestBiotool(unittest.TestCase):
         self.assertListEqual(self.biotool.topics, [])
         self.assertIsNone(self.biotool.informations)
 
-    #def test_set_infromations(self):
+    def test_set_informations(self):
+        credits = [{'comment':'a_comment', 'email':'an_email',\
+                    'gridId':'a_grid_id', 'name':'a_name',\
+                    'typeEntity':'a_type_entity', 'typeRole':'a_type_role',\
+                    'url':'a_url', 'orcidId':'an_orcid_id'}]
+        contacts = [{'email':'an_email', 'name':'a_name'}]
+        pubs = [{'doi':'a_doi', 'pmid':'a_pm_id', 'pmcid':'a_pmc_id', 'type':'a_type'}]
+        docs = [{'url':'an_url', 'type':'a_type', 'comment':'a_comment'}]
+        self.biotool.set_informations(credits,contacts,pubs,docs)
+        # Check credits params
+        self.assertEqual(self.biotool.informations.credits[0].comment, 'a_comment')
+        self.assertEqual(self.biotool.informations.credits[0].email, 'an_email')
+        self.assertEqual(self.biotool.informations.credits[0].grid_id, 'a_grid_id')
+        self.assertEqual(self.biotool.informations.credits[0].name, 'a_name')
+        self.assertEqual(self.biotool.informations.credits[0].type_entity, 'a_type_entity')
+        self.assertEqual(self.biotool.informations.credits[0].type_role, 'a_type_role')
+        self.assertEqual(self.biotool.informations.credits[0].url, 'a_url')
+        self.assertEqual(self.biotool.informations.credits[0].orcid_id, 'an_orcid_id')
+        # Check contacts params
+        self.assertEqual(self.biotool.informations.contacts[0].email, 'an_email')
+        self.assertEqual(self.biotool.informations.contacts[0].name, 'a_name')
+        # Check publications params
+        self.assertEqual(self.biotool.informations.publications[0].doi, 'a_doi')
+        self.assertEqual(self.biotool.informations.publications[0].pmid, 'a_pm_id')
+        self.assertEqual(self.biotool.informations.publications[0].pmcid, 'a_pmc_id')
+        self.assertEqual(self.biotool.informations.publications[0].type, 'a_type')
+        # Check documentations params
+        self.assertEqual(self.biotool.informations.documentations[0].url, 'an_url')
+        self.assertEqual(self.biotool.informations.documentations[0].type, 'a_type')
+        self.assertEqual(self.biotool.informations.documentations[0].comment, 'a_comment')
 
     def test_add_functions(self):
         function = [{'operation':[EDAM],
@@ -86,13 +114,11 @@ class TestBiotool(unittest.TestCase):
         self.assertEqual(self.biotool.topics[0].uri, EDAM['uri'])
         self.assertEqual(self.biotool.topics[0].term, EDAM['term'])
 
-    #def test_generate_xml(self):
-
 
 class TestInformations(unittest.TestCase):
 
     def test_init(self):
-        info = tooldog.Informations()
+        info = model.Informations()
         self.assertListEqual(info.publications, [])
         self.assertListEqual(info.documentations, [])
         self.assertListEqual(info.contacts, [])
@@ -105,7 +131,7 @@ class TestCredit(unittest.TestCase):
         dict_credit = {'comment':'a_comment', 'email':'an_email', 'gridId':'a_grid_id',\
                        'name':'a_name', 'typeEntity':'a_type_entity', 'typeRole':'a_type_role', \
                        'url':'an_url', 'orcidId':'an_orcid_id'}
-        credit = tooldog.Credit(dict_credit)
+        credit = model.Credit(dict_credit)
         self.assertEqual(credit.comment, dict_credit['comment'])
         self.assertEqual(credit.email, dict_credit['email'])
         self.assertEqual(credit.grid_id, dict_credit['gridId'])
@@ -120,7 +146,7 @@ class TestPublication(unittest.TestCase):
 
     def test_init(self):
         dict_publi = {'doi':'a_doi', 'pmid':'a_pm_id', 'pmcid':'a_pmc_id', 'type':'a_type'}
-        publication = tooldog.Publication(dict_publi)
+        publication = model.Publication(dict_publi)
         self.assertEqual(publication.doi,dict_publi['doi'])
         self.assertEqual(publication.pmid,dict_publi['pmid'])
         self.assertEqual(publication.pmcid,dict_publi['pmcid'])
@@ -131,7 +157,7 @@ class TestDocumentation(unittest.TestCase):
 
     def test_init(self):
         dict_doc = {'url':'one_url', 'type':'one_type', 'comment':'one comment with spaces.'}
-        documentation = tooldog.Documentation(dict_doc)
+        documentation = model.Documentation(dict_doc)
         self.assertEqual(documentation.url, dict_doc['url'])
         self.assertEqual(documentation.type, dict_doc['type'])
         self.assertEqual(documentation.comment, dict_doc['comment'])
@@ -141,7 +167,7 @@ class TestContact(unittest.TestCase):
 
     def test_init(self):
         dict_contact = {'email':'an_email', 'name':'a_name'}
-        contact = tooldog.Contact(dict_contact)
+        contact = model.Contact(dict_contact)
         self.assertEqual(contact.email,dict_contact['email'])
         self.assertEqual(contact.name,dict_contact['name'])
 
@@ -149,7 +175,7 @@ class TestContact(unittest.TestCase):
 class TestFunction(unittest.TestCase):
 
     def setUp(self):
-        self.function = tooldog.Function([EDAM])
+        self.function = model.Function([EDAM])
 
     def test_init(self):
         self.assertEqual(self.function.operations[0].uri, EDAM['uri'])
@@ -176,8 +202,6 @@ class TestFunction(unittest.TestCase):
         self.assertEqual(self.function.outputs[0].formats[0].uri, EDAM['uri'])
         self.assertEqual(self.function.outputs[0].formats[0].term, EDAM['term'])
         self.assertIsNone(self.function.outputs[0].description)
-
-    #def generate_inputs_xml(self):
         
 
 class TestData(unittest.TestCase):
@@ -186,7 +210,7 @@ class TestData(unittest.TestCase):
         data_type = EDAM
         formats = [EDAM]
         description = 'a description of a data with spaces.'
-        data = tooldog.Data(data_type, formats, description)
+        data = model.Data(data_type, formats, description)
         self.assertEqual(data.data_type.uri, EDAM['uri'])
         self.assertEqual(data.data_type.term, EDAM['term'])
         self.assertEqual(data.formats[0].uri, EDAM['uri'])
@@ -207,7 +231,7 @@ class TestOutput(TestData):
 class TestEdam(unittest.TestCase):
 
     def setUp(self):
-        self.edam = tooldog.Edam(EDAM)
+        self.edam = model.Edam(EDAM)
 
     def test_init(self):
         self.assertEqual(self.edam.uri, EDAM['uri'])
@@ -240,7 +264,7 @@ class TestTopic(TestEdam):
 class TestImportJson(TestEdam):
 
     def test_json_from_file(self):
-        j = tooldog.json_from_file('MacSyFinder.json')
+        j = main.json_from_file('MacSyFinder.json')
         self.assertEqual(len(j.keys()), 32)
         self.assertEqual(j['version'], '1.0.2')
         self.assertEqual(j['name'], 'MacSyFinder')
@@ -248,8 +272,8 @@ class TestImportJson(TestEdam):
         self.assertEqual(j['id'], 'MacSyFinder')
 
     def test_json_to_biotool(self):
-        j = tooldog.json_from_file('MacSyFinder.json')
-        bt = tooldog.json_to_biotool(j)
+        j = main.json_from_file('MacSyFinder.json')
+        bt = main.json_to_biotool(j)
         # Check few arguments of biotool object
         self.assertEqual(bt.name, 'MacSyFinder')
         self.assertEqual(bt.tool_id, 'MacSyFinder')

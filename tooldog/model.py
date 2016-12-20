@@ -55,10 +55,10 @@ class Biotool:
         doc: [LIST] of [DICT] with different documentations
         '''
         self.informations = Informations()
-        for c in contacts:
-            self.informations.contacts.append(Contact(c))
         for c in credits:
             self.informations.credits.append(Credit(c))
+        for c in contacts:
+            self.informations.contacts.append(Contact(c))
         for p in publications:
             self.informations.publications.append(Publication(p))
         for d in docs:
