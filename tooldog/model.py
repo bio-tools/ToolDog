@@ -19,8 +19,6 @@ import json
 
 # External libraries
 import requests
-import galaxyxml.tool as gxt
-import galaxyxml.tool.parameters as gxtp
 
 # Class and Objects
 
@@ -86,38 +84,6 @@ class Biotool:
         '''
         for t in topics:
             self.topics.append(Topic(t))
-
-    def generate_xml(self):
-        '''
-        Generate XML file using galaxyxml (reference) from Biotool object    
-    
-        biotool: Biotool [OBJECT]
-        '''
-        # Initialize XML
-        tool = gxt.Tool(self.name,self.tool_id,self.version,self.description,\
-                        "COMMAND", version_command="COMMAND --version")
-
-        # Write the ontology for functions and topics
-        edam_topics = gxtp.EdamTopics()
-        for t in self.topics:
-            edam_topics.append(gxtp.EdamTopic(t.get_edam_id()))
-        tool.edam_topics = edam_topics
-        edam_operations = gxtp.EdamOperations()
-        for f in self.functions:
-            for o in f.operations:
-                edam_operations.append(gxtp.EdamOperation(o.get_edam_id()))
-        tool.edam_operations = edam_operations
-
-        # Write Inputs based on the description        
-        tool.inputs = self.functions[0].generate_inputs_xml()
-
-        # Write Help part of the XML
-        tool.help = (self.description + '\n' + self.homepage)
-
-        # Write XML in current directory (id.xml)
-        outfile = open(self.tool_id + '.xml','w')
-        outfile.write(tool.export().decode('utf-8'))
-        outfile.close()
 
 
 class Informations:
@@ -197,16 +163,6 @@ class Function:
             # Create Output object and appends to the list
             self.outputs.append(Output(o['data'],o['format']))
 
-    def generate_inputs_xml(self):
-        '''
-        Build XML from inputs with the Galaxy syntax from Function object
-        '''
-        inputs = gxtp.Inputs()
-        cpt = 1
-        for i in self.inputs:
-            inputs.append(i.generate_xml(cpt))
-            cpt += 1
-        return inputs
 
 class Data:
 
@@ -231,18 +187,6 @@ class Input(Data):
         description: [STRING]
         '''
         Data.__init__(self, data_type, formats, description)
-
-    def generate_xml(self,cpt):
-        '''
-        Build XML from Input object with the Galaxy syntax.
-
-        cpt: counter to give different ID to inputs (e.g. INPUT1, INPUT2...) [INT]
-        '''
-        name = 'INPUT' + str(cpt)
-        param = gxtp.DataParam(name, label=self.data_type.term, \
-                               help=self.description, format=self.formats[0].term)
-        param.command_line_override = '--' + name + ' $' + name
-        return param
 
 
 class Output(Data):
@@ -302,8 +246,3 @@ class Topic(Edam):
         edam: [DICT] of EDAM ontology for topics with uri and term
         '''
         Edam.__init__(self, edam)
-
-
-
-###########  Function(s)  ###########
-

@@ -24,6 +24,7 @@ import galaxyxml.tool.parameters as gxtp
 
 # Class and Objects
 from tooldog import model
+from tooldog import galaxy
 
 ###########  Constant(s)  ###########
 
@@ -127,5 +128,21 @@ def run():
     # Load Biotool object
     biotool = json_to_biotool(json_tool)
 
-    # Write corresponding XML
-    biotool.generate_xml()
+    # Write corresponding XMLs (write function later)
+    biotool_xml = galaxy.GenerateXml(biotool)
+    # Add topics to the XML
+    for t in biotool.topics:
+        biotool_xml.add_edam_topic(t)
+    # Add operations and inputs
+    #for f in biotool.functions:  -> deal with all function
+    # Deal with 1st function only:
+    for f in biotool.functions:
+        for o in f.operations:
+            biotool_xml.add_edam_operation(o)
+        for i in f.inputs:
+            biotool_xml.add_input_file(i)
+        break # Only dead with 1st function:
+    biotool_xml.write_xml()
+
+if __name__ == "__main__":
+    run()
