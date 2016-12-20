@@ -8,24 +8,26 @@ How to use it ?
 
 We assume here that the program is :ref:`installed <install>`.
 
-You can see that importation can be perfomed either from :ref:`online <online_import>` entry or :ref:`local <local_import>` file::
+Importation of an entry can be perfomed either from :ref:`online <online_import>` entry or :ref:`local <local_import>` file::
 
-    ToolDog.py -h
+    tooldog -h
+
+ToolDog supports generation of XML files for Galaxy (`-g/--galaxy`) or CWL (`-c/--cwl`, not available yet).
 
 .. _online_import:
 
 From https://bio.tools entry
 ============================
 
-You can see all available options with::
+You can generate a XML for Galaxy from an online bio.tools description using the following command::
 
-    ToolDog.py online -h
+    tooldog --galaxy id/version > outfile.xml
 
 .. _local_import:
 
 From JSON local file
 ====================
 
-You can see all available options with::
+To generate XML from a local file, use the following command::
 
-    ToolDog.py local -h
+    tooldog --galaxy file.json > outfile.xml

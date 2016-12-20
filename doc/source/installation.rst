@@ -32,9 +32,12 @@ Pip
 Manually
 --------
 
-Clone the repository and execute the following command::
+Clone the repository and install ToolDog with the following commands::
 
-    (sudo) python3 setup.py install
+    git clone https://gitlab.pasteur.fr/kehillio/ToolDog.git
+    cd ToolDog
+    pip install -r requirements.txt
+    python3 setup.py install
 
 .. _uninstallation:
 
@@ -47,5 +50,7 @@ Conda
 Pip
 ---
 
-Manually
---------
+You can remove ToolDog with the following command::
+
+    pip uninstall tooldog
+

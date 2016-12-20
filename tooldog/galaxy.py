@@ -93,10 +93,15 @@ class GenerateXml:
         # Appends parameter to inputs
         self.tool.inputs.append(param)
 
-    def write_xml(self):
+    def write_xml(self,out_file=None):
         '''
         '''
         # Copy informations to avoid expension of xml in case we write several XMLs
         export_tool = self.tool
         # Give XML on STDout
-        print(export_tool.export().decode('utf-8'))
+        if out_file is None:
+            print(export_tool.export().decode('utf-8'))
+        else:
+            f = open(out_file,'w')
+            f.write(export_tool.export().decode('utf-8'))
+            f.close()
