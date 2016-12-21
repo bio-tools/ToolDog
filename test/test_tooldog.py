@@ -15,12 +15,13 @@ Descrition
 import os
 import argparse
 import sys
+import filecmp
 import unittest
 
 # External libraries
 
 # Class and Objects
-from tooldog import main, model
+from tooldog import main, model, galaxy
 
 ###########  Constant(s)  ###########
 
@@ -261,7 +262,7 @@ class TestTopic(TestEdam):
         TestEdam.test_init(self)
 
 
-class TestImportJson(TestEdam):
+class TestImportJson(unittest.TestCase):
 
     def test_json_from_file(self):
         j = main.json_from_file('MacSyFinder.json')
@@ -271,10 +272,15 @@ class TestImportJson(TestEdam):
         self.assertEqual(j['owner'], 'bneron')
         self.assertEqual(j['id'], 'MacSyFinder')
 
+    #def test_json_from_biotool(self):
+
+
+class TestMainFunctions(unittest.TestCase):
+
     def test_json_to_biotool(self):
         j = main.json_from_file('MacSyFinder.json')
         bt = main.json_to_biotool(j)
-        # Check few arguments of biotool object
+        # Check 3/5 arguments of biotool object
         self.assertEqual(bt.name, 'MacSyFinder')
         self.assertEqual(bt.tool_id, 'MacSyFinder')
         self.assertEqual(bt.version, '1.0.2')
@@ -293,6 +299,66 @@ class TestImportJson(TestEdam):
         self.assertEqual(bt.functions[0].outputs[0].data_type.term, 'Report')
         # Check few arguments from topics
         self.assertEqual(bt.topics[0].term, 'Functional genomics')
+
+    #def test_write_xml(self):
+
+
+class TestGenerateXml(unittest.TestCase):
+
+    def setUp(self):
+        # Create a biotool
+        self.biotool = model.Biotool('a_name', 'an_id', 'a_version', 'a_description',\
+                                     'a_homepage')
+        self.genxml = galaxy.GenerateXml(self.biotool)
+
+    def test_init(self):
+        # Test counters
+        self.assertEqual(self.genxml.input_ct, 0)
+        self.assertEqual(self.genxml.output_ct, 0)
+        # Copy tool to make it easier to read
+        tool = self.genxml.tool
+        # Test simple values of the tool
+        self.assertEqual(tool.help, self.biotool.description + \
+                         "\n\nTool Homepage: " + self.biotool.homepage)
+        self.assertEqual(tool.version_command, "COMMAND --version")
+        # Test <tool> of the future XML
+        self.assertEqual(tool.root.attrib['id'], 'an_id')
+        self.assertEqual(tool.root.attrib['name'], 'a_name')
+        self.assertEqual(tool.root.attrib['version'], 'a_version')
+        # Test <description> of the future XML
+        self.assertEqual(tool.root.find('description').text, 'a_description')
+
+    def test_add_edam_topic(self):
+        # Create a Topic object
+        topic = model.Topic(EDAM)
+        self.genxml.add_edam_topic(topic)
+        # Test
+        self.assertEqual(self.genxml.tool.edam_topics.children[0].node.text, 'topic_0091')
+
+    def test_add_edam_operation(self):
+        # Create a Operation object (Warning: EDAM is a topic)
+        operation = model.Operation(EDAM)
+        self.genxml.add_edam_operation(operation)
+        # Test
+        self.assertEqual(self.genxml.tool.edam_operations.children[0].node.text, 'topic_0091')
+
+    def test_add_input_file(self):
+        # Create a Input object (Warning both Type and Format will be a topic)
+        input = model.Input(EDAM,[EDAM])
+        self.genxml.add_input_file(input)
+        # Copy object to test (easier to read)
+        input_attrib = self.genxml.tool.inputs.children[0].node.attrib
+        self.assertEqual(input_attrib['help'], '(INPUT1)')
+        self.assertEqual(input_attrib['name'], 'INPUT1')
+        self.assertEqual(input_attrib['format'], EDAM['term'])
+        self.assertEqual(input_attrib['label'], EDAM['term'])
+        self.assertEqual(input_attrib['type'], 'data')
+
+    def test_write_xml(self):
+        tmp_file = 'tmp_test_write_xml'
+        self.genxml.write_xml(tmp_file)
+        self.assertTrue(filecmp.cmp('test_write_xml.xml',tmp_file))
+        os.remove(tmp_file)
 
 
 ###########  Main  ###########
