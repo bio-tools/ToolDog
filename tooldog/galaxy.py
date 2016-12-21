@@ -115,6 +115,21 @@ class GenerateXml:
         param.command_line_override = ''
         self.tool.outputs.append(param)
 
+    def add_citation(self, publication):
+        '''
+        publication: [Publication] object from model.py
+        Add publication to <citations>
+        '''
+        if not hasattr(self.tool, 'citations'):
+            self.tool.citations = gxtp.Citations()
+        # Add citation depending the type (doi, pmid...)
+        if publication.doi is not None:
+            self.tool.citations.append(gxtp.Citation('doi',publication.doi))
+        elif publication.pmid is not None:
+            self.tool.citations.append(gxtp.Citation('pmid',publication.pmid))
+        elif publication.pmcid is not None:
+            self.tool.citations.append(gxtp.Citation('pmcid',publication.pmcid))
+
     def write_xml(self,out_file=None):
         '''
         '''

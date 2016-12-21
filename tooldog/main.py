@@ -102,6 +102,8 @@ def write_xml(biotool,outfile=None):
         for o in f.outputs:
             biotool_xml.add_output_file(o)
         break # Only dead with 1st function:
+    for p in biotool.informations.publications:
+        biotool_xml.add_citation(p)
     biotool_xml.write_xml(outfile)
 
 ###########  Main  ###########
