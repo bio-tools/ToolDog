@@ -18,7 +18,6 @@ import sys
 import json
 
 # External libraries
-import requests
 
 # Class and Objects
 

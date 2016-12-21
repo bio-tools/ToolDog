@@ -93,6 +93,28 @@ class GenerateXml:
         # Appends parameter to inputs
         self.tool.inputs.append(param)
 
+    def add_output_file(self, output):
+        '''
+        output: [Output] object from model.py
+        Add the output to the tool.
+        '''
+        if not hasattr(self.tool, 'outputs'):
+            self.tool.outputs = gxtp.Outputs()
+        # Build parameter
+        self.output_ct += 1
+        # Give unique name to the output
+        name = 'OUTPUT' + str(self.output_ct)
+        # Get all different format for this output
+        list_formats = []
+        for f in output.formats:
+            list_formats.append(f.term)
+        formats = ', '.join(list_formats)
+        # Create the parameter
+        param = gxtp.OutputParameter(name, format=formats, from_work_dir=\
+                                     name + '.ext')
+        param.command_line_override = ''
+        self.tool.outputs.append(param)
+
     def write_xml(self,out_file=None):
         '''
         '''

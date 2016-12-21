@@ -99,6 +99,8 @@ def write_xml(biotool,outfile=None):
             biotool_xml.add_edam_operation(o)
         for i in f.inputs:
             biotool_xml.add_input_file(i)
+        for o in f.outputs:
+            biotool_xml.add_output_file(o)
         break # Only dead with 1st function:
     biotool_xml.write_xml(outfile)
 
