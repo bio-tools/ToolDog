@@ -16,6 +16,7 @@ import os
 import argparse
 import sys
 import json
+import copy
 
 # External libraries
 import requests
@@ -134,7 +135,7 @@ class GenerateXml:
         '''
         '''
         # Copy informations to avoid expension of xml in case we write several XMLs
-        export_tool = self.tool
+        export_tool = copy.deepcopy(self.tool)
         # Give XML on STDout
         if out_file is None:
             print(export_tool.export().decode('utf-8'))
