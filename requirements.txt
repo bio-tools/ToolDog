@@ -1,1 +1,1 @@
-git+https://github.com/erasche/galaxyxml#egg=galaxyxml
+git+https://github.com/khillion/galaxyxml#egg=galaxyxml
