@@ -354,6 +354,25 @@ class TestGenerateXml(unittest.TestCase):
         self.assertEqual(input_attrib['label'], EDAM['term'])
         self.assertEqual(input_attrib['type'], 'data')
 
+    def test_add_output_file(self):
+        # Create a Output object (Warning both Type and Format will be a topic)
+        output = model.Output(EDAM,[EDAM])
+        self.genxml.add_output_file(output)
+        # Copy object to test
+        output_attrib = self.genxml.tool.outputs.children[0].node.attrib
+        self.assertEqual(output_attrib['name'], 'OUTPUT1')
+        self.assertEqual(output_attrib['format'], EDAM['term'])
+        self.assertEqual(output_attrib['from_work_dir'], 'OUTPUT1.ext')
+
+    def test_add_citation(self):
+        # Create a Publication object
+        dict_pub = {'doi':'doi:123', 'pmid':'', 'pmcid':'', 'type':'a_type'}
+        publication = model.Publication(dict_pub)
+        self.genxml.add_citation(publication)
+        # Test
+        self.assertEqual(self.genxml.tool.citations.children[0].node.text,'doi:123')
+        self.assertEqual(self.genxml.tool.citations.children[0].node.attrib['type'], 'doi')
+
     def test_write_xml(self):
         tmp_file = 'tmp_test_write_xml'
         self.genxml.write_xml(tmp_file)
