@@ -376,8 +376,10 @@ class TestGenerateXml(unittest.TestCase):
     def test_write_xml(self):
         tmp_file = 'tmp_test_write_xml'
         self.genxml.write_xml(tmp_file)
-        self.assertTrue(filecmp.cmp('test_write_xml.xml',tmp_file))
-        os.remove(tmp_file)
+        try:
+            self.assertTrue(filecmp.cmp('test_write_xml.xml',tmp_file))
+        finally:
+            os.remove(tmp_file)
 
 
 ###########  Main  ###########
