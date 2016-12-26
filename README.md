@@ -12,6 +12,12 @@ ToolDog (TOOL DescriptiOn Generator) aims to generate XML template for Galaxy or
 
 ## Installation
 
+### Pip
+
+```bash
+pip install --no-cache-dir --process-dependency-links git+https://gitlab.pasteur.fr/kehillio/ToolDog.git#egg=tooldog
+```
+
 ### Manually
 
 Clone the repository and install ToolDog:
@@ -19,8 +25,7 @@ Clone the repository and install ToolDog:
 ```bash
 git clone https://gitlab.pasteur.fr/kehillio/ToolDog.git
 cd ToolDog
-pip install -r requirements.txt
-pip install .
+pip install --no-cache-dir --process-dependency-links .
 ```
 
 ## How it works ?

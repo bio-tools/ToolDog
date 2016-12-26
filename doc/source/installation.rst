@@ -29,6 +29,10 @@ Conda
 Pip
 ---
 
+You can use pip to install directly for the git repository::
+
+    pip install --no-cache-dir --process-dependency-links git+https://gitlab.pasteur.fr/kehillio/ToolDog.git#egg=tooldog
+
 Manually
 --------
 
@@ -36,8 +40,7 @@ Clone the repository and install ToolDog with the following commands::
 
     git clone https://gitlab.pasteur.fr/kehillio/ToolDog.git
     cd ToolDog
-    pip install -r requirements.txt
-    python3 setup.py install
+    pip install --no-cache-dir --process-dependency-links .
 
 .. _uninstallation:
 
