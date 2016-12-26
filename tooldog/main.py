@@ -114,9 +114,10 @@ def run():
     parser = argparse.ArgumentParser(description = 'Generates XML or CWL from bio.tools entry.')
     parser.add_argument('biotool_entry', help='either online (ID/VERSION, e.g. SignalP/4.1) '+\
                         'or from local file (ENTRY.json, e.g. signalp4.1.json)')
-    parser.add_argument('-g','--galaxy', action='store_true', help='generates XML for Galaxy.',\
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-g','--galaxy', action='store_true', help='generates XML for Galaxy.',\
                         dest='GALAXY')
-    parser.add_argument('-c','--cwl', action='store_true', help='generates CWL', dest='CWL')
+    group.add_argument('-c','--cwl', action='store_true', help='generates CWL', dest='CWL')
     parser.add_argument('-f','--file', dest='OUTFILE', help='Write in the OUTFILE instead '+\
                         'of STDOUT.')
   
@@ -125,13 +126,6 @@ def run():
     except SystemExit:
         parser.print_help()
         sys.exit(1)
-
-    ## Extra tests for arguments
-    if args.GALAXY and args.CWL:
-        sys.stderr.write('WARNING: Both (-g/--galaxy) and (-c/--cwl) were selected.\n')
-    if not (args.GALAXY or args.CWL):
-        sys.stderr.write('WARNING: Neither (-g/--galaxy) and (-c/--cwl) were selected.\n'+\
-                         '         Nothing will happen...\n')
 
     ###########################################################
 
