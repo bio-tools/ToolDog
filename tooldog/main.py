@@ -16,6 +16,8 @@ import os
 import argparse
 import sys
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 
 # External libraries
 import requests
@@ -24,7 +26,23 @@ import requests
 from tooldog import model
 from tooldog import galaxy
 
-###########  Constant(s)  ###########
+###########  Logger  ###########
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+# Define the format
+formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
+# Logger for all logs
+file_handler = RotatingFileHandler('tooldog_activity.log', mode='a', maxBytes=1000000,\
+                                   backupCount=1)
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+# Logger for Errors, warnings on stderr
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.WARNING)
+stream_handler.setFormatter(formatter)
+logger.addHandler(stream_handler)
 
 ###########  Function(s)  ###########
 
@@ -37,6 +55,7 @@ def json_from_biotools(tool_id,tool_version):
 
     RETURN: [DICT]
     '''
+    logger.debug("Loading tool entry from https://bio.tools: " + tool_id + '/' + tool_version)
     biotools_link = "https://bio.tools/api/tool/" + tool_id + "/version/" + tool_version
     # Access the entry with requests and get the JSON part
     http_tool = requests.get(biotools_link)
@@ -44,7 +63,7 @@ def json_from_biotools(tool_id,tool_version):
     if (len(json_tool.keys()) == 1):
         # The content of JSON only contains one element which is the results we obtain 
         # on bio.tools when an entry does not exist.
-        sys.stderr.write('ERROR: Entry not found on https://bio.tools.com. Exit.\n')
+        logger.error('Entry not found on https://bio.tools.com. Exit.')
         sys.exit(1)
     return json_tool
 
@@ -56,6 +75,7 @@ def json_from_file(json_file):
 
     RETURN: [DICT]
     '''
+    logger.debug("Loading tool entry from local file: " + json_file)
     # parse file in JSON format
     with open(json_file,'r') as tool_file:
         json_tool = json.load(tool_file)
@@ -87,6 +107,7 @@ def write_xml(biotool,outfile=None):
     biotool: [Biotool] object from model.py
     outfile: output file to write the XML [String]
     '''
+    logger.debug("Writing XML file...")
     biotool_xml = galaxy.GenerateXml(biotool)
     # Add topics to the XML
     for t in biotool.topics:
@@ -141,7 +162,7 @@ def run():
         json_tool = json_from_biotools(tool_ids[0],tool_ids[1])
     else:
         # Wrong argument given for the entry
-        sys.stderr.write('ERROR: biotool_entry does not have the correct syntax.\nExit\n')
+        logger.error('biotool_entry does not have the correct syntax. Exit')
         parser.print_help()
         sys.exit(1)
 
@@ -154,8 +175,7 @@ def run():
 
     if args.CWL:
     # Write corresponding CWL
-        sys.stderr.write('WARNING: Generation of CWL is not available yet.\n'+\
-                         '         Coming soon...\n')
+        logger.warning('Generation of CWL is not available yet. Coming soon...')
 
 if __name__ == "__main__":
     run()
