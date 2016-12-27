@@ -1,0 +1,31 @@
+<tool id="SARTools" name="SARTools" version="1.4.0">
+  <description>SARTools is a R package dedicated to the differential analysis of RNA-seq data. It provides tools to generate descriptive and diagnostic graphs, to run the differential analysis with one of the well known DESeq2 or edgeR packages and to export the results into easily readable tab-delimited files. It also facilitates the generation of a HTML report which displays all the figures produced, explains the statistical methods and gives the results of the differential analysis.</description>
+  <edam_operations>
+    <edam_operation>operation_3435</edam_operation>
+    <edam_operation>operation_3563</edam_operation>
+    <edam_operation>operation_3223</edam_operation>
+  </edam_operations>
+  <edam_topics>
+    <edam_topic>topic_2269</edam_topic>
+    <edam_topic>topic_3308</edam_topic>
+  </edam_topics>
+  <stdio>
+    <exit_code level="fatal" range="1:"/>
+  </stdio>
+  <version_command>COMMAND --version</version_command>
+  <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
+  <inputs>
+    <param __class__="&lt;class 'galaxyxml.tool.parameters.DataParam'&gt;" format="TSV" help="(INPUT1)" label="Gene expression data" name="INPUT1" type="data"/>
+  </inputs>
+  <outputs>
+    <data __class__="&lt;class 'galaxyxml.tool.parameters.OutputParameter'&gt;" format="" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
+    <data __class__="&lt;class 'galaxyxml.tool.parameters.OutputParameter'&gt;" format="HTML" from_work_dir="OUTPUT2.ext" hidden="false" name="OUTPUT2"/>
+    <data __class__="&lt;class 'galaxyxml.tool.parameters.OutputParameter'&gt;" format="TSV" from_work_dir="OUTPUT3.ext" hidden="false" name="OUTPUT3"/>
+  </outputs>
+  <help><![CDATA[SARTools is a R package dedicated to the differential analysis of RNA-seq data. It provides tools to generate descriptive and diagnostic graphs, to run the differential analysis with one of the well known DESeq2 or edgeR packages and to export the results into easily readable tab-delimited files. It also facilitates the generation of a HTML report which displays all the figures produced, explains the statistical methods and gives the results of the differential analysis.
+
+Tool Homepage: https://github.com/PF2-pasteur-fr/SARTools]]></help>
+  <citations>
+    <citation type="pmid">27280887</citation>
+  </citations>
+</tool>

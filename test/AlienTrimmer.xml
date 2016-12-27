@@ -1,0 +1,29 @@
+<tool id="AlienTrimmer" name="AlienTrimmer" version="0.4.0">
+  <description>Trimming and Clipping FASTQ-formatted read files</description>
+  <edam_operations>
+    <edam_operation>operation_2478</edam_operation>
+  </edam_operations>
+  <edam_topics>
+    <edam_topic>topic_0080</edam_topic>
+  </edam_topics>
+  <stdio>
+    <exit_code level="fatal" range="1:"/>
+  </stdio>
+  <version_command>COMMAND --version</version_command>
+  <command><![CDATA[COMMAND --INPUT1 $INPUT1
+--INPUT2 $INPUT2]]></command>
+  <inputs>
+    <param __class__="&lt;class 'galaxyxml.tool.parameters.DataParam'&gt;" format="FASTQ" help="(INPUT1)" label="DNA sequence (raw)" name="INPUT1" type="data"/>
+    <param __class__="&lt;class 'galaxyxml.tool.parameters.DataParam'&gt;" format="FASTA" help="(INPUT2)" label="DNA sequence (raw)" name="INPUT2" type="data"/>
+  </inputs>
+  <outputs>
+    <data __class__="&lt;class 'galaxyxml.tool.parameters.OutputParameter'&gt;" format="FASTQ" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
+  </outputs>
+  <help><![CDATA[Trimming and Clipping FASTQ-formatted read files
+
+Tool Homepage: https://research.pasteur.fr/en/software/alientrimmer/]]></help>
+  <citations>
+    <citation type="pmid">23912058</citation>
+    <citation type="pmid">24860597</citation>
+  </citations>
+</tool>

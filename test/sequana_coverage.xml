@@ -1,0 +1,24 @@
+<tool id="sequana_coverage" name="sequana_coverage">
+  <description>Show coverage and interval of confidence to identify under and over represented genomic regions. The tool also creates an HTML report with various images showing the coverage and GC versus coverage plots. It also provides a set of CSV files with low or high coverage regions (as compared to the average coverage).</description>
+  <edam_operations>
+    <edam_operation>operation_0253</edam_operation>
+  </edam_operations>
+  <edam_topics>
+    <edam_topic>topic_3070</edam_topic>
+    <edam_topic>topic_3316</edam_topic>
+  </edam_topics>
+  <stdio>
+    <exit_code level="fatal" range="1:"/>
+  </stdio>
+  <version_command>COMMAND --version</version_command>
+  <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
+  <inputs>
+    <param __class__="&lt;class 'galaxyxml.tool.parameters.DataParam'&gt;" format="BAM, BED, TSV" help="(INPUT1)" label="Position-specific scoring matrix" name="INPUT1" type="data"/>
+  </inputs>
+  <outputs>
+    <data __class__="&lt;class 'galaxyxml.tool.parameters.OutputParameter'&gt;" format="HTML" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
+  </outputs>
+  <help><![CDATA[Show coverage and interval of confidence to identify under and over represented genomic regions. The tool also creates an HTML report with various images showing the coverage and GC versus coverage plots. It also provides a set of CSV files with low or high coverage regions (as compared to the average coverage).
+
+Tool Homepage: http://sequana.readthedocs.io]]></help>
+</tool>

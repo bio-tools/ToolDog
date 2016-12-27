@@ -1,0 +1,33 @@
+<tool id="SHAMAN" name="SHAMAN">
+  <description>SHAMAN is a SHiny application for Metagenomic ANalysis including the normalization, the differential analysis and mutiple visualization.
+
+SHAMAN is based on DESeq2 R package [Anders and Huber 2010] for the analysis of metagenomic data, as suggested in [McMurdie and Holmes 2014, Jonsson2016] . SHAMAN robustly identifies the differential abundant genera with the Generalized Linear Model implemented in DESeq2 [Love 2014] . Resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. The PCOA is performed with the ade4 R package and plots are generated with ggplot2 or D3.js packages. SHAMAN is compatible with standard formats for metagenomic analysis.</description>
+  <edam_operations>
+    <edam_operation>operation_0337</edam_operation>
+    <edam_operation>operation_3435</edam_operation>
+    <edam_operation>operation_3223</edam_operation>
+    <edam_operation>operation_3221</edam_operation>
+  </edam_operations>
+  <edam_topics>
+    <edam_topic>topic_3174</edam_topic>
+  </edam_topics>
+  <stdio>
+    <exit_code level="fatal" range="1:"/>
+  </stdio>
+  <version_command>COMMAND --version</version_command>
+  <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
+  <inputs>
+    <param __class__="&lt;class 'galaxyxml.tool.parameters.DataParam'&gt;" format="TSV" help="(INPUT1)" label="Report" name="INPUT1" type="data"/>
+  </inputs>
+  <outputs>
+    <data __class__="&lt;class 'galaxyxml.tool.parameters.OutputParameter'&gt;" format="" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
+  </outputs>
+  <help><![CDATA[SHAMAN is a SHiny application for Metagenomic ANalysis including the normalization, the differential analysis and mutiple visualization.
+
+SHAMAN is based on DESeq2 R package [Anders and Huber 2010] for the analysis of metagenomic data, as suggested in [McMurdie and Holmes 2014, Jonsson2016] . SHAMAN robustly identifies the differential abundant genera with the Generalized Linear Model implemented in DESeq2 [Love 2014] . Resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. The PCOA is performed with the ade4 R package and plots are generated with ggplot2 or D3.js packages. SHAMAN is compatible with standard formats for metagenomic analysis.
+
+Tool Homepage: http://shaman.c3bi.pasteur.fr/]]></help>
+  <citations>
+    <citation type="pmcid">PMC4878514</citation>
+  </citations>
+</tool>

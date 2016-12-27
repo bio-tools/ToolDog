@@ -1,0 +1,28 @@
+<tool id="MEMHDX" name="MEMHDX" version="1">
+  <description>This tool allows users to perform an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of DynamX software from Waters. Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.</description>
+  <edam_operations>
+    <edam_operation>operation_2997</edam_operation>
+    <edam_operation>operation_0337</edam_operation>
+    <edam_operation>operation_2238</edam_operation>
+  </edam_operations>
+  <edam_topics>
+    <edam_topic>topic_3520</edam_topic>
+  </edam_topics>
+  <stdio>
+    <exit_code level="fatal" range="1:"/>
+  </stdio>
+  <version_command>COMMAND --version</version_command>
+  <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
+  <inputs>
+    <param __class__="&lt;class 'galaxyxml.tool.parameters.DataParam'&gt;" format="TSV" help="(INPUT1)" label="Mass spectrometry data" name="INPUT1" type="data"/>
+  </inputs>
+  <outputs>
+    <data __class__="&lt;class 'galaxyxml.tool.parameters.OutputParameter'&gt;" format="" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
+  </outputs>
+  <help><![CDATA[This tool allows users to perform an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of DynamX software from Waters. Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.
+
+Tool Homepage: http://memhdx.c3bi.pasteur.fr/]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/btw420</citation>
+  </citations>
+</tool>
