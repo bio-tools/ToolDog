@@ -265,7 +265,8 @@ class TestTopic(TestEdam):
 class TestImportJson(unittest.TestCase):
 
     def test_json_from_file(self):
-        j = main.json_from_file('MacSyFinder.json')
+        json_path = os.path.dirname(__file__) + '/MacSyFinder.json'
+        j = main.json_from_file(json_path)
         self.assertEqual(len(j.keys()), 32)
         self.assertEqual(j['version'], '1.0.2')
         self.assertEqual(j['name'], 'MacSyFinder')
@@ -278,7 +279,8 @@ class TestImportJson(unittest.TestCase):
 class TestMainFunctions(unittest.TestCase):
 
     def test_json_to_biotool(self):
-        j = main.json_from_file('MacSyFinder.json')
+        json_path = os.path.dirname(__file__) + '/MacSyFinder.json'
+        j = main.json_from_file(json_path)
         bt = main.json_to_biotool(j)
         # Check 3/5 arguments of biotool object
         self.assertEqual(bt.name, 'MacSyFinder')
@@ -376,8 +378,9 @@ class TestGenerateXml(unittest.TestCase):
     def test_write_xml(self):
         tmp_file = 'tmp_test_write_xml'
         self.genxml.write_xml(tmp_file)
+        expected_xml = os.path.dirname(__file__) + '/test_write_xml.xml'
         try:
-            self.assertTrue(filecmp.cmp('test_write_xml.xml',tmp_file))
+            self.assertTrue(filecmp.cmp(expected_xml,tmp_file))
         finally:
             os.remove(tmp_file)
 
