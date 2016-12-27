@@ -6,4 +6,4 @@ before_script:
 
 test:
   script:
-  - nosetests --with-coverage --cover-package=tooldog
+  - sh run_test.sh

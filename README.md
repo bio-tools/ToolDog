@@ -1,5 +1,8 @@
 # ToolDog
 
+[![build status](https://gitlab.pasteur.fr/kehillio/ToolDog/badges/master/build.svg)](https://gitlab.pasteur.fr/kehillio/ToolDog/commits/master)
+[![coverage report](https://gitlab.pasteur.fr/kehillio/ToolDog/badges/master/coverage.svg)](https://gitlab.pasteur.fr/kehillio/ToolDog/commits/master)
+
 ToolDog (TOOL DescriptiOn Generator) aims to generate XML template for Galaxy or CWL from the description of tools from [Bio.tools](https://bio.tools).
 
 ### Full documentation: [here]()
