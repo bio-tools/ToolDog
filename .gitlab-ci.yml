@@ -1,0 +1,9 @@
+image: python:3.5.2
+
+before_script:
+  - pip install --no-cache-dir --process-dependency-links .
+  - pip install nose coverage requests_mock nose_parameterized
+
+test:
+  script:
+  - nosetests --with-coverage --cover-package=tooldog
