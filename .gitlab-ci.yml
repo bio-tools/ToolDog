@@ -6,4 +6,4 @@ before_script:
 
 test:
   script:
-  - sh run_test.sh
+  - bash run_test.sh
