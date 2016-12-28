@@ -12,7 +12,6 @@ Descrition
 ###########  Import  ###########
 
 # General libraries
-import os
 import argparse
 import sys
 import json
@@ -28,25 +27,25 @@ from tooldog import galaxy
 
 ###########  Logger  ###########
 
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+LOGGER = logging.getLogger()
+LOGGER.setLevel(logging.DEBUG)
 # Define the format
-formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
+FORMATTER = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
 # Logger for all logs
-file_handler = RotatingFileHandler('tooldog_activity.log', mode='a', maxBytes=1000000,\
+FILE_HANDLER = RotatingFileHandler('tooldog_activity.log', mode='a', maxBytes=1000000,\
                                    backupCount=1)
-file_handler.setLevel(logging.DEBUG)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
+FILE_HANDLER.setLevel(logging.DEBUG)
+FILE_HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(FILE_HANDLER)
 # Logger for Errors, warnings on stderr
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.WARNING)
-stream_handler.setFormatter(formatter)
-logger.addHandler(stream_handler)
+STREAM_HANDLER = logging.StreamHandler()
+STREAM_HANDLER.setLevel(logging.WARNING)
+STREAM_HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(STREAM_HANDLER)
 
 ###########  Function(s)  ###########
 
-def json_from_biotools(tool_id,tool_version):
+def json_from_biotools(tool_id, tool_version):
     '''
     Import JSON of a tool from https://bio.tools
 
@@ -55,15 +54,15 @@ def json_from_biotools(tool_id,tool_version):
 
     RETURN: [DICT]
     '''
-    logger.debug("Loading tool entry from https://bio.tools: " + tool_id + '/' + tool_version)
+    LOGGER.debug("Loading tool entry from https://bio.tools: " + tool_id + '/' + tool_version)
     biotools_link = "https://bio.tools/api/tool/" + tool_id + "/version/" + tool_version
     # Access the entry with requests and get the JSON part
     http_tool = requests.get(biotools_link)
     json_tool = http_tool.json()
-    if (len(json_tool.keys()) == 1):
-        # The content of JSON only contains one element which is the results we obtain 
+    if len(json_tool.keys()) == 1:
+        # The content of JSON only contains one element which is the results we obtain
         # on bio.tools when an entry does not exist.
-        logger.error('Entry not found on https://bio.tools.com. Exit.')
+        LOGGER.error('Entry not found on https://bio.tools.com. Exit.')
         sys.exit(1)
     return json_tool
 
@@ -75,14 +74,14 @@ def json_from_file(json_file):
 
     RETURN: [DICT]
     '''
-    logger.debug("Loading tool entry from local file: " + json_file)
+    LOGGER.debug("Loading tool entry from local file: " + json_file)
     # parse file in JSON format
-    with open(json_file,'r') as tool_file:
+    with open(json_file, 'r') as tool_file:
         json_tool = json.load(tool_file)
     tool_file.close()
     return json_tool
 
-def json_to_biotool(json):
+def json_to_biotool(json_file):
     '''
     Takes JSON file from bio.tools and loads it content to Biotool object
 
@@ -91,57 +90,61 @@ def json_to_biotool(json):
     RETURN: Biotool [OBJECT]
     '''
     # Initialize Biotool object with basic parameters
-    biotool = model.Biotool(json['name'],json['id'],json['version'],json['description'],json['homepage'])
+    biotool = model.Biotool(json_file['name'], json_file['id'], json_file['version'],\
+                            json_file['description'], json_file['homepage'])
     # Add informations
-    biotool.set_informations(json['credit'],json['contact'],json['publication'],json['documentation'])
+    biotool.set_informations(json_file['credit'], json_file['contact'],\
+                             json_file['publication'], json_file['documentation'])
     # Add Function(s)
-    biotool.add_functions(json['function'])
-    # Add Topics(s)  
-    biotool.add_topics(json['topic'])
+    biotool.add_functions(json_file['function'])
+    # Add Topics(s)
+    biotool.add_topics(json_file['topic'])
     return biotool
 
-def write_xml(biotool,outfile=None):
+def write_xml(biotool, outfile=None):
     '''
     This function uses GenerateXml class (galaxy.py) to write XML using galaxyxml
 
     biotool: [Biotool] object from model.py
     outfile: output file to write the XML [String]
     '''
-    logger.debug("Writing XML file...")
+    LOGGER.debug("Writing XML file...")
     biotool_xml = galaxy.GenerateXml(biotool)
     # Add topics to the XML
-    for t in biotool.topics:
-        biotool_xml.add_edam_topic(t)
+    for topic in biotool.topics:
+        biotool_xml.add_edam_topic(topic)
     # Add operations and inputs
     #for f in biotool.functions:  -> deal with all function
     # Deal with 1st function only:
-    for f in biotool.functions:
-        for o in f.operations:
-            biotool_xml.add_edam_operation(o)
-        for i in f.inputs:
-            biotool_xml.add_input_file(i)
-        for o in f.outputs:
-            biotool_xml.add_output_file(o)
+    for function in biotool.functions:
+        for operation in function.operations:
+            biotool_xml.add_edam_operation(operation)
+        for inpt in function.inputs:
+            biotool_xml.add_input_file(inpt)
+        for output in function.outputs:
+            biotool_xml.add_output_file(output)
         break # Only dead with 1st function:
-    for p in biotool.informations.publications:
-        biotool_xml.add_citation(p)
+    for publi in biotool.informations.publications:
+        biotool_xml.add_citation(publi)
     biotool_xml.write_xml(outfile)
 
 ###########  Main  ###########
 
 def run():
-
+    '''
+    Running function
+    '''
     ## Parse arguments
-    parser = argparse.ArgumentParser(description = 'Generates XML or CWL from bio.tools entry.')
+    parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
     parser.add_argument('biotool_entry', help='either online (ID/VERSION, e.g. SignalP/4.1) '+\
                         'or from local file (ENTRY.json, e.g. signalp4.1.json)')
     group = parser.add_mutually_exclusive_group()
-    group.add_argument('-g','--galaxy', action='store_true', help='generates XML for Galaxy.',\
+    group.add_argument('-g', '--galaxy', action='store_true', help='generates XML for Galaxy.',\
                         dest='GALAXY')
-    group.add_argument('-c','--cwl', action='store_true', help='generates CWL', dest='CWL')
-    parser.add_argument('-f','--file', dest='OUTFILE', help='Write in the OUTFILE instead '+\
+    group.add_argument('-c', '--cwl', action='store_true', help='generates CWL', dest='CWL')
+    parser.add_argument('-f', '--file', dest='OUTFILE', help='Write in the OUTFILE instead '+\
                         'of STDOUT.')
-  
+
     try:
         args = parser.parse_args()
     except SystemExit:
@@ -159,10 +162,10 @@ def run():
     elif ('/' in args.biotool_entry) and (len(args.biotool_entry.split('/')) == 2):
         # Importation from https://bio.tools
         tool_ids = args.biotool_entry.split('/')
-        json_tool = json_from_biotools(tool_ids[0],tool_ids[1])
+        json_tool = json_from_biotools(tool_ids[0], tool_ids[1])
     else:
         # Wrong argument given for the entry
-        logger.error('biotool_entry does not have the correct syntax. Exit')
+        LOGGER.error('biotool_entry does not have the correct syntax. Exit')
         parser.print_help()
         sys.exit(1)
 
@@ -171,11 +174,11 @@ def run():
 
     if args.GALAXY:
     # Write corresponding XMLs
-        write_xml(biotool,args.OUTFILE)
+        write_xml(biotool, args.OUTFILE)
 
     if args.CWL:
     # Write corresponding CWL
-        logger.warning('Generation of CWL is not available yet. Coming soon...')
+        LOGGER.warning('Generation of CWL is not available yet. Coming soon...')
 
 if __name__ == "__main__":
     run()
