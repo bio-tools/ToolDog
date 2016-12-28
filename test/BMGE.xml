@@ -1,5 +1,5 @@
 <tool id="BMGE" name="BMGE" version="1.12">
-  <description>Block Mapping and Gathering using Entropy</description>
+  <description>Block Mapping and Gathering using Entropy.</description>
   <edam_operations>
     <edam_operation>operation_0258</edam_operation>
   </edam_operations>

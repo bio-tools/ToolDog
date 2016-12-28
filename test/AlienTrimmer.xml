@@ -1,5 +1,5 @@
 <tool id="AlienTrimmer" name="AlienTrimmer" version="0.4.0">
-  <description>Trimming and Clipping FASTQ-formatted read files</description>
+  <description>Trimming and Clipping FASTQ-formatted read files.</description>
   <edam_operations>
     <edam_operation>operation_2478</edam_operation>
   </edam_operations>

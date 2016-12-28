@@ -1,5 +1,5 @@
 <tool id="MacSyFinder" name="MacSyFinder" version="1.0.2">
-  <description>MacSyFinder is a program to model and detect macromolecular systems, genetic pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily conserved properties: they are made of conserved components, and are encoded in compact loci (conserved genetic architecture). The user models these systems with MacSyFinder to reflect these conserved features, and to allow their efficient detection.</description>
+  <description>MacSyFinder is a program to model and detect macromolecular systems, genetic pathways.</description>
   <edam_operations>
     <edam_operation>operation_3023</edam_operation>
   </edam_operations>

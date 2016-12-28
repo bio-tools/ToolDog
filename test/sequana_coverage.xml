@@ -1,5 +1,5 @@
 <tool id="sequana_coverage" name="sequana_coverage">
-  <description>Show coverage and interval of confidence to identify under and over represented genomic regions. The tool also creates an HTML report with various images showing the coverage and GC versus coverage plots. It also provides a set of CSV files with low or high coverage regions (as compared to the average coverage).</description>
+  <description>Show coverage and interval of confidence to identify under and over represented genomic regions.</description>
   <edam_operations>
     <edam_operation>operation_0253</edam_operation>
   </edam_operations>

@@ -1,5 +1,5 @@
 <tool id="integron_finder" name="Integron Finder" version="1.5.1">
-  <description>A tool to detect Integron in DNA sequences</description>
+  <description>A tool to detect Integron in DNA sequences.</description>
   <edam_operations>
     <edam_operation>operation_3430</edam_operation>
     <edam_operation>operation_0239</edam_operation>

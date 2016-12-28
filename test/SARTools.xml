@@ -1,5 +1,5 @@
 <tool id="SARTools" name="SARTools" version="1.4.0">
-  <description>SARTools is a R package dedicated to the differential analysis of RNA-seq data. It provides tools to generate descriptive and diagnostic graphs, to run the differential analysis with one of the well known DESeq2 or edgeR packages and to export the results into easily readable tab-delimited files. It also facilitates the generation of a HTML report which displays all the figures produced, explains the statistical methods and gives the results of the differential analysis.</description>
+  <description>SARTools is a R package dedicated to the differential analysis of RNA-seq data.</description>
   <edam_operations>
     <edam_operation>operation_3435</edam_operation>
     <edam_operation>operation_3563</edam_operation>

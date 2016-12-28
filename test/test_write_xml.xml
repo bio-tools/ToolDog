@@ -1,11 +1,11 @@
 <tool id="an_id" name="a_name" version="a_version">
-  <description>a_description</description>
+  <description>a_description.</description>
   <stdio>
     <exit_code level="fatal" range="1:"/>
   </stdio>
   <version_command>COMMAND --version</version_command>
   <command><![CDATA[COMMAND]]></command>
-  <help><![CDATA[a_description
+  <help><![CDATA[a_description.
 
 Tool Homepage: a_homepage]]></help>
 </tool>

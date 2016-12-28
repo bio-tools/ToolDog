@@ -302,14 +302,12 @@ class TestMainFunctions(unittest.TestCase):
         # Check few arguments from topics
         self.assertEqual(bt.topics[0].term, 'Functional genomics')
 
-    #def test_write_xml(self):
-
 
 class TestGenerateXml(unittest.TestCase):
 
     def setUp(self):
         # Create a biotool
-        self.biotool = model.Biotool('a_name', 'an_id', 'a_version', 'a_description',\
+        self.biotool = model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
                                      'a_homepage')
         self.genxml = galaxy.GenerateXml(self.biotool)
 
@@ -328,7 +326,7 @@ class TestGenerateXml(unittest.TestCase):
         self.assertEqual(tool.root.attrib['name'], 'a_name')
         self.assertEqual(tool.root.attrib['version'], 'a_version')
         # Test <description> of the future XML
-        self.assertEqual(tool.root.find('description').text, 'a_description')
+        self.assertEqual(tool.root.find('description').text, 'a_description.')
 
     def test_add_edam_topic(self):
         # Create a Topic object
