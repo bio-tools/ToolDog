@@ -43,8 +43,10 @@ class GenerateXml:
         self.input_ct = 0
         self.output_ct = 0
         # Initialize tool
+        #   Get the first sentence of the description only
+        description = biotool.description.split('.')[0] + '.' 
         self.tool = gxt.Tool(biotool.name,biotool.tool_id,biotool.version, \
-                             biotool.description, "COMMAND", version_command = \
+                             description, "COMMAND", version_command = \
                              "COMMAND --version")
         self.tool.help = (biotool.description + "\n\nTool Homepage: " + \
                           biotool.homepage)
