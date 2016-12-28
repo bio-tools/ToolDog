@@ -51,12 +51,18 @@ class TestToolDog(unittest.TestCase):
     def test_from_local_to_galaxy(self, name, json_path, xml_path):
         json = main.json_from_file(json_path)
         biotool = main.json_to_biotool(json)
-        tmp_file = 'tmp_test_xml'
+        tmp_file = 'tmp_test_xml.xml'
         main.write_xml(biotool,tmp_file)
+        tmp_file_list = glob("tmp_*.xml")
         try:
-            self.assertTrue(filecmp.cmp(xml_path,tmp_file))
+            for temp_file in tmp_file_list:
+                if len(tmp_file_list) > 1:
+                    xml_path = os.path.splitext(json_path)[0] + \
+                               str(tmp_file_list.index(temp_file) + 1) + '.xml' 
+                self.assertTrue(filecmp.cmp(xml_path,temp_file))
         finally:
-            os.remove(tmp_file)
+            for temp_file in tmp_file_list:
+                os.remove(temp_file)
 
     @parameterized.expand(get_test_files())
     def test_from_biotools_to_galaxy(self, name, json_path, xml_path):
@@ -67,12 +73,18 @@ class TestToolDog(unittest.TestCase):
                   json=json_answer)
             json = main.json_from_biotools(name, '1.0')
             biotool = main.json_to_biotool(json)
-            tmp_file = 'tmp_test_xml'
+            tmp_file = 'tmp_test_xml.xml'
             main.write_xml(biotool,tmp_file)
+            tmp_file_list = glob("tmp_*.xml")
             try:
-                self.assertTrue(filecmp.cmp(xml_path,tmp_file))
+                for temp_file in tmp_file_list:
+                    if len(tmp_file_list) > 1:
+                        xml_path = os.path.splitext(json_path)[0] + \
+                                   str(tmp_file_list.index(temp_file) + 1) + '.xml' 
+                    self.assertTrue(filecmp.cmp(xml_path,temp_file))
             finally:
-                os.remove(tmp_file)
+                for temp_file in tmp_file_list:
+                    os.remove(temp_file)
 
 
 ###########  Main  ###########

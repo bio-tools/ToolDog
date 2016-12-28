@@ -133,15 +133,23 @@ class GenerateXml:
         elif publication.pmcid is not None:
             self.tool.citations.append(gxtp.Citation('pmcid',publication.pmcid))
 
-    def write_xml(self,out_file=None):
+    def write_xml(self, out_file=None, index=None):
         '''
+        Write XML to STDOUT or files
         '''
         # Copy informations to avoid expension of xml in case we write several XMLs
         export_tool = copy.deepcopy(self.tool)
         # Give XML on STDout
         if out_file is None:
+            if index is not None:
+                print('########## XML number ' + str(index) + ' ##########')
             print(export_tool.export().decode('utf-8'))
         else:
+            # Format name for output file(s)
+            if index is not None:
+                out_file = os.path.splitext(out_file)[0] + str(index) + '.xml'
+            else:
+                out_file = os.path.splitext(out_file)[0] + '.xml' 
             f = open(out_file,'w')
             f.write(export_tool.export().decode('utf-8'))
             f.close()

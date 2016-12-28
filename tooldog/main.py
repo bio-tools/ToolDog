@@ -16,6 +16,7 @@ import argparse
 import sys
 import json
 import logging
+import copy
 from logging.handlers import RotatingFileHandler
 
 # External libraries
@@ -113,20 +114,24 @@ def write_xml(biotool, outfile=None):
     # Add topics to the XML
     for topic in biotool.topics:
         biotool_xml.add_edam_topic(topic)
-    # Add operations and inputs
-    #for f in biotool.functions:  -> deal with all function
-    # Deal with 1st function only:
-    for function in biotool.functions:
-        for operation in function.operations:
-            biotool_xml.add_edam_operation(operation)
-        for inpt in function.inputs:
-            biotool_xml.add_input_file(inpt)
-        for output in function.outputs:
-            biotool_xml.add_output_file(output)
-        break # Only dead with 1st function:
     for publi in biotool.informations.publications:
         biotool_xml.add_citation(publi)
-    biotool_xml.write_xml(outfile)
+    # Add operations and inputs
+    for function in biotool.functions:
+        # First make a copy of the tool to add function infos
+        function_xml = copy.deepcopy(biotool_xml)
+        for operation in function.operations:
+            function_xml.add_edam_operation(operation)
+        for inpt in function.inputs:
+            function_xml.add_input_file(inpt)
+        for output in function.outputs:
+            function_xml.add_output_file(output)
+        # Write tool
+        if len(biotool.functions) > 1:
+            function_xml.write_xml(outfile, biotool.functions.index(function) + 1)
+        else:
+            function_xml.write_xml(outfile)
+
 
 ###########  Main  ###########
 

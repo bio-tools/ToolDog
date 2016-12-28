@@ -1,0 +1,23 @@
+<tool id="MacSyFinder" name="MacSyFinder" version="1.0.2">
+  <description>MacSyFinder is a program to model and detect macromolecular systems, genetic pathways.</description>
+  <edam_operations>
+    <edam_operation>operation_0337</edam_operation>
+  </edam_operations>
+  <edam_topics>
+    <edam_topic>topic_0085</edam_topic>
+  </edam_topics>
+  <stdio>
+    <exit_code level="fatal" range="1:"/>
+  </stdio>
+  <version_command>COMMAND --version</version_command>
+  <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
+  <inputs>
+    <param __class__="&lt;class 'galaxyxml.tool.parameters.DataParam'&gt;" format="JSON" help="(INPUT1)" label="Report" name="INPUT1" type="data"/>
+  </inputs>
+  <help><![CDATA[MacSyFinder is a program to model and detect macromolecular systems, genetic pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily conserved properties: they are made of conserved components, and are encoded in compact loci (conserved genetic architecture). The user models these systems with MacSyFinder to reflect these conserved features, and to allow their efficient detection.
+
+Tool Homepage: https://github.com/gem-pasteur/macsyfinder]]></help>
+  <citations>
+    <citation type="doi">doi:10.1371/journal.pone.0110726</citation>
+  </citations>
+</tool>

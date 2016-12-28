@@ -374,7 +374,7 @@ class TestGenerateXml(unittest.TestCase):
         self.assertEqual(self.genxml.tool.citations.children[0].node.attrib['type'], 'doi')
 
     def test_write_xml(self):
-        tmp_file = 'tmp_test_write_xml'
+        tmp_file = 'tmp_test_write_xml.xml'
         self.genxml.write_xml(tmp_file)
         expected_xml = os.path.dirname(__file__) + '/test_write_xml.xml'
         try:
