@@ -12,10 +12,6 @@ Descrition
 ###########  Import  ###########
 
 # General libraries
-import os
-import argparse
-import sys
-import json
 
 # External libraries
 
@@ -25,43 +21,46 @@ import json
 
 ###########  Class(es)  ###########
 
-class Biotool:
+class Biotool(object):
+    '''
+    This class correspond to an entry from bio.tools.
+    '''
 
     def __init__(self, name, tool_id, version, description, homepage):
-         '''
-         name: [STRING]
-         tool_id: [STRING]
-         version: [STRING]
-         description: [STRING]
-         homepage: URL to homepage [STRING]
-         '''
-         self.name = name
-         self.tool_id = tool_id
-         self.version = version
-         self.description = description
-         self.homepage = homepage
-         self.functions = [] # List of Function objects
-         self.topics = []    # List of Topic objects
-         self.informations = None # Informations object
+        '''
+        name: [STRING]
+        tool_id: [STRING]
+        version: [STRING]
+        description: [STRING]
+        homepage: URL to homepage [STRING]
+        '''
+        self.name = name
+        self.tool_id = tool_id
+        self.version = version
+        self.description = description
+        self.homepage = homepage
+        self.functions = [] # List of Function objects
+        self.topics = []    # List of Topic objects
+        self.informations = None # Informations object
 
-    def set_informations(self, credits, contacts, publications, docs): 
+    def set_informations(self, tool_credits, contacts, publications, docs):
         '''
         Add an information object to the biotool
 
-        credits: [LIST] of [DICT] with different credits
+        tool_credits: [LIST] of [DICT] with different tool_credits
         contacts: [LIST] of [DICT] of contacts
-        publications: [LIST] of [DICT] of different IDs for publications 
+        publications: [LIST] of [DICT] of different IDs for publications
         doc: [LIST] of [DICT] with different documentations
         '''
         self.informations = Informations()
-        for c in credits:
-            self.informations.credits.append(Credit(c))
-        for c in contacts:
-            self.informations.contacts.append(Contact(c))
-        for p in publications:
-            self.informations.publications.append(Publication(p))
-        for d in docs:
-            self.informations.documentations.append(Documentation(d))
+        for cred in tool_credits:
+            self.informations.tool_credits.append(Credit(cred))
+        for cont in contacts:
+            self.informations.contacts.append(Contact(cont))
+        for pub in publications:
+            self.informations.publications.append(Publication(pub))
+        for doc in docs:
+            self.informations.documentations.append(Documentation(doc))
 
     def add_functions(self, functions):
         '''
@@ -69,11 +68,11 @@ class Biotool:
 
         function: [LIST] of [DICT]
         '''
-        for f in functions:
+        for fct in functions:
             # Create Function object
-            function = Function(f['operation'])
-            function.add_inputs(f['input'])
-            function.add_outputs(f['output'])
+            function = Function(fct['operation'])
+            function.add_inputs(fct['input'])
+            function.add_outputs(fct['output'])
             # Append object to the biotool
             self.functions.append(function)
 
@@ -81,20 +80,26 @@ class Biotool:
         '''
         Add topics to the list
         '''
-        for t in topics:
-            self.topics.append(Topic(t))
+        for topic in topics:
+            self.topics.append(Topic(topic))
 
 
-class Informations:
+class Informations(object):
+    '''
+    Class to describe different informations concerning a bio.tool entry
+    '''
 
     def __init__(self):
         self.publications = [] # List of Publication objects
         self.documentations = [] # List of Documentation objects
         self.contacts = [] # List of Contact objects
-        self.credits = [] # List of Credit objects
+        self.tool_credits = [] # List of Credit objects
 
 
-class Credit:
+class Credit(object):
+    '''
+    Class to store a credit information
+    '''
 
     def __init__(self, credit):
         self.comment = credit['comment'] # [STRING]
@@ -107,7 +112,10 @@ class Credit:
         self.orcid_id = credit['orcidId'] # [STRING]
 
 
-class Publication:
+class Publication(object):
+    '''
+    Store publication information
+    '''
 
     def __init__(self, publication):
         self.doi = publication['doi'] # [STRING]
@@ -116,7 +124,10 @@ class Publication:
         self.type = publication['type'] # [STRING]
 
 
-class Documentation:
+class Documentation(object):
+    '''
+    Store documentation information
+    '''
 
     def __init__(self, documentation):
         self.url = documentation['url'] # [STRING]
@@ -124,9 +135,12 @@ class Documentation:
         self.comment = documentation['comment'] # [STRING]
 
 
-class Contact:
+class Contact(object):
+    '''
+    Store contact information
+    '''
 
-    def __init__(self,contact):
+    def __init__(self, contact):
         self.email = contact['email'] # [STRING]
         self.name = contact['name'] # [STRING]
         # self.role = contact['contactRole']
@@ -134,15 +148,18 @@ class Contact:
         # self.url = contact['contactURL']
 
 
-class Function:
+class Function(object):
+    '''
+    Correspond to one function of the entry with the corresponding inputs and outputs
+    '''
 
-    def __init__(self,edams):
+    def __init__(self, edams):
         '''
         edams: [LIST] of [DICT] of EDAM ontology for operation(s) with uri and term
         '''
         self.operations = [] # List of Operation objects
-        for e in edams:
-            self.operations.append(Operation(e))
+        for edam in edams:
+            self.operations.append(Operation(edam))
         self.inputs = [] # List of Inputs objects
         self.outputs = [] # List of Outputs objects
 
@@ -150,20 +167,23 @@ class Function:
         '''
         inputs: [LIST] of [DICT] inputs
         '''
-        for i in inputs:
+        for inp in inputs:
             # Create Input object and appends to the list
-            self.inputs.append(Input(i['data'],i['format']))
+            self.inputs.append(Input(inp['data'], inp['format']))
 
     def add_outputs(self, outputs):
         '''
         outputs: [LIST] of [DICT] outputs
         '''
-        for o in outputs:
+        for outp in outputs:
             # Create Output object and appends to the list
-            self.outputs.append(Output(o['data'],o['format']))
+            self.outputs.append(Output(outp['data'], outp['format']))
 
 
-class Data:
+class Data(object):
+    '''
+    Data described by EDAM ontology that can be input or output
+    '''
 
     def __init__(self, data_type, formats, description=None):
         '''
@@ -171,13 +191,16 @@ class Data:
         formats: [LIST] of [DICT] of EDAM ontology for data formats with uri and term
         description: [STRING]
         '''
-        self.data_type = Data_type(data_type) # Data_type object
+        self.data_type = DataType(data_type) # Data_type object
         self.formats = [] # List of Format objects
-        for f in formats:
-            self.formats.append(Format(f))
+        for frmt in formats:
+            self.formats.append(Format(frmt))
         self.description = description
 
 class Input(Data):
+    '''
+    Input of a described function
+    '''
 
     def __init__(self, data_type, formats, description=None):
         '''
@@ -189,6 +212,9 @@ class Input(Data):
 
 
 class Output(Data):
+    '''
+    Output of a described function
+    '''
 
     def __init__(self, data_type, formats, description=None):
         '''
@@ -199,7 +225,10 @@ class Output(Data):
         Data.__init__(self, data_type, formats, description)
 
 
-class Edam:
+class Edam(object):
+    '''
+    Edam annotation with the uri and its corresponding term
+    '''
 
     def __init__(self, edam):
         '''
@@ -215,6 +244,9 @@ class Edam:
         return self.uri.split('/')[-1]
 
 class Operation(Edam):
+    '''
+    EDAM operation associated to a function
+    '''
 
     def __init__(self, edam):
         '''
@@ -222,7 +254,10 @@ class Operation(Edam):
         '''
         Edam.__init__(self, edam)
 
-class Data_type(Edam):
+class DataType(Edam):
+    '''
+    EDAM data_type associated to either input or output
+    '''
 
     def __init__(self, edam):
         '''
@@ -231,6 +266,9 @@ class Data_type(Edam):
         Edam.__init__(self, edam)
 
 class Format(Edam):
+    '''
+    EDAM format associated to either input or output
+    '''
 
     def __init__(self, edam):
         '''
@@ -239,6 +277,9 @@ class Format(Edam):
         Edam.__init__(self, edam)
 
 class Topic(Edam):
+    '''
+    EDAM topic associated to the entry
+    '''
 
     def __init__(self, edam):
         '''
