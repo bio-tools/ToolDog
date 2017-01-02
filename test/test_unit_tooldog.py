@@ -13,8 +13,6 @@ Descrition
 
 # General libraries
 import os
-import argparse
-import sys
 import filecmp
 import unittest
 
@@ -36,7 +34,7 @@ EDAM = {'uri':'http://edamontology.org/topic_0091',
 class TestBiotool(unittest.TestCase):
 
     def setUp(self):
-        self.biotool = model.Biotool('name','an_id','a_version','a description '+\
+        self.biotool = model.Biotool('name', 'an_id', 'a_version', 'a description '+\
                                        'with spaces.', 'http://urltohomepage.com')
 
     def test_init(self):
@@ -50,16 +48,16 @@ class TestBiotool(unittest.TestCase):
         self.assertIsNone(self.biotool.informations)
 
     def test_set_informations(self):
-        credits = [{'comment':'a_comment', 'email':'an_email',\
+        tool_credits = [{'comment':'a_comment', 'email':'an_email',\
                     'gridId':'a_grid_id', 'name':'a_name',\
                     'typeEntity':'a_type_entity', 'typeRole':'a_type_role',\
                     'url':'a_url', 'orcidId':'an_orcid_id'}]
         contacts = [{'email':'an_email', 'name':'a_name'}]
         pubs = [{'doi':'a_doi', 'pmid':'a_pm_id', 'pmcid':'a_pmc_id', 'type':'a_type'}]
         docs = [{'url':'an_url', 'type':'a_type', 'comment':'a_comment'}]
-        self.biotool.set_informations(credits,contacts,pubs,docs)
+        self.biotool.set_informations(tool_credits, contacts, pubs, docs)
         # Check credits params
-        self.assertEqual(self.biotool.informations.credits[0].comment, 'a_comment')
+        self.assertEqual(self.biotool.informations.tool_credits[0].comment, 'a_comment')
         self.assertEqual(self.biotool.informations.credits[0].email, 'an_email')
         self.assertEqual(self.biotool.informations.credits[0].grid_id, 'a_grid_id')
         self.assertEqual(self.biotool.informations.credits[0].name, 'a_name')
@@ -110,7 +108,7 @@ class TestBiotool(unittest.TestCase):
         self.assertIsNone(self.biotool.functions[0].outputs[0].description)
 
     def test_add_topics(self):
-        topics =[EDAM]
+        topics = [EDAM]
         self.biotool.add_topics(topics)
         self.assertEqual(self.biotool.topics[0].uri, EDAM['uri'])
         self.assertEqual(self.biotool.topics[0].term, EDAM['term'])
@@ -123,7 +121,7 @@ class TestInformations(unittest.TestCase):
         self.assertListEqual(info.publications, [])
         self.assertListEqual(info.documentations, [])
         self.assertListEqual(info.contacts, [])
-        self.assertListEqual(info.credits, [])
+        self.assertListEqual(info.tool_credits, [])
 
 
 class TestCredit(unittest.TestCase):
@@ -148,10 +146,10 @@ class TestPublication(unittest.TestCase):
     def test_init(self):
         dict_publi = {'doi':'a_doi', 'pmid':'a_pm_id', 'pmcid':'a_pmc_id', 'type':'a_type'}
         publication = model.Publication(dict_publi)
-        self.assertEqual(publication.doi,dict_publi['doi'])
-        self.assertEqual(publication.pmid,dict_publi['pmid'])
-        self.assertEqual(publication.pmcid,dict_publi['pmcid'])
-        self.assertEqual(publication.type,dict_publi['type'])
+        self.assertEqual(publication.doi, dict_publi['doi'])
+        self.assertEqual(publication.pmid, dict_publi['pmid'])
+        self.assertEqual(publication.pmcid, dict_publi['pmcid'])
+        self.assertEqual(publication.type, dict_publi['type'])
 
 
 class TestDocumentation(unittest.TestCase):
@@ -169,8 +167,8 @@ class TestContact(unittest.TestCase):
     def test_init(self):
         dict_contact = {'email':'an_email', 'name':'a_name'}
         contact = model.Contact(dict_contact)
-        self.assertEqual(contact.email,dict_contact['email'])
-        self.assertEqual(contact.name,dict_contact['name'])
+        self.assertEqual(contact.email, dict_contact['email'])
+        self.assertEqual(contact.name, dict_contact['name'])
 
 
 class TestFunction(unittest.TestCase):
@@ -181,8 +179,8 @@ class TestFunction(unittest.TestCase):
     def test_init(self):
         self.assertEqual(self.function.operations[0].uri, EDAM['uri'])
         self.assertEqual(self.function.operations[0].term, EDAM['term'])
-        self.assertListEqual(self.function.inputs,[])
-        self.assertListEqual(self.function.outputs,[])
+        self.assertListEqual(self.function.inputs, [])
+        self.assertListEqual(self.function.outputs, [])
 
     def test_add_inputs(self):
         inputs = [{'data':EDAM,
@@ -196,14 +194,14 @@ class TestFunction(unittest.TestCase):
 
     def test_add_outputs(self):
         outputs = [{'data': EDAM,
-                   'format': [EDAM]}]
+                    'format': [EDAM]}]
         self.function.add_outputs(outputs)
         self.assertEqual(self.function.outputs[0].data_type.uri, EDAM['uri'])
         self.assertEqual(self.function.outputs[0].data_type.term, EDAM['term'])
         self.assertEqual(self.function.outputs[0].formats[0].uri, EDAM['uri'])
         self.assertEqual(self.function.outputs[0].formats[0].term, EDAM['term'])
         self.assertIsNone(self.function.outputs[0].description)
-        
+
 
 class TestData(unittest.TestCase):
 
@@ -240,7 +238,7 @@ class TestEdam(unittest.TestCase):
 
     def test_get_edam_id(self):
         self.assertEqual(self.edam.get_edam_id(), 'topic_0091')
-        
+
 class TestOperation(TestEdam):
 
     def test_init(self):
@@ -281,26 +279,26 @@ class TestMainFunctions(unittest.TestCase):
     def test_json_to_biotool(self):
         json_path = os.path.dirname(__file__) + '/MacSyFinder.json'
         j = main.json_from_file(json_path)
-        bt = main.json_to_biotool(j)
+        biot = main.json_to_biotool(j)
         # Check 3/5 arguments of biotool object
-        self.assertEqual(bt.name, 'MacSyFinder')
-        self.assertEqual(bt.tool_id, 'MacSyFinder')
-        self.assertEqual(bt.version, '1.0.2')
+        self.assertEqual(biot.name, 'MacSyFinder')
+        self.assertEqual(biot.tool_id, 'MacSyFinder')
+        self.assertEqual(biot.version, '1.0.2')
         # Check few arguments from Information object
-        self.assertEqual(bt.informations.contacts[0].name, 'Bertrand Néron')
-        self.assertEqual(bt.informations.credits[0].name, 'Institut Pasteur')
-        self.assertEqual(bt.informations.documentations[0].type, \
+        self.assertEqual(biot.informations.contacts[0].name, 'Bertrand Néron')
+        self.assertEqual(biot.informations.tool_credits[0].name, 'Institut Pasteur')
+        self.assertEqual(biot.informations.documentations[0].type, \
                          'Citation instructions')
-        self.assertEqual(bt.informations.publications[0].doi, \
+        self.assertEqual(biot.informations.publications[0].doi, \
                          'doi:10.1371/journal.pone.0110726')
         # Check few arguments from function
-        self.assertEqual(bt.functions[0].operations[0].term, \
+        self.assertEqual(biot.functions[0].operations[0].term, \
                          'Prediction and recognition (protein)')
-        self.assertEqual(bt.functions[0].inputs[0].data_type.term, \
+        self.assertEqual(biot.functions[0].inputs[0].data_type.term, \
                          'Protein sequence record')
-        self.assertEqual(bt.functions[0].outputs[0].data_type.term, 'Report')
+        self.assertEqual(biot.functions[0].outputs[0].data_type.term, 'Report')
         # Check few arguments from topics
-        self.assertEqual(bt.topics[0].term, 'Functional genomics')
+        self.assertEqual(biot.topics[0].term, 'Functional genomics')
 
 
 class TestGenerateXml(unittest.TestCase):
@@ -344,7 +342,7 @@ class TestGenerateXml(unittest.TestCase):
 
     def test_add_input_file(self):
         # Create a Input object (Warning both Type and Format will be a topic)
-        input = model.Input(EDAM,[EDAM])
+        input = model.Input(EDAM, [EDAM])
         self.genxml.add_input_file(input)
         # Copy object to test (easier to read)
         input_attrib = self.genxml.tool.inputs.children[0].node.attrib
@@ -356,7 +354,7 @@ class TestGenerateXml(unittest.TestCase):
 
     def test_add_output_file(self):
         # Create a Output object (Warning both Type and Format will be a topic)
-        output = model.Output(EDAM,[EDAM])
+        output = model.Output(EDAM, [EDAM])
         self.genxml.add_output_file(output)
         # Copy object to test
         output_attrib = self.genxml.tool.outputs.children[0].node.attrib
@@ -370,7 +368,7 @@ class TestGenerateXml(unittest.TestCase):
         publication = model.Publication(dict_pub)
         self.genxml.add_citation(publication)
         # Test
-        self.assertEqual(self.genxml.tool.citations.children[0].node.text,'doi:123')
+        self.assertEqual(self.genxml.tool.citations.children[0].node.text, 'doi:123')
         self.assertEqual(self.genxml.tool.citations.children[0].node.attrib['type'], 'doi')
 
     def test_write_xml(self):
@@ -378,7 +376,7 @@ class TestGenerateXml(unittest.TestCase):
         self.genxml.write_xml(tmp_file)
         expected_xml = os.path.dirname(__file__) + '/test_write_xml.xml'
         try:
-            self.assertTrue(filecmp.cmp(expected_xml,tmp_file))
+            self.assertTrue(filecmp.cmp(expected_xml, tmp_file))
         finally:
             os.remove(tmp_file)
 
