@@ -140,8 +140,8 @@ class GenerateXml(object):
         # Give XML on STDout
         if out_file is None:
             if index is not None:
-                print '########## XML number ' + str(index) + ' ##########'
-            print export_tool.export().decode('utf-8')
+                print ('########## XML number ' + str(index) + ' ##########')
+            print (export_tool.export().decode('utf-8'))
         else:
             # Format name for output file(s)
             if index is not None:
