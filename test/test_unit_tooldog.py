@@ -246,7 +246,7 @@ class TestOperation(TestEdam):
     def test_init(self):
         TestEdam.test_init(self)
 
-class TestData_type(TestEdam):
+class TestDataType(TestEdam):
 
     def test_init(self):
         TestEdam.test_init(self)
