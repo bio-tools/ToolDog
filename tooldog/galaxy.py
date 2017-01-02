@@ -13,24 +13,22 @@ Descrition
 
 # General libraries
 import os
-import argparse
-import sys
-import json
 import copy
 
 # External libraries
-import requests
 import galaxyxml.tool as gxt
 import galaxyxml.tool.parameters as gxtp
 
 # Class and Objects
-from tooldog import model
 
 ###########  Constant(s)  ###########
 
 ###########  Class(es)  ###########
 
-class GenerateXml:
+class GenerateXml(object):
+    '''
+    Class to support generation of XML from Biotool class of model.py
+    '''
 
     def __init__(self, biotool):
         '''
@@ -44,9 +42,9 @@ class GenerateXml:
         self.output_ct = 0
         # Initialize tool
         #   Get the first sentence of the description only
-        description = biotool.description.split('.')[0] + '.' 
-        self.tool = gxt.Tool(biotool.name,biotool.tool_id,biotool.version, \
-                             description, "COMMAND", version_command = \
+        description = biotool.description.split('.')[0] + '.'
+        self.tool = gxt.Tool(biotool.name, biotool.tool_id, biotool.version, \
+                             description, "COMMAND", version_command=\
                              "COMMAND --version")
         self.tool.help = (biotool.description + "\n\nTool Homepage: " + \
                           biotool.homepage)
@@ -71,7 +69,7 @@ class GenerateXml:
             self.tool.edam_operations = gxtp.EdamOperations()
         self.tool.edam_operations.append(gxtp.EdamOperation(operation.get_edam_id()))
 
-    def add_input_file(self, input):
+    def add_input_file(self, input_obj):
         '''
         input: [Input] object from model.py
         Add the input to the tool. We consider inputs present in biotool represent
@@ -85,12 +83,12 @@ class GenerateXml:
         name = 'INPUT' + str(self.input_ct)
         # Get all different format for this input
         list_formats = []
-        for f in input.formats:
-            list_formats.append(f.term)
+        for format_obj in input_obj.formats:
+            list_formats.append(format_obj.term)
         formats = ', '.join(list_formats)
         # Create the parameter
-        param = gxtp.DataParam(name, label=input.data_type.term, \
-                               help=input.description, format=formats)
+        param = gxtp.DataParam(name, label=input_obj.data_type.term, \
+                               help=input_obj.description, format=formats)
         # Override the corresponding arguments in the command line
         param.command_line_override = '--' + name + ' $' + name
         # Appends parameter to inputs
@@ -109,8 +107,8 @@ class GenerateXml:
         name = 'OUTPUT' + str(self.output_ct)
         # Get all different format for this output
         list_formats = []
-        for f in output.formats:
-            list_formats.append(f.term)
+        for format_obj in output.formats:
+            list_formats.append(format_obj.term)
         formats = ', '.join(list_formats)
         # Create the parameter
         param = gxtp.OutputParameter(name, format=formats, from_work_dir=\
@@ -127,11 +125,11 @@ class GenerateXml:
             self.tool.citations = gxtp.Citations()
         # Add citation depending the type (doi, pmid...)
         if publication.doi is not None:
-            self.tool.citations.append(gxtp.Citation('doi',publication.doi))
+            self.tool.citations.append(gxtp.Citation('doi', publication.doi))
         elif publication.pmid is not None:
-            self.tool.citations.append(gxtp.Citation('pmid',publication.pmid))
+            self.tool.citations.append(gxtp.Citation('pmid', publication.pmid))
         elif publication.pmcid is not None:
-            self.tool.citations.append(gxtp.Citation('pmcid',publication.pmcid))
+            self.tool.citations.append(gxtp.Citation('pmcid', publication.pmcid))
 
     def write_xml(self, out_file=None, index=None):
         '''
@@ -142,14 +140,14 @@ class GenerateXml:
         # Give XML on STDout
         if out_file is None:
             if index is not None:
-                print('########## XML number ' + str(index) + ' ##########')
-            print(export_tool.export().decode('utf-8'))
+                print '########## XML number ' + str(index) + ' ##########'
+            print export_tool.export().decode('utf-8')
         else:
             # Format name for output file(s)
             if index is not None:
                 out_file = os.path.splitext(out_file)[0] + str(index) + '.xml'
             else:
-                out_file = os.path.splitext(out_file)[0] + '.xml' 
-            f = open(out_file,'w')
-            f.write(export_tool.export().decode('utf-8'))
-            f.close()
+                out_file = os.path.splitext(out_file)[0] + '.xml'
+            file_w = open(out_file, 'w')
+            file_w.write(export_tool.export().decode('utf-8'))
+            file_w.close()

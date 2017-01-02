@@ -15,8 +15,8 @@ Descrition
 import argparse
 import sys
 import json
-import logging
 import copy
+import logging
 from logging.handlers import RotatingFileHandler
 
 # External libraries
