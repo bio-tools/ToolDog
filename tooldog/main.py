@@ -24,7 +24,7 @@ import requests
 
 # Class and Objects
 from tooldog import model
-from tooldog import galaxy
+from tooldog import galaxy, cwl
 
 ###########  Logger  ###########
 
@@ -132,6 +132,28 @@ def write_xml(biotool, outfile=None):
         else:
             function_xml.write_xml(outfile)
 
+def write_cwl(biotool, outfile=None):
+    '''
+    This function uses GenerateCwl class (cwl.py) to write CWL using pycwl
+
+    biotool: [Biotool] object from model.py
+    outfile: output file to write the CWL [String]
+    '''
+    LOGGER.debug("Writing CWL file...")
+    biotool_cwl = cwl.GenerateCwl(biotool)
+    # Add operations and inputs
+    for function in biotool.functions:
+        # First make a copy of the tool to add function infos
+        function_cwl = copy.deepcopy(biotool_cwl)
+        for inp in function.inputs:
+            function_cwl.add_input_file(inp)
+        for outp in function.outputs:
+            function_cwl.add_output_file(outp)
+        # Write tool
+        if len(biotool.functions) > 1:
+            function_cwl.write_cwl(outfile, biotool.functions.index(function) + 1)
+        else:
+            function_cwl.write_cwl(outfile)
 
 ###########  Main  ###########
 
@@ -183,7 +205,8 @@ def run():
 
     if args.CWL:
     # Write corresponding CWL
-        LOGGER.warning('Generation of CWL is not available yet. Coming soon...')
+        write_cwl(biotool, args.OUTFILE)
+        #LOGGER.warning('Generation of CWL is not available yet. Coming soon...')
 
 if __name__ == "__main__":
     run()
