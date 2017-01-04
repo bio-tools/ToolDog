@@ -6,7 +6,7 @@
 ## Creation : 12-13-2016
 
 '''
-Descrition
+Model used to order informations downloaded from bio.tools
 '''
 
 ###########  Import  ###########

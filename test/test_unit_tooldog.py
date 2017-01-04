@@ -6,7 +6,7 @@
 ## Creation : 12-19-2016
 
 '''
-Descrition
+Unit tests for ToolDog
 '''
 
 ###########  Import  ###########

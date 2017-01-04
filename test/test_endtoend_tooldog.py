@@ -6,7 +6,7 @@
 ## Creation : 12-19-2016
 
 '''
-Descrition
+End to end tests for ToolDog with several examples
 '''
 
 ###########  Import  ###########

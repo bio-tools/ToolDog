@@ -6,7 +6,7 @@
 ## Creation : 12-20-2016
 
 '''
-Descrition
+Generation of XML for Galaxy from Biotool based on model.py
 '''
 
 ###########  Import  ###########

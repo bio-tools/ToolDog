@@ -6,7 +6,7 @@
 ## Creation : 12-13-2016
 
 '''
-Descrition
+Main functions to run ToolDog
 '''
 
 ###########  Import  ###########

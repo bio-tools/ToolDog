@@ -6,7 +6,7 @@
 ## Creation : 03-01-2017
 
 '''
-Descrition
+Generation of CWL from Biotool based on model.py
 '''
 
 ###########  Import  ###########
