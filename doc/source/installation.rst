@@ -11,7 +11,7 @@ Installation
 ToolDog dependencies
 ====================
 
-ToolDog is built with Python 3.5 and uses the following libraries:
+ToolDog is built with Python 3.6 and uses the following libraries:
 
 - galaxyxml_ (>=0.2.3)
 - requests (>=2.12.3)

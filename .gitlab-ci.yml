@@ -1,4 +1,4 @@
-image: python:3.5.2
+image: python:3.6.0
 
 before_script:
   - pip install --no-cache-dir --process-dependency-links .
