@@ -2,7 +2,7 @@
 
 ## Author(s): Kenzo-Hugo Hillion
 ## Contact(s): kehillio@pasteur.fr
-## Python version: 3.5.2+
+## Python version: 3.6.0
 ## Creation : 12-19-2016
 
 '''
