@@ -19,7 +19,7 @@ import unittest
 # External libraries
 
 # Class and Objects
-from tooldog import main, model, galaxy
+from tooldog import main, model, galaxy, cwl
 
 ###########  Constant(s)  ###########
 
@@ -379,6 +379,64 @@ class TestGenerateXml(unittest.TestCase):
             self.assertTrue(filecmp.cmp(expected_xml, tmp_file))
         finally:
             os.remove(tmp_file)
+
+
+class TestGenerateCwl(unittest.TestCase):
+
+    def setUp(self):
+        # Create a biotool
+        self.biotool = model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
+                                     'a_homepage')
+        self.gencwl = cwl.GenerateCwl(self.biotool)
+
+    def test_init(self):
+        # Test counters
+        self.assertEqual(self.gencwl.input_ct, 0)
+        self.assertEqual(self.gencwl.output_ct, 0)
+        # Copy tool to make it easier to read
+        tool = self.gencwl.tool
+        # Test simple values of the tool
+        self.assertEqual(tool.tool_id, "an_id")
+        self.assertEqual(tool.tool_class, "CommandLineTool")
+        self.assertEqual(tool.label, "a_description.")
+        self.assertEqual(tool.base_command, "COMMAND")
+        self.assertEqual(tool.doc, self.biotool.description + \
+                         "\n\nTool Homepage: " + self.biotool.homepage)
+        self.assertListEqual(tool.inputs, [])
+        self.assertListEqual(tool.outputs, [])
+
+    def test_add_input_file(self):
+        # Create a Input object (Warning both Type and Format will be a topic)
+        input = model.Input(EDAM, [EDAM])
+        self.gencwl.add_input_file(input)
+        # Copy object to test (easier to read)
+        input_attrib = self.gencwl.tool.inputs[0]
+        self.assertEqual(input_attrib.id, 'INPUT1')
+        self.assertEqual(input_attrib.type, 'File')
+        self.assertEqual(input_attrib.label, EDAM['term'])
+        self.assertEqual(input_attrib.format, EDAM['uri'])
+        self.assertEqual(input_attrib.prefix, '--INPUT1')
+
+    def test_add_output_file(self):
+        # Create a Output object (Warning both Type and Format will be a topic)
+        output = model.Output(EDAM, [EDAM])
+        self.gencwl.add_output_file(output)
+        # Copy object to test
+        output_attrib = self.gencwl.tool.outputs[0]
+        self.assertEqual(output_attrib.id, 'OUTPUT1')
+        self.assertEqual(output_attrib.type, 'File')
+        self.assertEqual(output_attrib.label, EDAM['term'])
+        self.assertEqual(output_attrib.format, EDAM['uri'])
+        self.assertEqual(output_attrib.glob, 'OUTPUT1.ext')
+
+    def test_write_cwl(self):
+        tmp_file = 'tmp_test_write_cwl.cwl'
+        self.gencwl.write_cwl(tmp_file, 1)
+        expected_cwl = os.path.dirname(__file__) + '/test_write_cwl.cwl'
+        try:
+            self.assertTrue(filecmp.cmp(expected_cwl, 'tmp_test_write_cwl1.cwl'))
+        finally:
+            os.remove('tmp_test_write_cwl1.cwl')
 
 
 ###########  Main  ###########

@@ -80,7 +80,7 @@ class GenerateCwl(object):
         # Get all different format for this output
         list_formats = []
         for format_obj in output.formats:
-            list_formats.append(format_obj.term)
+            list_formats.append(format_obj.uri)
         formats = ', '.join(list_formats)
         # Create the parameter
         param = pycwl.Output(name, 'File', label=output.data_type.term, \
