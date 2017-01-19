@@ -1,3 +1,6 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
 id: AlienTrimmer
 label: Trimming and Clipping FASTQ-formatted read files.
 baseCommand: COMMAND

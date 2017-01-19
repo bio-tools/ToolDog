@@ -1,3 +1,6 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
 id: BMGE
 label: Block Mapping and Gathering using Entropy.
 baseCommand: COMMAND

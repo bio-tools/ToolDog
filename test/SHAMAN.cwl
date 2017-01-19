@@ -1,3 +1,6 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
 id: SHAMAN
 label: SHAMAN is a SHiny application for Metagenomic ANalysis including the normalization,
   the differential analysis and mutiple visualization.

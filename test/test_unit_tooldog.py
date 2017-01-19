@@ -397,7 +397,6 @@ class TestGenerateCwl(unittest.TestCase):
         tool = self.gencwl.tool
         # Test simple values of the tool
         self.assertEqual(tool.tool_id, "an_id")
-        self.assertEqual(tool.tool_class, "CommandLineTool")
         self.assertEqual(tool.label, "a_description.")
         self.assertEqual(tool.base_command, "COMMAND")
         self.assertEqual(tool.doc, self.biotool.description + \
@@ -415,7 +414,7 @@ class TestGenerateCwl(unittest.TestCase):
         self.assertEqual(input_attrib.type, 'File')
         self.assertEqual(input_attrib.label, EDAM['term'])
         self.assertEqual(input_attrib.format, EDAM['uri'])
-        self.assertEqual(input_attrib.prefix, '--INPUT1')
+        self.assertEqual(input_attrib.input_binding.prefix, '--INPUT1')
 
     def test_add_output_file(self):
         # Create a Output object (Warning both Type and Format will be a topic)
@@ -427,7 +426,7 @@ class TestGenerateCwl(unittest.TestCase):
         self.assertEqual(output_attrib.type, 'File')
         self.assertEqual(output_attrib.label, EDAM['term'])
         self.assertEqual(output_attrib.format, EDAM['uri'])
-        self.assertEqual(output_attrib.glob, 'OUTPUT1.ext')
+        self.assertEqual(output_attrib.output_binding.glob, 'OUTPUT1.ext')
 
     def test_write_cwl(self):
         tmp_file = 'tmp_test_write_cwl.cwl'

@@ -1,3 +1,6 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
 id: SARTools
 label: SARTools is a R package dedicated to the differential analysis of RNA-seq data.
 baseCommand: COMMAND

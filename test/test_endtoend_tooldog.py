@@ -137,6 +137,7 @@ class TestToolDog(unittest.TestCase):
                                    str(re.findall('\d+', temp_file)[0]) + '.cwl' 
                     self.assertTrue(filecmp.cmp(cwl_path,temp_file))
             finally:
+                pass
                 for temp_file in tmp_file_list:
                     os.remove(temp_file)
 

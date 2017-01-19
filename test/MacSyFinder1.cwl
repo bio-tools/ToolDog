@@ -1,3 +1,6 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
 id: MacSyFinder
 label: MacSyFinder is a program to model and detect macromolecular systems, genetic
   pathways.

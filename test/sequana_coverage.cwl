@@ -1,3 +1,6 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
 id: sequana_coverage
 label: Show coverage and interval of confidence to identify under and over represented
   genomic regions.

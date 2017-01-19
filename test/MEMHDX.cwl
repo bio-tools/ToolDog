@@ -1,3 +1,6 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
 id: MEMHDX
 label: This tool allows users to perform an automated workflow to analyze, validate
   and visualize large HDX-MS datasets.

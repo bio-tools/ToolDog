@@ -1,3 +1,6 @@
+#!/usr/bin/env cwl-runner
+
+cwlVersion: v1.0
 id: integron_finder
 label: A tool to detect Integron in DNA sequences.
 baseCommand: COMMAND

@@ -6,7 +6,7 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 setup(name="tooldog",
-        version='0.1.0',
+        version='0.1.1',
         description='Tool description generator (from https//bio.tools to XML and CWL)',
         author='Kenzo-Hugo Hillion and Hervé Ménager',
         author_email='kehillio@pasteur.fr and hmenager@pasteur.fr',
