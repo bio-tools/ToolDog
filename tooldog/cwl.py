@@ -44,8 +44,9 @@ class GenerateCwl(object):
         description = biotool.description.split('.')[0] + '.'
         documentation = (biotool.description + "\n\nTool Homepage: " + \
                          biotool.homepage)
-        self.tool = pycwl.CommandLineTool(biotool.tool_id, 'CommandLineTool', \
-                             description, "COMMAND", doc=documentation)
+        self.tool = pycwl.CommandLineTool(tool_id=biotool.tool_id, label=description, \
+                                          base_command="COMMAND", \
+                                          doc=documentation)
 
     def add_input_file(self, input_obj):
         '''
@@ -63,8 +64,11 @@ class GenerateCwl(object):
             list_formats.append(format_obj.uri)
         formats = ', '.join(list_formats)
         # Create the parameter
-        param = pycwl.Input(name, 'File', label=input_obj.data_type.term,\
-                            param_format=formats, prefix='--' + name)
+        param_binding = pycwl.CommandLineBinding(prefix='--' + name)
+        param = pycwl.CommandInputParameter(name, param_type='File', \
+                                            label=input_obj.data_type.term,\
+                                            param_format=formats, \
+                                            input_binding=param_binding)
         # Appends parameter to inputs
         self.tool.inputs.append(param)
 
@@ -83,8 +87,11 @@ class GenerateCwl(object):
             list_formats.append(format_obj.uri)
         formats = ', '.join(list_formats)
         # Create the parameter
-        param = pycwl.Output(name, 'File', label=output.data_type.term, \
-                             param_format=formats, glob=name + '.ext')
+        param_binding = pycwl.CommandOutputBinding(glob=name + '.ext')
+        param = pycwl.CommandOutputParameter(name, param_type='File', \
+                                             label=output.data_type.term, \
+                                             param_format=formats, \
+                                             output_binding=param_binding)
         self.tool.outputs.append(param)
 
     def write_cwl(self, out_file=None, index=None):
