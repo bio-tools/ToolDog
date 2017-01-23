@@ -1,13 +1,10 @@
 # ToolDog
 
-[![build status](https://gitlab.pasteur.fr/kehillio/ToolDog/badges/master/build.svg)](https://gitlab.pasteur.fr/kehillio/ToolDog/commits/master)
-[![coverage report](https://gitlab.pasteur.fr/kehillio/ToolDog/badges/master/coverage.svg)](https://gitlab.pasteur.fr/kehillio/ToolDog/commits/master)
+[![Build Status](https://travis-ci.org/khillion/ToolDog.svg?branch=master)](https://travis-ci.org/khillion/ToolDog)
+[![codecov](https://codecov.io/gh/khillion/ToolDog/branch/master/graph/badge.svg)](https://codecov.io/gh/khillion/ToolDog)
+[![Documentation Status](https://readthedocs.org/projects/tooldog/badge/?version=latest)](http://tooldog.readthedocs.io/en/latest/?badge=latest)
 
 ToolDog (TOOL DescriptiOn Generator) aims to generate XML template for Galaxy or CWL from the description of tools from [Bio.tools](https://bio.tools).
-
-### Full documentation: [here]()
-
-### License
 
 ------------------------
 
@@ -15,20 +12,10 @@ ToolDog (TOOL DescriptiOn Generator) aims to generate XML template for Galaxy or
 
 ## Installation
 
-### Pip
+You can install ToolDog using pip with the following command:
 
 ```bash
-pip install --no-cache-dir --process-dependency-links git+https://gitlab.pasteur.fr/kehillio/ToolDog.git#egg=tooldog
-```
-
-### Manually
-
-Clone the repository and install ToolDog:
-
-```bash
-git clone https://gitlab.pasteur.fr/kehillio/ToolDog.git
-cd ToolDog
-pip install --no-cache-dir --process-dependency-links .
+pip install --no-cache-dir --process-dependency-links git+https://github.com/khillion/ToolDog.git#egg=tooldog
 ```
 
 ## How it works ?

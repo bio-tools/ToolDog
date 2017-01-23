@@ -1,0 +1,12 @@
+language: python
+python:
+  - "2.7"
+  - "3.6"
+
+install:
+  - pip install --no-cache-dir --process-dependency-links .
+  - pip install coverage requests_mock nose_parameterized
+
+script: nosetests --with-coverage --cover-package=tooldog
+
+after_success: codecov
