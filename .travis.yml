@@ -4,7 +4,7 @@ python:
 
 install:
   - pip install --no-cache-dir --process-dependency-links .
-  - pip install coverage requests_mock nose_parameterized
+  - pip install codecov coverage requests_mock nose_parameterized
 
 script: nosetests --with-coverage --cover-package=tooldog
 
