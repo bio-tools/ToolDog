@@ -4,10 +4,7 @@
 Welcome to ToolDog's documentation!
 ===================================
 
-ToolDog is a program that generate description of a tool entry from https://bio.tools.
-
-So far, ToolDog only supports generation of XML for Galaxy.
-
+ToolDog is a program that generates description of a tool entry from https://bio.tools.
 
 .. toctree::
    :maxdepth: 2

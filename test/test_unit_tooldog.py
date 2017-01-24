@@ -342,11 +342,10 @@ class TestGenerateXml(unittest.TestCase):
 
     def test_add_input_file(self):
         # Create a Input object (Warning both Type and Format will be a topic)
-        input = model.Input(EDAM, [EDAM])
-        self.genxml.add_input_file(input)
+        an_input = model.Input(EDAM, [EDAM])
+        self.genxml.add_input_file(an_input)
         # Copy object to test (easier to read)
         input_attrib = self.genxml.tool.inputs.children[0].node.attrib
-        self.assertEqual(input_attrib['help'], '(INPUT1)')
         self.assertEqual(input_attrib['name'], 'INPUT1')
         self.assertEqual(input_attrib['format'], EDAM['term'])
         self.assertEqual(input_attrib['label'], EDAM['term'])

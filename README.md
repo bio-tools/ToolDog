@@ -22,7 +22,9 @@ pip install --no-cache-dir --process-dependency-links git+https://github.com/khi
 
 ## How it works ?
 
-ToolDog supports importation either from [bio.tools](https://bio.tools) or from a local file (downloaded from [bio.tools](https://bio.tools) in JSON format). It can generate XML for Galaxy and CWL (not available yet).
+ToolDog supports importation either from [bio.tools](https://bio.tools) or from a local
+file (downloaded from [bio.tools](https://bio.tools) in JSON format). It can generate XML
+for Galaxy and CWL tool.
 
 ```bash
 usage: tooldog [-h] [-g/--galaxy] [-c/--cwl] [-f OUTFILE] biotool_entry
