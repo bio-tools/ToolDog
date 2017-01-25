@@ -16,7 +16,7 @@ import os
 import copy
 
 # External libraries
-import pycwl
+import cwlgen
 
 # Class and Objects
 
@@ -33,7 +33,7 @@ class GenerateCwl(object):
         '''
         biotool: [Biotool] object from model.py
 
-        Initialize a [CommandLineTool] object from pycwl with the minimal informations
+        Initialize a [CommandLineTool] object from cwlgen with the minimal informations
         from a [Biotool] object.
         '''
         # Initialize counters for inputs and outputs
@@ -44,7 +44,7 @@ class GenerateCwl(object):
         description = biotool.description.split('.')[0] + '.'
         documentation = (biotool.description + "\n\nTool Homepage: " + \
                          biotool.homepage)
-        self.tool = pycwl.CommandLineTool(tool_id=biotool.tool_id, label=description, \
+        self.tool = cwlgen.CommandLineTool(tool_id=biotool.tool_id, label=description, \
                                           base_command="COMMAND", \
                                           doc=documentation)
 
@@ -64,8 +64,8 @@ class GenerateCwl(object):
             list_formats.append(format_obj.uri)
         formats = ', '.join(list_formats)
         # Create the parameter
-        param_binding = pycwl.CommandLineBinding(prefix='--' + name)
-        param = pycwl.CommandInputParameter(name, param_type='File', \
+        param_binding = cwlgen.CommandLineBinding(prefix='--' + name)
+        param = cwlgen.CommandInputParameter(name, param_type='File', \
                                             label=input_obj.data_type.term,\
                                             param_format=formats, \
                                             input_binding=param_binding)
@@ -87,8 +87,8 @@ class GenerateCwl(object):
             list_formats.append(format_obj.uri)
         formats = ', '.join(list_formats)
         # Create the parameter
-        param_binding = pycwl.CommandOutputBinding(glob=name + '.ext')
-        param = pycwl.CommandOutputParameter(name, param_type='File', \
+        param_binding = cwlgen.CommandOutputBinding(glob=name + '.ext')
+        param = cwlgen.CommandOutputParameter(name, param_type='File', \
                                              label=output.data_type.term, \
                                              param_format=formats, \
                                              output_binding=param_binding)
