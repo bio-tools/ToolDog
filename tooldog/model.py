@@ -6,33 +6,35 @@
 ## Creation : 12-13-2016
 
 '''
-Model used to order informations downloaded from bio.tools
+Model used to process information contained in JSON from https//bio.tools description.
 '''
-
-###########  Import  ###########
-
-# General libraries
-
-# External libraries
-
-# Class and Objects
-
-###########  Constant(s)  ###########
 
 ###########  Class(es)  ###########
 
 class Biotool(object):
     '''
-    This class correspond to an entry from bio.tools.
+    This class correspond to an entry from https://bio.tools.
     '''
 
     def __init__(self, name, tool_id, version, description, homepage):
         '''
-        name: [STRING]
-        tool_id: [STRING]
-        version: [STRING]
-        description: [STRING]
-        homepage: URL to homepage [STRING]
+        :param name: Name of the tool.
+        :type name: STRING
+        :param tool_id: ID of the tool entry.
+        :type tool_id: STRING
+        :param version: Version of the tool entry.
+        :type version: STRING
+        :param description: Description of the tool entry.
+        :type description: STRING
+        :param homepage: URL to homepage.
+        :type homepage: STRING
+
+        Functions (:class:`tooldog.model.Function` objects) 
+        and topics (:class:`tooldog.model.Topic` objects)
+        are stored in lists which are initialized empty.
+
+        More information (:class:`tooldog.model.Informations` object) can be specified
+        using :meth:`tooldog.model.Biotool.set_informations`.
         '''
         self.name = name
         self.tool_id = tool_id
@@ -45,12 +47,16 @@ class Biotool(object):
 
     def set_informations(self, tool_credits, contacts, publications, docs):
         '''
-        Add an information object to the biotool
+        Add an :class:`tooldog.model.Informations` object to the Biotool.
 
-        tool_credits: [LIST] of [DICT] with different tool_credits
-        contacts: [LIST] of [DICT] of contacts
-        publications: [LIST] of [DICT] of different IDs for publications
-        doc: [LIST] of [DICT] with different documentations
+        :param tool_credits: list of different tool_credits.
+        :type tool_credits: LIST of DICT
+        :param contacts: list of different contacts.
+        :type contacts: LIST of DICT
+        :param publications: list of different IDs for publications.
+        :type publications: LIST of DICT
+        :param doc: list of different documentations.
+        :type doc: LIST of DICT
         '''
         self.informations = Informations()
         for cred in tool_credits:
@@ -64,9 +70,11 @@ class Biotool(object):
 
     def add_functions(self, functions):
         '''
-        Add functions to the list
+        Add :class:`tooldog.model.Function` objects to the list of functions of the 
+        Biotool object.
 
-        function: [LIST] of [DICT]
+        :param functions: list of functions description from https://bio.tools.
+        :type functions: LIST of DICT
         '''
         for fct in functions:
             # Create Function object
@@ -78,7 +86,11 @@ class Biotool(object):
 
     def add_topics(self, topics):
         '''
-        Add topics to the list
+        Add :class:`tooldog.model.Topic` objects to the list of topics of the
+        Biotool object.
+
+        :param topics: list of topics description from https://bio.tools.
+        :type topics: LIST of DICT
         '''
         for topic in topics:
             self.topics.append(Topic(topic))

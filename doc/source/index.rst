@@ -6,6 +6,8 @@ Welcome to ToolDog's documentation!
 
 ToolDog is a program that generates description of a tool entry from https://bio.tools.
 
+ToolDog
+=======
 .. toctree::
    :maxdepth: 2
 
@@ -13,6 +15,13 @@ ToolDog is a program that generates description of a tool entry from https://bio
    installation
    how_to_use
    references
+
+ToolDog API Documentation
+=========================
+.. toctree::
+   :maxdepth: 2
+
+   API_doc
 
 ..
   Indices and tables
