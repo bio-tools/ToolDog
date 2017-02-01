@@ -6,14 +6,14 @@
 ## Creation : 03-01-2017
 
 '''
-Generation of CWL from Biotool based on model.py
+Generation of CWL tool from https://bio.tools based on the ToolDog model using
+cwlgen library.
 '''
 
 ###########  Import  ###########
 
 # General libraries
 import os
-import copy
 
 # External libraries
 import cwlgen
@@ -26,15 +26,16 @@ import cwlgen
 
 class GenerateCwl(object):
     '''
-    Class to support generation of CWL from Biotool class of model.py
+    Class to support generation of CWL from :class:`tooldog.model.Biotool` object.
     '''
 
     def __init__(self, biotool):
         '''
-        biotool: [Biotool] object from model.py
+        Initialize a [CommandLineTool] object from cwlgen with the minimal information
+        (an id, a description, the command and a documentation).
 
-        Initialize a [CommandLineTool] object from cwlgen with the minimal informations
-        from a [Biotool] object.
+        :param biotool: Biotool object of an entry from https://bio.tools.
+        :type biotool: :class:`tooldog.model.Biotool`
         '''
         # Initialize counters for inputs and outputs
         self.input_ct = 0
@@ -50,9 +51,10 @@ class GenerateCwl(object):
 
     def add_input_file(self, input_obj):
         '''
-        input: [Input] object from model.py
-        Add the input to the tool. We consider inputs present in biotool represent
-        input files.
+        Add an input to the CWL tool.
+
+        :param input_obj: Input object.
+        :type input_obj: :class:`tooldog.model.Input`
         '''
         # Build parameter
         self.input_ct += 1
@@ -74,8 +76,10 @@ class GenerateCwl(object):
 
     def add_output_file(self, output):
         '''
-        output: [Output] object from model.py
-        Add the output to the tool.
+        Add an output to the CWL tool.
+
+        :param output: Output object.
+        :type output: :class:`tooldog.model.Output`
         '''
         # Build parameter
         self.output_ct += 1
@@ -96,7 +100,12 @@ class GenerateCwl(object):
 
     def write_cwl(self, out_file=None, index=None):
         '''
-        Write CWL to STDOUT or file(s)
+        Write CWL to STDOUT or out_file(s).
+
+        :param out_file: path to output file.
+        :type out_file: STRING
+        :param index: Index in case more than one function is described.
+        :type index: INT
         '''
         # Give CWL on STDout
         if out_file is None:

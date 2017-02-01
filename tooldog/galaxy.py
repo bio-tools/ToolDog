@@ -6,7 +6,8 @@
 ## Creation : 12-20-2016
 
 '''
-Generation of XML for Galaxy from Biotool based on model.py
+Generation of XML for Galaxy from https://bio.tools based on the Tooldog model using
+galaxyxml library.
 '''
 
 ###########  Import  ###########
@@ -27,15 +28,17 @@ import galaxyxml.tool.parameters as gxtp
 
 class GenerateXml(object):
     '''
-    Class to support generation of XML from Biotool class of model.py
+    Class to support generation of XML from :class:`tooldog.model.Biotool` object.
     '''
 
     def __init__(self, biotool):
         '''
-        biotool: [Biotool] object from model.py
+        Initialize a [Tool] object from galaxyxml with the minimal information
+        (a name, an id, a version, a description, the command, the command version
+        and a help).
 
-        Initialize a [Tool] object from galaxyxml with the minimal informations
-        from a [Biotool] object.
+        :param biotool: Biotool object of an entry from https://bio.tools.
+        :type biotool: :class:`tooldog.model.Biotool`
         '''
         # Initialize counters for inputs and outputs
         self.input_ct = 0
@@ -51,8 +54,10 @@ class GenerateXml(object):
 
     def add_edam_topic(self, topic):
         '''
-        topic: [Topic] object from model.py
-        Add the EDAM topic to the tool
+        Add the EDAM topic to the tool (XML: edam_topics).
+
+        :param topic: Topic object.
+        :type topic: :class:`tooldog.model.Topic`
         '''
         if not hasattr(self.tool, 'edam_topics'):
             # First time we add topics to the tool
@@ -61,8 +66,10 @@ class GenerateXml(object):
 
     def add_edam_operation(self, operation):
         '''
-        topic: [Operation] object from model.py
-        Add the EDAM operation to the tool
+        Add the EDAM operation to the tool (XML: edam_operations).
+
+        :param topic: Operation object.
+        :type topic: :class:`tooldog.model.Operation`
         '''
         if not hasattr(self.tool, 'edam_operations'):
             # First time we add operations to the tool
@@ -71,9 +78,10 @@ class GenerateXml(object):
 
     def add_input_file(self, input_obj):
         '''
-        input: [Input] object from model.py
-        Add the input to the tool. We consider inputs present in biotool represent
-        input files.
+        Add an input to the tool (XML: <inputs>).
+
+        :param input_obj: Input object.
+        :type input_obj: :class:`tooldog.model.Input`
         '''
         if not hasattr(self.tool, 'inputs'):
             self.tool.inputs = gxtp.Inputs()
@@ -96,8 +104,10 @@ class GenerateXml(object):
 
     def add_output_file(self, output):
         '''
-        output: [Output] object from model.py
-        Add the output to the tool.
+        Add an output to the tool (XML: <outputs>).
+ 
+        :param output: Output object.
+        :type output: :class:`tooldog.model.Output`
         '''
         if not hasattr(self.tool, 'outputs'):
             self.tool.outputs = gxtp.Outputs()
@@ -118,8 +128,10 @@ class GenerateXml(object):
 
     def add_citation(self, publication):
         '''
-        publication: [Publication] object from model.py
-        Add publication to <citations>
+        Add publication(s) to the tool (XML: <citations>).
+
+        :param publication: Publication object.
+        :type publication: :class:`tooldog.model.Publication`
         '''
         if not hasattr(self.tool, 'citations'):
             self.tool.citations = gxtp.Citations()
@@ -133,7 +145,12 @@ class GenerateXml(object):
 
     def write_xml(self, out_file=None, index=None):
         '''
-        Write XML to STDOUT or files
+        Write CWL to STDOUT or out_file(s).
+
+        :param out_file: path to output file.
+        :type out_file: STRING
+        :param index: Index in case more than one function is described.
+        :type index: INT
         '''
         # Copy informations to avoid expension of xml in case we write several XMLs
         export_tool = copy.deepcopy(self.tool)
