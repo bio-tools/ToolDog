@@ -6,7 +6,10 @@
 ## Creation : 12-13-2016
 
 '''
-Model used to process information contained in JSON from https//bio.tools description.
+Model used to process information contained in JSON from https://bio.tools description.
+
+The content of a description on https://bio.tools is contained in a JSON file and this
+model aims to store the different information.
 '''
 
 ###########  Class(es)  ###########
@@ -29,9 +32,11 @@ class Biotool(object):
         :param homepage: URL to homepage.
         :type homepage: STRING
 
-        Functions (:class:`tooldog.model.Function` objects) 
-        and topics (:class:`tooldog.model.Topic` objects)
-        are stored in lists which are initialized empty.
+        :class:`tooldog.model.Biotool` object is also initialized with two empty
+        list of objects:
+
+        * functions: list of :class:`tooldog.model.Function`
+        * topics: list of :class:`tooldog.model.Topic`
 
         More information (:class:`tooldog.model.Informations` object) can be specified
         using :meth:`tooldog.model.Biotool.set_informations`.
@@ -70,7 +75,7 @@ class Biotool(object):
 
     def add_functions(self, functions):
         '''
-        Add :class:`tooldog.model.Function` objects to the list of functions of the 
+        Add :class:`tooldog.model.Function` objects to the list of functions of the
         Biotool object.
 
         :param functions: list of functions description from https://bio.tools.
@@ -98,22 +103,35 @@ class Biotool(object):
 
 class Informations(object):
     '''
-    Class to describe different informations concerning a bio.tool entry
+    Class to describe different information concerning a bio.tool entry.
     '''
 
     def __init__(self):
-        self.publications = [] # List of Publication objects
-        self.documentations = [] # List of Documentation objects
-        self.contacts = [] # List of Contact objects
-        self.tool_credits = [] # List of Credit objects
+        '''
+        :class:`tooldog.model.Informations` object is initialized with four empty
+        list of objects:
+
+        * publications: list of :class:`tooldog.model.Publication`
+        * documentations: list of :class:`tooldog.model.Documentation`
+        * contacts: list of :class:`tooldog.model.Contact`
+        * tool_credits: list of :class:`tooldog.model.Credit`
+        '''
+        self.publications = []
+        self.documentations = []
+        self.contacts = []
+        self.tool_credits = []
 
 
 class Credit(object):
     '''
-    Class to store a credit information
+    Class to store a credit information.
     '''
 
     def __init__(self, credit):
+        '''
+        :param credit: credit part of the JSON from http://bio.tools.
+        :type credit: DICT
+        '''
         self.comment = credit['comment'] # [STRING]
         self.email = credit['email'] # [STRING]
         self.grid_id = credit['gridId'] # [STRING]
@@ -126,10 +144,14 @@ class Credit(object):
 
 class Publication(object):
     '''
-    Store publication information
+    Class to store one publication information.
     '''
 
     def __init__(self, publication):
+        '''
+        :param publication: publication part of the JSON from http://bio.tools.
+        :type publication: DICT
+        '''
         self.doi = publication['doi'] # [STRING]
         self.pmid = publication['pmid'] # [STRING]
         self.pmcid = publication['pmcid'] # [STRING]
@@ -138,10 +160,14 @@ class Publication(object):
 
 class Documentation(object):
     '''
-    Store documentation information
+    Class to store one documentation information.
     '''
 
     def __init__(self, documentation):
+        '''
+        :param documentation: documentation part of the JSON from http://bio.tools.
+        :type documentation: DICT
+        '''
         self.url = documentation['url'] # [STRING]
         self.type = documentation['type'] # [STRING]
         self.comment = documentation['comment'] # [STRING]
@@ -149,10 +175,14 @@ class Documentation(object):
 
 class Contact(object):
     '''
-    Store contact information
+    Class to store one contact information.
     '''
 
     def __init__(self, contact):
+        '''
+        :param contact: contact part of the JSON from http://bio.tools.
+        :type contact: DICT
+        '''
         self.email = contact['email'] # [STRING]
         self.name = contact['name'] # [STRING]
         # self.role = contact['contactRole']
@@ -162,22 +192,31 @@ class Contact(object):
 
 class Function(object):
     '''
-    Correspond to one function of the entry with the corresponding inputs and outputs
+    Correspond to one function of the entry with the corresponding inputs and outputs.
     '''
 
     def __init__(self, edams):
         '''
-        edams: [LIST] of [DICT] of EDAM ontology for operation(s) with uri and term
+        :param edams: EDAM ontology for operation(s) with uri and term.
+        :type edams: LIST of DICT
+        :class:`tooldog.model.Function` object is initialized with two empty
+        list of objects:
+
+        * inputs: list of :class:`tooldog.model.Input`
+        * outputs: list of :class:`tooldog.model.Output`
         '''
-        self.operations = [] # List of Operation objects
+        self.operations = []
         for edam in edams:
             self.operations.append(Operation(edam))
-        self.inputs = [] # List of Inputs objects
-        self.outputs = [] # List of Outputs objects
+        self.inputs = []
+        self.outputs = []
 
     def add_inputs(self, inputs):
         '''
-        inputs: [LIST] of [DICT] inputs
+        Add inputs to the :class:`tooldog.model.Function` object.
+
+        :param inputs: inputs part of one function from http://bio.tools.
+        :type inputs: LIST of DICT
         '''
         for inp in inputs:
             # Create Input object and appends to the list
@@ -185,7 +224,10 @@ class Function(object):
 
     def add_outputs(self, outputs):
         '''
-        outputs: [LIST] of [DICT] outputs
+        Add outputs to the :class:`tooldog.model.Function` object.
+
+        :param outputs: inputs part of one function from http://bio.tools.
+        :type outputs: LIST of DICT
         '''
         for outp in outputs:
             # Create Output object and appends to the list
@@ -194,107 +236,124 @@ class Function(object):
 
 class Data(object):
     '''
-    Data described by EDAM ontology that can be input or output
+    Data described by EDAM ontology.
     '''
 
     def __init__(self, data_type, formats, description=None):
         '''
-        data_type: [DICT] of EDAM ontology for data types with uri and term
-        formats: [LIST] of [DICT] of EDAM ontology for data formats with uri and term
-        description: [STRING]
+        :param data_type: EDAM ontology for the data type with uri and term.
+        :type data_type: DICT
+        :param formats: EDAM ontology for data formats with uri and term.
+        :type formats: LIST of DICT
+        :param description: description of the data (DEPRECATED)
+        :type description: STRING
         '''
-        self.data_type = DataType(data_type) # Data_type object
-        self.formats = [] # List of Format objects
+        self.data_type = DataType(data_type)
+        self.formats = []
         for frmt in formats:
             self.formats.append(Format(frmt))
         self.description = description
 
 class Input(Data):
     '''
-    Input of a described function
+    Input of a described function.
     '''
 
     def __init__(self, data_type, formats, description=None):
         '''
-        data_type: [DICT] of EDAM ontology for data types with uri and term
-        formats: [LIST] of [DICT] of EDAM ontology for data formats with uri and term
-        description: [STRING]
+        :param data_type: EDAM ontology for the data type with uri and term.
+        :type data_type: DICT
+        :param formats: EDAM ontology for data formats with uri and term.
+        :type formats: LIST of DICT
+        :param description: description of the data (DEPRECATED)
+        :type description: STRING
         '''
         Data.__init__(self, data_type, formats, description)
 
 
 class Output(Data):
     '''
-    Output of a described function
+    Output of a described function.
     '''
 
     def __init__(self, data_type, formats, description=None):
         '''
-        data_type: [DICT] of EDAM ontology for data types with uri and term
-        formats: [LIST] of [DICT] of EDAM ontology for data formats with uri and term
-        description: [STRING]
+        :param data_type: EDAM ontology for the data type with uri and term.
+        :type data_type: DICT
+        :param formats: EDAM ontology for data formats with uri and term.
+        :type formats: LIST of DICT
+        :param description: description of the data (DEPRECATED)
+        :type description: STRING
         '''
         Data.__init__(self, data_type, formats, description)
 
 
 class Edam(object):
     '''
-    Edam annotation with the uri and its corresponding term
+    Edam annotation with the uri and its corresponding term.
     '''
 
     def __init__(self, edam):
         '''
-        edam: [DICT] of EDAM ontology with uri and term
+        :param edam: EDAM ontology with uri and term.
+        :type edam: DICT
         '''
         self.uri = edam['uri']
         self.term = edam['term']
 
     def get_edam_id(self):
         '''
-        Get the EDAM id from the url
+        Get the EDAM id from the uri.
+
+        :return: EDAM id from the uri.
+        :rtype: STRING
         '''
         return self.uri.split('/')[-1]
 
 class Operation(Edam):
     '''
-    EDAM operation associated to a function
+    EDAM operation associated to a function.
     '''
 
     def __init__(self, edam):
         '''
-        edam: [DICT] of EDAM ontology for operations with uri and term
+        :param edam: EDAM ontology with uri and term.
+        :type edam: DICT
         '''
         Edam.__init__(self, edam)
 
 class DataType(Edam):
     '''
-    EDAM data_type associated to either input or output
+    EDAM data associated to either input or output.
     '''
 
     def __init__(self, edam):
         '''
-        edam: [DICT] of EDAM ontology for data type with uri and term
+        :param edam: EDAM ontology with uri and term.
+        :type edam: DICT
         '''
         Edam.__init__(self, edam)
 
 class Format(Edam):
     '''
-    EDAM format associated to either input or output
+    EDAM format associated to either input or output.
     '''
 
     def __init__(self, edam):
         '''
-        edam: [DICT] of EDAM ontology for formats with uri and term
+        :param edam: EDAM ontology with uri and term.
+        :type edam: DICT
         '''
         Edam.__init__(self, edam)
 
 class Topic(Edam):
     '''
-    EDAM topic associated to the entry
+    EDAM topic associated to the entry.
     '''
 
     def __init__(self, edam):
         '''
-        edam: [DICT] of EDAM ontology for topics with uri and term
+        :param edam: EDAM ontology with uri and term.
+        :type edam: DICT
         '''
         Edam.__init__(self, edam)
