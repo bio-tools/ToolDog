@@ -347,7 +347,7 @@ class TestGenerateXml(unittest.TestCase):
         # Copy object to test (easier to read)
         input_attrib = self.genxml.tool.inputs.children[0].node.attrib
         self.assertEqual(input_attrib['name'], 'INPUT1')
-        self.assertEqual(input_attrib['format'], EDAM['term'])
+        self.assertEqual(input_attrib['format'], 'no_mapping')
         self.assertEqual(input_attrib['label'], EDAM['term'])
         self.assertEqual(input_attrib['type'], 'data')
 
@@ -358,7 +358,7 @@ class TestGenerateXml(unittest.TestCase):
         # Copy object to test
         output_attrib = self.genxml.tool.outputs.children[0].node.attrib
         self.assertEqual(output_attrib['name'], 'OUTPUT1')
-        self.assertEqual(output_attrib['format'], EDAM['term'])
+        self.assertEqual(output_attrib['format'], 'no_mapping')
         self.assertEqual(output_attrib['from_work_dir'], 'OUTPUT1.ext')
 
     def test_add_citation(self):
@@ -378,6 +378,22 @@ class TestGenerateXml(unittest.TestCase):
             self.assertTrue(filecmp.cmp(expected_xml, tmp_file))
         finally:
             os.remove(tmp_file)
+
+
+class TestGalaxyInfo(unittest.TestCase):
+
+    def setUp(self):
+        # Create two GalaxyInfo objects
+        self.galaxy_info = galaxy.GalaxyInfo()
+        self.galaxy_info_url = galaxy.GalaxyInfo(galaxy_url="a_url")
+
+    def test_init(self):
+        self.assertIsNone(self.galaxy_info.galaxy_url)
+        self.assertDictEqual(self.galaxy_info.datatypes_from_formats, {})
+        self.assertDictEqual(self.galaxy_info.datatypes_from_formats, {})
+        self.assertEqual(self.galaxy_info_url.galaxy_url, "a_url")
+        self.assertDictEqual(self.galaxy_info_url.datatypes_from_formats, {})
+        self.assertDictEqual(self.galaxy_info_url.datatypes_from_formats, {})
 
 
 class TestGenerateCwl(unittest.TestCase):

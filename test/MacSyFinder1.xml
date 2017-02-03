@@ -14,15 +14,15 @@
 --INPUT2 $INPUT2
 --INPUT3 $INPUT3]]></command>
   <inputs>
-    <param argument="INPUT1" format="FASTA-like (text), FASTA" label="Protein sequence record" name="INPUT1" type="data"/>
-    <param argument="INPUT2" format="HMMER3" label="Sequence-profile alignment" name="INPUT2" type="data"/>
-    <param argument="INPUT3" format="XML" label="Resource metadata" name="INPUT3" type="data"/>
+    <param argument="INPUT1" format="no_mapping, mothur.align" label="Protein sequence record" name="INPUT1" type="data"/>
+    <param argument="INPUT2" format="hmm3" label="Sequence-profile alignment" name="INPUT2" type="data"/>
+    <param argument="INPUT3" format="svg" label="Resource metadata" name="INPUT3" type="data"/>
   </inputs>
   <outputs>
-    <data format="TSV" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
-    <data format="TSV" from_work_dir="OUTPUT2.ext" hidden="false" name="OUTPUT2"/>
-    <data format="TSV" from_work_dir="OUTPUT3.ext" hidden="false" name="OUTPUT3"/>
-    <data format="JSON" from_work_dir="OUTPUT4.ext" hidden="false" name="OUTPUT4"/>
+    <data format="pepxml.tsv" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
+    <data format="pepxml.tsv" from_work_dir="OUTPUT2.ext" hidden="false" name="OUTPUT2"/>
+    <data format="pepxml.tsv" from_work_dir="OUTPUT3.ext" hidden="false" name="OUTPUT3"/>
+    <data format="json" from_work_dir="OUTPUT4.ext" hidden="false" name="OUTPUT4"/>
   </outputs>
   <help><![CDATA[MacSyFinder is a program to model and detect macromolecular systems, genetic pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily conserved properties: they are made of conserved components, and are encoded in compact loci (conserved genetic architecture). The user models these systems with MacSyFinder to reflect these conserved features, and to allow their efficient detection.
 
