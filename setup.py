@@ -14,6 +14,9 @@ setup(name="tooldog",
         install_requires=['requests', 'galaxyxml==0.3.1', 'cwlgen>=0.1'],
         dependency_links = ['https://github.com/common-workflow-language/python-cwlgen/archive/master.zip#egg=cwlgen-0.1'],
         packages=["tooldog"],
+        package_data={
+        'tooldog': ['data/*.json'],
+        },
         entry_points={'console_scripts':['tooldog=tooldog.main:run']},
         classifiers=[
             'Development Status :: 3 - Alpha',

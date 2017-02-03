@@ -15,23 +15,87 @@ galaxyxml library.
 # General libraries
 import os
 import copy
+import json
 
 # External libraries
 import galaxyxml.tool as gxt
 import galaxyxml.tool.parameters as gxtp
+import requests
 
 # Class and Objects
 
 ###########  Constant(s)  ###########
 
+LOCAL_DATA = os.path.dirname(__file__) + "/data"
+
 ###########  Class(es)  ###########
+
+class GalaxyInfo(object):
+    '''
+    Class to gather different information about a Galaxy instance.
+
+    By default, if the galaxy_url is None, information is loaded from local files
+    located in the `data/` folder.
+    '''
+
+    def __init__(self, galaxy_url=None):
+        '''
+        :param galaxy_url: URL of the galaxy instance.
+        :type galaxy_url: STRING
+
+        :class:`tooldog.galaxy.GalaxyInfo` object is initialized with two empty
+        dictionnaries:
+
+        * datatypes_from_formats
+        * datatypes_from_data
+
+        Dictionnaries are then filled in with :meth:`tooldog.galaxy.GalaxyInfo.load_info`.
+        '''
+        self.galaxy_url = galaxy_url
+        self.datatypes_from_formats = {}
+        self.datatypes_from_data = {}
+
+    def load_info(self):
+        '''
+        Loads information from the galaxy URL (or local file).
+        '''
+        # Load dictionnaries datatype -> EDAM
+        if self.galaxy_url is None:
+            with open(LOCAL_DATA + "/edam_formats.json") as json_file:
+                edam_formats = json.load(json_file)
+            json_file.close()
+            with open(LOCAL_DATA + "/edam_data.json") as json_file:
+                edam_data = json.load(json_file)
+            json_file.close()
+        else:
+            edam_formats = requests.get(galaxy_url + "/api/datatypes/edam_formats").json()
+            edam_data = requests.get(galaxy_url + "/api/datatypes/edam_data").json()
+        # Build dictionnaries EDAM -> datatype
+        # FOR THE MOMENT, KEEP ONLY ONE DATATYPE PER EDAM, ONLY LAST IS KEPT
+        for datatype in edam_formats.keys():
+            self.datatypes_from_formats[edam_formats[datatype]] = datatype
+        for datatype in edam_data.keys():
+            self.datatypes_from_data[edam_data[datatype]] = datatype
+
+    def get_datatype(self, edam_format_uri, edam_data_uri=None):
+        '''
+        :return: datatype corresponding to both edam_format and edam_data
+        :rtype: STRING
+
+        Note: for the moment, return only datatype corresponding to the edam_format
+        '''
+        edam_format = edam_format_uri.split('/')[-1]
+        if edam_format in self.datatypes_from_formats:
+            return self.datatypes_from_formats[edam_format]
+        return "no_mapping"
+
 
 class GenerateXml(object):
     '''
     Class to support generation of XML from :class:`tooldog.model.Biotool` object.
     '''
 
-    def __init__(self, biotool):
+    def __init__(self, biotool, galaxy_url=None):
         '''
         Initialize a [Tool] object from galaxyxml with the minimal information
         (a name, an id, a version, a description, the command, the command version
@@ -40,6 +104,9 @@ class GenerateXml(object):
         :param biotool: Biotool object of an entry from https://bio.tools.
         :type biotool: :class:`tooldog.model.Biotool`
         '''
+        # Initialize GalaxyInfo
+        self.galaxy_info = GalaxyInfo(galaxy_url=galaxy_url)
+        self.galaxy_info.load_info()
         # Initialize counters for inputs and outputs
         self.input_ct = 0
         self.output_ct = 0
@@ -92,7 +159,8 @@ class GenerateXml(object):
         # Get all different format for this input
         list_formats = []
         for format_obj in input_obj.formats:
-            list_formats.append(format_obj.term)
+            list_formats.append(self.galaxy_info.get_datatype(format_obj.uri,\
+                                                              input_obj.data_type.uri))
         formats = ', '.join(list_formats)
         # Create the parameter
         param = gxtp.DataParam(name, label=input_obj.data_type.term, \
@@ -118,7 +186,7 @@ class GenerateXml(object):
         # Get all different format for this output
         list_formats = []
         for format_obj in output.formats:
-            list_formats.append(format_obj.term)
+            list_formats.append(self.galaxy_info.get_datatype(format_obj.uri))
         formats = ', '.join(list_formats)
         # Create the parameter
         param = gxtp.OutputParameter(name, format=formats, from_work_dir=\
