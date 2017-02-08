@@ -23,8 +23,9 @@ from logging.handlers import RotatingFileHandler
 import requests
 
 # Class and Objects
-from tooldog import model
-from tooldog import galaxy, cwl
+from tooldog.model import Biotool
+from tooldog.galaxy import GenerateXml
+from tooldog.cwl import GenerateCwl
 
 ###########  Logger  ###########
 
@@ -99,8 +100,8 @@ def json_to_biotool(json_file):
     :rtype: :class:`tooldog.model.Biotool`
     '''
     # Initialize Biotool object with basic parameters
-    biotool = model.Biotool(json_file['name'], json_file['id'], json_file['version'],\
-                            json_file['description'], json_file['homepage'])
+    biotool = Biotool(json_file['name'], json_file['id'], json_file['version'],\
+                      json_file['description'], json_file['homepage'])
     # Add informations
     biotool.set_informations(json_file['credit'], json_file['contact'],\
                              json_file['publication'], json_file['documentation'])
@@ -121,7 +122,7 @@ def write_xml(biotool, outfile=None):
     :type outfile: STRING
     '''
     LOGGER.debug("Writing XML file...")
-    biotool_xml = galaxy.GenerateXml(biotool)
+    biotool_xml = GenerateXml(biotool)
     # Add topics to the XML
     for topic in biotool.topics:
         biotool_xml.add_edam_topic(topic)
@@ -154,7 +155,7 @@ def write_cwl(biotool, outfile=None):
     :type outfile: STRING
     '''
     LOGGER.debug("Writing CWL file...")
-    biotool_cwl = cwl.GenerateCwl(biotool)
+    biotool_cwl = GenerateCwl(biotool)
     # Add operations and inputs
     for function in biotool.functions:
         # First make a copy of the tool to add function infos
