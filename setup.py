@@ -15,7 +15,7 @@ setup(name="tooldog",
         dependency_links = ['https://github.com/common-workflow-language/python-cwlgen/archive/master.zip#egg=cwlgen-0.1'],
         packages=["tooldog"],
         package_data={
-        'tooldog': ['data/*.json'],
+        'tooldog': ['data/*.json', 'data/*.owl'],
         },
         entry_points={'console_scripts':['tooldog=tooldog.main:run']},
         classifiers=[

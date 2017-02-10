@@ -23,7 +23,7 @@ import galaxyxml.tool.parameters as gxtp
 import requests
 
 # Class and Objects
-from tooldog.galaxy_info import GalaxyInfo
+from tooldog.edam_to_galaxy import EdamToGalaxy
 
 ###########  Constant(s)  ###########
 
@@ -46,8 +46,8 @@ class GenerateXml(object):
         :type biotool: :class:`tooldog.model.Biotool`
         '''
         # Initialize GalaxyInfo
-        self.galaxy_info = GalaxyInfo(galaxy_url=galaxy_url)
-        self.galaxy_info.load_info()
+        self.galaxy_info = EdamToGalaxy(galaxy_url=galaxy_url)
+        self.galaxy_info.generate_mapping()
         # Initialize counters for inputs and outputs
         self.input_ct = 0
         self.output_ct = 0
@@ -95,13 +95,18 @@ class GenerateXml(object):
             self.tool.inputs = gxtp.Inputs()
         # Build parameter
         self.input_ct += 1
+        data_uri = input_obj.data_type.get_edam_id()
         # Give unique name to the input
         name = 'INPUT' + str(self.input_ct)
         # Get all different format for this input
         list_formats = []
-        for format_obj in input_obj.formats:
-            list_formats.append(self.galaxy_info.get_datatype(format_obj.uri,\
-                                                              input_obj.data_type.uri))
+        if not input_obj.formats:
+            list_formats.append(self.galaxy_info.get_datatype(edam_data=data_uri))
+        else:
+            for format_obj in input_obj.formats:
+                format_uri = format_obj.get_edam_id()
+                list_formats.append(self.galaxy_info.get_datatype(edam_data=data_uri,\
+                                                                  edam_format=format_uri))
         formats = ', '.join(list_formats)
         # Create the parameter
         param = gxtp.DataParam(name, label=input_obj.data_type.term, \
@@ -122,12 +127,18 @@ class GenerateXml(object):
             self.tool.outputs = gxtp.Outputs()
         # Build parameter
         self.output_ct += 1
+        data_uri = output.data_type.get_edam_id()
         # Give unique name to the output
         name = 'OUTPUT' + str(self.output_ct)
         # Get all different format for this output
         list_formats = []
-        for format_obj in output.formats:
-            list_formats.append(self.galaxy_info.get_datatype(format_obj.uri))
+        if not output.formats:
+            list_formats.append(self.galaxy_info.get_datatype(edam_data=data_uri))
+        else:
+            for format_obj in output.formats:
+                format_uri = format_obj.get_edam_id()
+                list_formats.append(self.galaxy_info.get_datatype(edam_data=data_uri, \
+                                                                  edam_format=format_uri))
         formats = ', '.join(list_formats)
         # Create the parameter
         param = gxtp.OutputParameter(name, format=formats, from_work_dir=\
