@@ -19,13 +19,19 @@ import unittest
 # External libraries
 
 # Class and Objects
-from tooldog import main, model, galaxy, cwl
+from tooldog import main, model, galaxy, cwl, edam_to_galaxy
 
 ###########  Constant(s)  ###########
 
 # Declare one ontology for all the test
-EDAM = {'uri':'http://edamontology.org/topic_0091',
-        'term':'bioinformatics'}
+EDAM_TOPIC = {'uri':'http://edamontology.org/topic_0091',
+              'term':'bioinformatics'}
+EDAM_OPE = {'uri':'http://edamontology.org/operation_2429',
+             'term':'mapping'}
+EDAM_DATA = {'uri':'http://edamontology.org/data_0924',
+             'term':'sequence_trace'}
+EDAM_FORMAT = {'uri':'http://edamontology.org/format_1930',
+               'term':'fastq'}
 
 ###########  Function(s)  ###########
 
@@ -79,39 +85,39 @@ class TestBiotool(unittest.TestCase):
         self.assertEqual(self.biotool.informations.documentations[0].comment, 'a_comment')
 
     def test_add_functions(self):
-        function = [{'operation':[EDAM],
-                     'input':[{'data':EDAM, 'format':[EDAM]}],
-                     'output':[{'data':EDAM, 'format':[EDAM]}]}]
+        function = [{'operation':[EDAM_OPE],
+                     'input':[{'data':EDAM_DATA, 'format':[EDAM_FORMAT]}],
+                     'output':[{'data':EDAM_DATA, 'format':[EDAM_FORMAT]}]}]
         self.biotool.add_functions(function)
         # Check function
-        self.assertEqual(self.biotool.functions[0].operations[0].uri, EDAM['uri'])
-        self.assertEqual(self.biotool.functions[0].operations[0].term, EDAM['term'])
+        self.assertEqual(self.biotool.functions[0].operations[0].uri, EDAM_OPE['uri'])
+        self.assertEqual(self.biotool.functions[0].operations[0].term, EDAM_OPE['term'])
         # Check inputs
         self.assertEqual(self.biotool.functions[0].inputs[0].data_type.uri,\
-                         EDAM['uri'])
+                         EDAM_DATA['uri'])
         self.assertEqual(self.biotool.functions[0].inputs[0].data_type.term, \
-                         EDAM['term'])
+                         EDAM_DATA['term'])
         self.assertEqual(self.biotool.functions[0].inputs[0].formats[0].uri,\
-                         EDAM['uri'])
+                         EDAM_FORMAT['uri'])
         self.assertEqual(self.biotool.functions[0].inputs[0].formats[0].term, \
-                         EDAM['term'])
+                         EDAM_FORMAT['term'])
         self.assertIsNone(self.biotool.functions[0].inputs[0].description)
         # Check outputs
         self.assertEqual(self.biotool.functions[0].outputs[0].data_type.uri, \
-                         EDAM['uri'])
+                         EDAM_DATA['uri'])
         self.assertEqual(self.biotool.functions[0].outputs[0].data_type.term, \
-                         EDAM['term'])
+                         EDAM_DATA['term'])
         self.assertEqual(self.biotool.functions[0].outputs[0].formats[0].uri, \
-                         EDAM['uri'])
+                         EDAM_FORMAT['uri'])
         self.assertEqual(self.biotool.functions[0].outputs[0].formats[0].term, \
-                         EDAM['term'])
+                         EDAM_FORMAT['term'])
         self.assertIsNone(self.biotool.functions[0].outputs[0].description)
 
     def test_add_topics(self):
-        topics = [EDAM]
+        topics = [EDAM_TOPIC]
         self.biotool.add_topics(topics)
-        self.assertEqual(self.biotool.topics[0].uri, EDAM['uri'])
-        self.assertEqual(self.biotool.topics[0].term, EDAM['term'])
+        self.assertEqual(self.biotool.topics[0].uri, EDAM_TOPIC['uri'])
+        self.assertEqual(self.biotool.topics[0].term, EDAM_TOPIC['term'])
 
 
 class TestInformations(unittest.TestCase):
@@ -174,46 +180,46 @@ class TestContact(unittest.TestCase):
 class TestFunction(unittest.TestCase):
 
     def setUp(self):
-        self.function = model.Function([EDAM])
+        self.function = model.Function([EDAM_TOPIC])
 
     def test_init(self):
-        self.assertEqual(self.function.operations[0].uri, EDAM['uri'])
-        self.assertEqual(self.function.operations[0].term, EDAM['term'])
+        self.assertEqual(self.function.operations[0].uri, EDAM_TOPIC['uri'])
+        self.assertEqual(self.function.operations[0].term, EDAM_TOPIC['term'])
         self.assertListEqual(self.function.inputs, [])
         self.assertListEqual(self.function.outputs, [])
 
     def test_add_inputs(self):
-        inputs = [{'data':EDAM,
-                   'format': [EDAM]}]
+        inputs = [{'data':EDAM_DATA,
+                   'format': [EDAM_FORMAT]}]
         self.function.add_inputs(inputs)
-        self.assertEqual(self.function.inputs[0].data_type.uri, EDAM['uri'])
-        self.assertEqual(self.function.inputs[0].data_type.term, EDAM['term'])
-        self.assertEqual(self.function.inputs[0].formats[0].uri, EDAM['uri'])
-        self.assertEqual(self.function.inputs[0].formats[0].term, EDAM['term'])
+        self.assertEqual(self.function.inputs[0].data_type.uri, EDAM_DATA['uri'])
+        self.assertEqual(self.function.inputs[0].data_type.term, EDAM_DATA['term'])
+        self.assertEqual(self.function.inputs[0].formats[0].uri, EDAM_FORMAT['uri'])
+        self.assertEqual(self.function.inputs[0].formats[0].term, EDAM_FORMAT['term'])
         self.assertIsNone(self.function.inputs[0].description)
 
     def test_add_outputs(self):
-        outputs = [{'data': EDAM,
-                    'format': [EDAM]}]
+        outputs = [{'data': EDAM_DATA,
+                    'format': [EDAM_FORMAT]}]
         self.function.add_outputs(outputs)
-        self.assertEqual(self.function.outputs[0].data_type.uri, EDAM['uri'])
-        self.assertEqual(self.function.outputs[0].data_type.term, EDAM['term'])
-        self.assertEqual(self.function.outputs[0].formats[0].uri, EDAM['uri'])
-        self.assertEqual(self.function.outputs[0].formats[0].term, EDAM['term'])
+        self.assertEqual(self.function.outputs[0].data_type.uri, EDAM_DATA['uri'])
+        self.assertEqual(self.function.outputs[0].data_type.term, EDAM_DATA['term'])
+        self.assertEqual(self.function.outputs[0].formats[0].uri, EDAM_FORMAT['uri'])
+        self.assertEqual(self.function.outputs[0].formats[0].term, EDAM_FORMAT['term'])
         self.assertIsNone(self.function.outputs[0].description)
 
 
 class TestData(unittest.TestCase):
 
     def test_init(self):
-        data_type = EDAM
-        formats = [EDAM]
+        data_type = EDAM_DATA
+        formats = [EDAM_FORMAT]
         description = 'a description of a data with spaces.'
         data = model.Data(data_type, formats, description)
-        self.assertEqual(data.data_type.uri, EDAM['uri'])
-        self.assertEqual(data.data_type.term, EDAM['term'])
-        self.assertEqual(data.formats[0].uri, EDAM['uri'])
-        self.assertEqual(data.formats[0].term, EDAM['term'])
+        self.assertEqual(data.data_type.uri, EDAM_DATA['uri'])
+        self.assertEqual(data.data_type.term, EDAM_DATA['term'])
+        self.assertEqual(data.formats[0].uri, EDAM_FORMAT['uri'])
+        self.assertEqual(data.formats[0].term, EDAM_FORMAT['term'])
         self.assertEqual(data.description, description)
 
 class TestInput(TestData):
@@ -230,11 +236,11 @@ class TestOutput(TestData):
 class TestEdam(unittest.TestCase):
 
     def setUp(self):
-        self.edam = model.Edam(EDAM)
+        self.edam = model.Edam(EDAM_TOPIC)
 
     def test_init(self):
-        self.assertEqual(self.edam.uri, EDAM['uri'])
-        self.assertEqual(self.edam.term, EDAM['term'])
+        self.assertEqual(self.edam.uri, EDAM_TOPIC['uri'])
+        self.assertEqual(self.edam.term, EDAM_TOPIC['term'])
 
     def test_get_edam_id(self):
         self.assertEqual(self.edam.get_edam_id(), 'topic_0091')
@@ -328,37 +334,37 @@ class TestGenerateXml(unittest.TestCase):
 
     def test_add_edam_topic(self):
         # Create a Topic object
-        topic = model.Topic(EDAM)
+        topic = model.Topic(EDAM_TOPIC)
         self.genxml.add_edam_topic(topic)
         # Test
         self.assertEqual(self.genxml.tool.edam_topics.children[0].node.text, 'topic_0091')
 
     def test_add_edam_operation(self):
-        # Create a Operation object (Warning: EDAM is a topic)
-        operation = model.Operation(EDAM)
+        # Create a Operation object (Warning: EDAM_TOPIC is a topic)
+        operation = model.Operation(EDAM_OPE)
         self.genxml.add_edam_operation(operation)
         # Test
-        self.assertEqual(self.genxml.tool.edam_operations.children[0].node.text, 'topic_0091')
+        self.assertEqual(self.genxml.tool.edam_operations.children[0].node.text, 'operation_2429')
 
     def test_add_input_file(self):
         # Create a Input object (Warning both Type and Format will be a topic)
-        an_input = model.Input(EDAM, [EDAM])
+        an_input = model.Input(EDAM_DATA, [EDAM_FORMAT])
         self.genxml.add_input_file(an_input)
         # Copy object to test (easier to read)
         input_attrib = self.genxml.tool.inputs.children[0].node.attrib
         self.assertEqual(input_attrib['name'], 'INPUT1')
-        self.assertEqual(input_attrib['format'], 'no_mapping')
-        self.assertEqual(input_attrib['label'], EDAM['term'])
+        self.assertEqual(input_attrib['format'], 'MULTI MAPPING')
+        self.assertEqual(input_attrib['label'], EDAM_DATA['term'])
         self.assertEqual(input_attrib['type'], 'data')
 
     def test_add_output_file(self):
         # Create a Output object (Warning both Type and Format will be a topic)
-        output = model.Output(EDAM, [EDAM])
+        output = model.Output(EDAM_DATA, [EDAM_FORMAT])
         self.genxml.add_output_file(output)
         # Copy object to test
         output_attrib = self.genxml.tool.outputs.children[0].node.attrib
         self.assertEqual(output_attrib['name'], 'OUTPUT1')
-        self.assertEqual(output_attrib['format'], 'no_mapping')
+        self.assertEqual(output_attrib['format'], 'MULTI MAPPING')
         self.assertEqual(output_attrib['from_work_dir'], 'OUTPUT1.ext')
 
     def test_add_citation(self):
@@ -380,20 +386,12 @@ class TestGenerateXml(unittest.TestCase):
             os.remove(tmp_file)
 
 
-class TestGalaxyInfo(unittest.TestCase):
+class TestEdamToGalaxy(unittest.TestCase):
 
     def setUp(self):
         # Create two GalaxyInfo objects
-        self.galaxy_info = galaxy.GalaxyInfo()
-        self.galaxy_info_url = galaxy.GalaxyInfo(galaxy_url="a_url")
-
-    def test_init(self):
-        self.assertIsNone(self.galaxy_info.galaxy_url)
-        self.assertDictEqual(self.galaxy_info.datatypes_from_formats, {})
-        self.assertDictEqual(self.galaxy_info.datatypes_from_formats, {})
-        self.assertEqual(self.galaxy_info_url.galaxy_url, "a_url")
-        self.assertDictEqual(self.galaxy_info_url.datatypes_from_formats, {})
-        self.assertDictEqual(self.galaxy_info_url.datatypes_from_formats, {})
+        self.etog = edam_to_galaxy.EdamToGalaxy()
+        self.etog_url = edam_to_galaxy.EdamToGalaxy(galaxy_url="a_url")
 
 
 class TestGenerateCwl(unittest.TestCase):
@@ -421,26 +419,26 @@ class TestGenerateCwl(unittest.TestCase):
 
     def test_add_input_file(self):
         # Create a Input object (Warning both Type and Format will be a topic)
-        input = model.Input(EDAM, [EDAM])
+        input = model.Input(EDAM_DATA, [EDAM_FORMAT])
         self.gencwl.add_input_file(input)
         # Copy object to test (easier to read)
         input_attrib = self.gencwl.tool.inputs[0]
         self.assertEqual(input_attrib.id, 'INPUT1')
         self.assertEqual(input_attrib.type, 'File')
-        self.assertEqual(input_attrib.label, EDAM['term'])
-        self.assertEqual(input_attrib.format, EDAM['uri'])
+        self.assertEqual(input_attrib.label, EDAM_DATA['term'])
+        self.assertEqual(input_attrib.format, EDAM_FORMAT['uri'])
         self.assertEqual(input_attrib.input_binding.prefix, '--INPUT1')
 
     def test_add_output_file(self):
         # Create a Output object (Warning both Type and Format will be a topic)
-        output = model.Output(EDAM, [EDAM])
+        output = model.Output(EDAM_DATA, [EDAM_FORMAT])
         self.gencwl.add_output_file(output)
         # Copy object to test
         output_attrib = self.gencwl.tool.outputs[0]
         self.assertEqual(output_attrib.id, 'OUTPUT1')
         self.assertEqual(output_attrib.type, 'File')
-        self.assertEqual(output_attrib.label, EDAM['term'])
-        self.assertEqual(output_attrib.format, EDAM['uri'])
+        self.assertEqual(output_attrib.label, EDAM_DATA['term'])
+        self.assertEqual(output_attrib.format, EDAM_FORMAT['uri'])
         self.assertEqual(output_attrib.output_binding.glob, 'OUTPUT1.ext')
 
     def test_write_cwl(self):

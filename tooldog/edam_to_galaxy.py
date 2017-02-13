@@ -59,11 +59,11 @@ class GalaxyInfo(object):
             with open(LOCAL_DATA + "/edam_data.json") as json_file:
                 api_edam_data = json.load(json_file)
             with open(LOCAL_DATA + "/mapping.json") as json_file:
-                self.mapping = json.load(json_file)
+                mapping = json.load(json_file)
         else:
             api_edam_formats = requests.get(galaxy_url + "/api/datatypes/edam_formats").json()
             api_edam_data = requests.get(galaxy_url + "/api/datatypes/edam_data").json()
-            self.mapping = requests.get(galaxy_url + "/api/datatypes/mapping").json()
+            mapping = requests.get(galaxy_url + "/api/datatypes/mapping").json()
         # Reverse EDAMs dictionnaries
         def rev_dict(dictionnary):
             new_dict = {}
@@ -74,6 +74,20 @@ class GalaxyInfo(object):
             return new_dict
         self.edam_formats = rev_dict(api_edam_formats)
         self.edam_data = rev_dict(api_edam_data)
+        # Store hierarchy from mapping and class names
+        self.hierarchy = mapping["class_to_direct_parents"]
+        self.class_names = mapping["ext_to_class_name"]
+
+    def select_best(self, datatypes):
+        '''
+        Select the last common datatype to all given datatypes.
+
+        :param datatypes: list of different datatypes.
+        :type datatypes: list of STRING
+        :return: last common datatype.
+        :rtype: STRING
+        '''
+        return "MULTI MAPPING"
 
 
 class EdamInfo(object):
@@ -155,30 +169,40 @@ class EdamToGalaxy(object):
 
         Every edam_format and edam_data will be given a datatype.
         '''
+        def datatype_from_parent(edam, edam_hierarchy, galaxy_mapping):
+            '''
+            Find the datatype corresponding to parental EDAM.
+            NEED TO FIND MORE ACCURATE WAY OF FINDING THE DATATYPE WITH CORRECT WARNINGS.
+            '''
+            datatypes = []
+            for p_edam in edam_hierarchy[edam]:
+                if not p_edam in galaxy_mapping:
+                    pass
+                elif len(galaxy_mapping[p_edam]) == 1:
+                    datatypes.append(galaxy_mapping[p_edam][0])
+                elif len(galaxy_mapping[p_edam]) > 1:
+                    pass
+
+        def maps_datatype(edam_hierarchy, galaxy_mapping):
+            map_to_datatype = {}
+            for edam in edam_hierarchy.keys():
+                # edam not used in galaxy
+                if not edam in galaxy_mapping:
+                    map_to_datatype[edam] = "NO mapping"
+                # edam is uniquely used in galaxy
+                elif len(galaxy_mapping[edam]) == 1:
+                    map_to_datatype[edam] = galaxy_mapping[edam][0]
+                # edam is used by several datatypes
+                elif len(galaxy_mapping[edam]) > 1:
+                    map_to_datatype[edam] = self.galaxy.select_best(galaxy_mapping[edam])
+            return map_to_datatype
+            
         # EDAM formats
-        self.format_to_datatype = {}
-        for edam_format in self.edam.edam_format_hierarchy.keys():
-            # edam_format not used in galaxy
-            if not edam_format in self.galaxy.edam_formats:
-                self.format_to_datatype[edam_format] = "NO mapping"
-            # edam_format is uniquely used in galaxy
-            elif len(self.galaxy.edam_formats[edam_format]) == 1:
-                self.format_to_datatype[edam_format] = self.galaxy.edam_formats[edam_format][0]
-            # edam_format is used by several datatypes
-            elif len(self.galaxy.edam_formats[edam_format]) > 1:
-                self.format_to_datatype[edam_format] = "MULTI mapping"
+        self.format_to_datatype = maps_datatype(self.edam.edam_format_hierarchy,\
+                                                self.galaxy.edam_formats)
         # EDAM data
-        self.data_to_datatype = {}
-        for edam_data in self.edam.edam_data_hierarchy.keys():
-            # edam_data not used in galaxy
-            if not edam_data in self.galaxy.edam_data:
-                self.data_to_datatype[edam_data] = "NO mapping"
-            # edam_data is uniquely used in galaxy
-            elif len(self.galaxy.edam_data[edam_data]) == 1:
-                self.data_to_datatype[edam_data] = self.galaxy.edam_data[edam_data][0]
-            # edam_data is used by several datatypes
-            elif len(self.galaxy.edam_data[edam_data]) > 1:
-                self.data_to_datatype[edam_data] = "MULTI mapping"
+        self.data_to_datatype = maps_datatype(self.edam.edam_data_hierarchy,\
+                                              self.galaxy.edam_data)
 
     def load_local_mapping(self, local_file):
         '''
@@ -200,7 +224,6 @@ class EdamToGalaxy(object):
         :param export_file: path to the file.
         :type export_file: STRING
         '''
-        print("exporting content to", export_file)
         with open(export_file, 'w') as fp:
             json.dump({'format':self.format_to_datatype,
                        'data': self.data_to_datatype}, fp)
