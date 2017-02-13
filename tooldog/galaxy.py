@@ -27,8 +27,6 @@ from tooldog.edam_to_galaxy import EdamToGalaxy
 
 ###########  Constant(s)  ###########
 
-LOCAL_DATA = os.path.dirname(__file__) + "/data"
-
 ###########  Class(es)  ###########
 
 class GenerateXml(object):

@@ -136,7 +136,7 @@ class EdamToGalaxy(object):
         '''
         if mapping_from_local is None:
             mapping_from_local = LOCAL_DATA + "/edam_to_galaxy.json"
-        print(mapping_from_local)
+        # Generates or Loads ?
         if os.path.isfile(mapping_from_local):
             self.load_local_mapping(mapping_from_local)
         else:
@@ -150,7 +150,8 @@ class EdamToGalaxy(object):
     def generate_mapping(self):
         '''
         Generates mapping between edam_format and edam_data to Galaxy datatypes
-        based on the information of the Galaxy instance (main by default) and the EDAM ontology.
+        based on the information of the Galaxy instance (main by default) and the
+        EDAM ontology.
 
         Every edam_format and edam_data will be given a datatype.
         '''
@@ -181,6 +182,11 @@ class EdamToGalaxy(object):
 
     def load_local_mapping(self, local_file):
         '''
+        Method to load (from JSON file) mapping previously generated and exported in the
+        `local_file`.
+
+        :param local_file: path to the mapping local file.
+        :type local_file: STRING
         '''
         with open(local_file, 'r') as fp:
             json_file = json.load(fp)
@@ -189,6 +195,10 @@ class EdamToGalaxy(object):
 
     def export_info(self, export_file):
         '''
+        Method to export mapping of this object to a JSON file.
+
+        :param export_file: path to the file.
+        :type export_file: STRING
         '''
         print("exporting content to", export_file)
         with open(export_file, 'w') as fp:
