@@ -125,16 +125,27 @@ class EdamToGalaxy(object):
     datatypes. 
     '''
 
-    def __init__(self, galaxy_url=None, edam_file=None):
+    def __init__(self, galaxy_url=None, edam_file=None, mapping_from_local=None):
         '''
         :param galaxy_url: URL of the galaxy instance.
         :type galaxy_url: STRING
         :param edam_file: path to EDAM.owl file
         :type edam_file: STRING
+        :param mapping_from_local: path to personnalized EDAM mapping to Galaxy.
+        :type mapping_from_local: STRING
         '''
-        self.edam = EdamInfo(edam_file)
-        self.edam.generate_hierarchy()
-        self.galaxy = GalaxyInfo(galaxy_url)
+        if mapping_from_local is None:
+            mapping_from_local = LOCAL_DATA + "/edam_to_galaxy.json"
+        print(mapping_from_local)
+        if os.path.isfile(mapping_from_local):
+            self.load_local_mapping(mapping_from_local)
+        else:
+            # No local file exists, needs to generate it (takes a little bit of time)
+            self.edam = EdamInfo(edam_file)
+            self.edam.generate_hierarchy()
+            self.galaxy = GalaxyInfo(galaxy_url)
+            self.generate_mapping()
+            self.export_info(mapping_from_local)
 
     def generate_mapping(self):
         '''
@@ -167,6 +178,22 @@ class EdamToGalaxy(object):
             # edam_data is used by several datatypes
             elif len(self.galaxy.edam_data[edam_data]) > 1:
                 self.data_to_datatype[edam_data] = "MULTI mapping"
+
+    def load_local_mapping(self, local_file):
+        '''
+        '''
+        with open(local_file, 'r') as fp:
+            json_file = json.load(fp)
+        self.format_to_datatype = json_file['format']
+        self.data_to_datatype = json_file['data']
+
+    def export_info(self, export_file):
+        '''
+        '''
+        print("exporting content to", export_file)
+        with open(export_file, 'w') as fp:
+            json.dump({'format':self.format_to_datatype,
+                       'data': self.data_to_datatype}, fp)
 
     def get_datatype(self, edam_data=None, edam_format=None):
         '''
