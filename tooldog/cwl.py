@@ -14,6 +14,8 @@ cwlgen library.
 
 # General libraries
 import os
+import logging
+from logging.handlers import RotatingFileHandler
 
 # External libraries
 import cwlgen
@@ -21,6 +23,25 @@ import cwlgen
 # Class and Objects
 
 ###########  Constant(s)  ###########
+
+LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
+
+###########  Logger  ###########
+
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+# Define the format
+FORMATTER = logging.Formatter('%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s')
+# Logger for all logs
+FILE_HANDLER = RotatingFileHandler(LOG_FILE, mode='a', maxBytes=1000000, backupCount=1)
+FILE_HANDLER.setLevel(logging.DEBUG)
+FILE_HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(FILE_HANDLER)
+# Logger for Errors, warnings on stderr
+STREAM_HANDLER = logging.StreamHandler()
+STREAM_HANDLER.setLevel(logging.WARNING)
+STREAM_HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(STREAM_HANDLER)
 
 ###########  Class(es)  ###########
 
@@ -37,6 +58,7 @@ class GenerateCwl(object):
         :param biotool: Biotool object of an entry from https://bio.tools.
         :type biotool: :class:`tooldog.model.Biotool`
         '''
+        LOGGER.info("Creating new GenerateCwl object...")
         # Initialize counters for inputs and outputs
         self.input_ct = 0
         self.output_ct = 0
@@ -56,6 +78,7 @@ class GenerateCwl(object):
         :param input_obj: Input object.
         :type input_obj: :class:`tooldog.model.Input`
         '''
+        LOGGER.info("Adding input to GenerateCwl object...")
         # Build parameter
         self.input_ct += 1
         # Give unique name to the input
@@ -81,6 +104,7 @@ class GenerateCwl(object):
         :param output: Output object.
         :type output: :class:`tooldog.model.Output`
         '''
+        LOGGER.info("Adding output to GenerateCwl object...")
         # Build parameter
         self.output_ct += 1
         # Give unique name to the output
@@ -111,6 +135,7 @@ class GenerateCwl(object):
         if out_file is None:
             if index is not None:
                 print('########## CWL number ' + str(index) + ' ##########')
+            LOGGER.info("Writing CWL file to STDOUT...")
             print(self.tool.export())
         else:
             # Format name for output file(s)
@@ -118,4 +143,5 @@ class GenerateCwl(object):
                 out_file = os.path.splitext(out_file)[0] + str(index) + '.cwl'
             else:
                 out_file = os.path.splitext(out_file)[0] + '.cwl'
+            LOGGER.info("Writing CWL file to " + out_file)
             self.tool.export(out_file)

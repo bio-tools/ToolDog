@@ -16,6 +16,8 @@ galaxyxml library.
 import os
 import copy
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 
 # External libraries
 import galaxyxml.tool as gxt
@@ -28,6 +30,24 @@ from ontospy import Ontospy
 ###########  Constant(s)  ###########
 
 LOCAL_DATA = os.path.dirname(__file__) + "/data"
+LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
+
+###########  Logger  ###########
+
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+# Define the format
+FORMATTER = logging.Formatter('%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s')
+# Logger for all logs
+FILE_HANDLER = RotatingFileHandler(LOG_FILE, mode='a', maxBytes=1000000, backupCount=1)
+FILE_HANDLER.setLevel(logging.DEBUG)
+FILE_HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(FILE_HANDLER)
+# Logger for Errors, warnings on stderr
+STREAM_HANDLER = logging.StreamHandler()
+STREAM_HANDLER.setLevel(logging.WARNING)
+STREAM_HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(STREAM_HANDLER)
 
 ###########  Class(es)  ###########
 
@@ -54,6 +74,7 @@ class GalaxyInfo(object):
         '''
         self.galaxy_url = galaxy_url
         if self.galaxy_url is None:
+            LOGGER.info("Loading galaxy info from " + LOCAL_DATA)
             with open(LOCAL_DATA + "/edam_formats.json") as json_file:
                 api_edam_formats = json.load(json_file)
             with open(LOCAL_DATA + "/edam_data.json") as json_file:
@@ -61,6 +82,7 @@ class GalaxyInfo(object):
             with open(LOCAL_DATA + "/mapping.json") as json_file:
                 mapping = json.load(json_file)
         else:
+            LOGGER.info("Loading galaxy info from " + galaxy_url +"/api/datatypes")
             api_edam_formats = requests.get(galaxy_url + "/api/datatypes/edam_formats").json()
             api_edam_data = requests.get(galaxy_url + "/api/datatypes/edam_data").json()
             mapping = requests.get(galaxy_url + "/api/datatypes/mapping").json()
@@ -104,6 +126,7 @@ class EdamInfo(object):
         :type edam_file: STRING
         '''
         if edam_file is None:
+            LOGGER.info("Loading EDAM info from " + LOCAL_DATA + "/EDAM_dev.owl")
             self.edam_ontology = Ontospy(uri_or_path=LOCAL_DATA + "/EDAM_dev.owl")
         else:
             pass
@@ -169,32 +192,32 @@ class EdamToGalaxy(object):
 
         Every edam_format and edam_data will be given a datatype.
         '''
-        def datatype_from_parent(edam, edam_hierarchy, galaxy_mapping):
-            '''
-            Find the datatype corresponding to parental EDAM.
-            NEED TO FIND MORE ACCURATE WAY OF FINDING THE DATATYPE WITH CORRECT WARNINGS.
-            '''
-            datatypes = []
-            for p_edam in edam_hierarchy[edam]:
-                if not p_edam in galaxy_mapping:
-                    pass
-                elif len(galaxy_mapping[p_edam]) == 1:
-                    datatypes.append(galaxy_mapping[p_edam][0])
-                elif len(galaxy_mapping[p_edam]) > 1:
-                    pass
+        LOGGER.info("Generating new EDAM mapping to Galaxy datatypes file...")
+
+        def find_datatype(edam, edam_hierarchy, galaxy_mapping):
+            if not edam in galaxy_mapping:
+                LOGGER.info("No datatype found for " + edam)
+                if len(edam_hierarchy[edam]) > 1:
+                    LOGGER.warning(edam + " inherits from more than one EDAM. " +\
+                                   "Only first EDAM parent of the list is treated: " + \
+                                   edam_hierarchy[edam][0])
+                elif len(edam_hierarchy[edam]) == 0:
+                    LOGGER.warning("No parental EDAM found. " + edam + " is skipped.")
+                    return "NO mapping"
+                datatype = find_datatype(edam_hierarchy[edam][0], edam_hierarchy, \
+                                         galaxy_mapping)
+            elif len(galaxy_mapping[edam]) == 1:
+                LOGGER.info("Exactly one datatype found for " + edam)
+                datatype = galaxy_mapping[edam][0]
+            elif len(galaxy_mapping[edam]) > 1:
+                LOGGER.info("More than one datatypes found for " + edam)
+                datatype = self.galaxy.select_best(galaxy_mapping[edam])
+            return datatype
 
         def maps_datatype(edam_hierarchy, galaxy_mapping):
             map_to_datatype = {}
             for edam in edam_hierarchy.keys():
-                # edam not used in galaxy
-                if not edam in galaxy_mapping:
-                    map_to_datatype[edam] = "NO mapping"
-                # edam is uniquely used in galaxy
-                elif len(galaxy_mapping[edam]) == 1:
-                    map_to_datatype[edam] = galaxy_mapping[edam][0]
-                # edam is used by several datatypes
-                elif len(galaxy_mapping[edam]) > 1:
-                    map_to_datatype[edam] = self.galaxy.select_best(galaxy_mapping[edam])
+                map_to_datatype[edam] = find_datatype(edam, edam_hierarchy, galaxy_mapping)
             return map_to_datatype
             
         # EDAM formats
@@ -212,6 +235,8 @@ class EdamToGalaxy(object):
         :param local_file: path to the mapping local file.
         :type local_file: STRING
         '''
+        LOGGER.info("Loading EDAM mapping to Galaxy datatypes from " +\
+                    local_file)
         with open(local_file, 'r') as fp:
             json_file = json.load(fp)
         self.format_to_datatype = json_file['format']
@@ -224,6 +249,8 @@ class EdamToGalaxy(object):
         :param export_file: path to the file.
         :type export_file: STRING
         '''
+        LOGGER.info("Exporting new EDAM mapping to Galaxy datatypes file to " +\
+                    export_file)
         with open(export_file, 'w') as fp:
             json.dump({'format':self.format_to_datatype,
                        'data': self.data_to_datatype}, fp)

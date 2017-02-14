@@ -13,6 +13,7 @@ Main functions used by ToolDog.
 
 # General libraries
 import argparse
+import os
 import sys
 import json
 import copy
@@ -27,15 +28,18 @@ from tooldog.model import Biotool
 from tooldog.galaxy import GenerateXml
 from tooldog.cwl import GenerateCwl
 
+########### Constant(s) ##########
+
+LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
+
 ###########  Logger  ###########
 
-LOGGER = logging.getLogger()
+LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 # Define the format
-FORMATTER = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
+FORMATTER = logging.Formatter('%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s')
 # Logger for all logs
-FILE_HANDLER = RotatingFileHandler('tooldog_activity.log', mode='a', maxBytes=1000000,\
-                                   backupCount=1)
+FILE_HANDLER = RotatingFileHandler(LOG_FILE, mode='a', maxBytes=1000000, backupCount=1)
 FILE_HANDLER.setLevel(logging.DEBUG)
 FILE_HANDLER.setFormatter(FORMATTER)
 LOGGER.addHandler(FILE_HANDLER)
@@ -59,7 +63,7 @@ def json_from_biotools(tool_id, tool_version):
     :return: dictionnary corresponding to the JSON from https://bio.tools.
     :rtype: DICT
     '''
-    LOGGER.debug("Loading tool entry from https://bio.tools: " + tool_id + '/' + tool_version)
+    LOGGER.info("Loading tool entry from https://bio.tools: " + tool_id + '/' + tool_version)
     biotools_link = "https://bio.tools/api/tool/" + tool_id + "/version/" + tool_version
     # Access the entry with requests and get the JSON part
     http_tool = requests.get(biotools_link)
@@ -81,7 +85,7 @@ def json_from_file(json_file):
     :return: dictionnary corresponding to the JSON.
     :rtype: DICT
     '''
-    LOGGER.debug("Loading tool entry from local file: " + json_file)
+    LOGGER.info("Loading tool entry from local file: " + json_file)
     # parse file in JSON format
     with open(json_file, 'r') as tool_file:
         json_tool = json.load(tool_file)
@@ -99,6 +103,7 @@ def json_to_biotool(json_file):
     :return: Biotool object.
     :rtype: :class:`tooldog.model.Biotool`
     '''
+    LOGGER.info("Converting biotool entry (JSON) to Biotool object...")
     # Initialize Biotool object with basic parameters
     biotool = Biotool(json_file['name'], json_file['id'], json_file['version'],\
                       json_file['description'], json_file['homepage'])
@@ -121,7 +126,7 @@ def write_xml(biotool, outfile=None):
     :param outfile: path to output file to write the XML.
     :type outfile: STRING
     '''
-    LOGGER.debug("Writing XML file...")
+    LOGGER.info("Writing XML file with galaxy.py module...")
     biotool_xml = GenerateXml(biotool)
     # Add topics to the XML
     for topic in biotool.topics:
@@ -154,7 +159,7 @@ def write_cwl(biotool, outfile=None):
     :param outfile: path to output file to write the CWL.
     :type outfile: STRING
     '''
-    LOGGER.debug("Writing CWL file...")
+    LOGGER.info("Writing CWL file with cwl.py module...")
     biotool_cwl = GenerateCwl(biotool)
     # Add operations and inputs
     for function in biotool.functions:
@@ -221,7 +226,6 @@ def run():
     if args.CWL:
     # Write corresponding CWL
         write_cwl(biotool, args.OUTFILE)
-        #LOGGER.warning('Generation of CWL is not available yet. Coming soon...')
 
 if __name__ == "__main__":
     run()

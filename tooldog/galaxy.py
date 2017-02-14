@@ -16,6 +16,8 @@ galaxyxml library.
 import os
 import copy
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 
 # External libraries
 import galaxyxml.tool as gxt
@@ -26,6 +28,25 @@ import requests
 from tooldog.edam_to_galaxy import EdamToGalaxy
 
 ###########  Constant(s)  ###########
+
+LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
+
+###########  Logger  ###########
+
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+# Define the format
+FORMATTER = logging.Formatter('%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s')
+# Logger for all logs
+FILE_HANDLER = RotatingFileHandler(LOG_FILE, mode='a', maxBytes=1000000, backupCount=1)
+FILE_HANDLER.setLevel(logging.DEBUG)
+FILE_HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(FILE_HANDLER)
+# Logger for Errors, warnings on stderr
+STREAM_HANDLER = logging.StreamHandler()
+STREAM_HANDLER.setLevel(logging.WARNING)
+STREAM_HANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(STREAM_HANDLER)
 
 ###########  Class(es)  ###########
 
@@ -43,6 +64,7 @@ class GenerateXml(object):
         :param biotool: Biotool object of an entry from https://bio.tools.
         :type biotool: :class:`tooldog.model.Biotool`
         '''
+        LOGGER.info("Creating new GenerateXml object...")
         # Initialize GalaxyInfo
         self.etog = EdamToGalaxy(galaxy_url=galaxy_url, edam_file=edam_file,\
                                  mapping_from_local=mapping_from_local)
@@ -65,6 +87,7 @@ class GenerateXml(object):
         :param topic: Topic object.
         :type topic: :class:`tooldog.model.Topic`
         '''
+        LOGGER.info("Adding EDAM topic to GenerateXml object...")
         if not hasattr(self.tool, 'edam_topics'):
             # First time we add topics to the tool
             self.tool.edam_topics = gxtp.EdamTopics()
@@ -77,6 +100,7 @@ class GenerateXml(object):
         :param topic: Operation object.
         :type topic: :class:`tooldog.model.Operation`
         '''
+        LOGGER.info("Adding EDAM operation to GenerateXml object...")
         if not hasattr(self.tool, 'edam_operations'):
             # First time we add operations to the tool
             self.tool.edam_operations = gxtp.EdamOperations()
@@ -89,6 +113,7 @@ class GenerateXml(object):
         :param input_obj: Input object.
         :type input_obj: :class:`tooldog.model.Input`
         '''
+        LOGGER.info("Adding input to GenerateXml object...")
         if not hasattr(self.tool, 'inputs'):
             self.tool.inputs = gxtp.Inputs()
         # Build parameter
@@ -121,6 +146,7 @@ class GenerateXml(object):
         :param output: Output object.
         :type output: :class:`tooldog.model.Output`
         '''
+        LOGGER.info("Adding output to GenerateXml object...")
         if not hasattr(self.tool, 'outputs'):
             self.tool.outputs = gxtp.Outputs()
         # Build parameter
@@ -151,6 +177,7 @@ class GenerateXml(object):
         :param publication: Publication object.
         :type publication: :class:`tooldog.model.Publication`
         '''
+        LOGGER.info("Adding citation to GenerateXml object...")
         if not hasattr(self.tool, 'citations'):
             self.tool.citations = gxtp.Citations()
         # Add citation depending the type (doi, pmid...)
@@ -176,6 +203,7 @@ class GenerateXml(object):
         if out_file is None:
             if index is not None:
                 print('########## XML number ' + str(index) + ' ##########')
+            LOGGER.info("Writing XML file to STDOUT")
             print(export_tool.export().decode('utf-8'))
         else:
             # Format name for output file(s)
@@ -183,6 +211,6 @@ class GenerateXml(object):
                 out_file = os.path.splitext(out_file)[0] + str(index) + '.xml'
             else:
                 out_file = os.path.splitext(out_file)[0] + '.xml'
-            file_w = open(out_file, 'w')
-            file_w.write(export_tool.export().decode('utf-8'))
-            file_w.close()
+            LOGGER.info("Writing XML file to " + out_file)
+            with open(out_file, 'w') as file_w:
+                file_w.write(export_tool.export().decode('utf-8'))
