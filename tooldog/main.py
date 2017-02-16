@@ -30,6 +30,8 @@ from tooldog.cwl import GenerateCwl
 ########### Constant(s) ##########
 
 LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
+global LOGGER
+LOGGER = logging.getLogger(__name__) # for tests
 
 ###########  Function(s)  ###########
 
@@ -246,7 +248,7 @@ def run():
     import logging.config
     logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL, \
                                             args.LOG_FILE, args.VERBOSE))
-    global LOGGER
+    # Reset LOGGER with new config
     LOGGER = logging.getLogger(__name__)
 
     # Get JSON of the tool
