@@ -18,7 +18,6 @@ import sys
 import json
 import copy
 import logging
-from logging.handlers import RotatingFileHandler
 
 # External libraries
 import requests
@@ -32,24 +31,57 @@ from tooldog.cwl import GenerateCwl
 
 LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
 
-###########  Logger  ###########
-
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
-# Define the format
-FORMATTER = logging.Formatter('%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s')
-# Logger for all logs
-FILE_HANDLER = RotatingFileHandler(LOG_FILE, mode='a', maxBytes=1000000, backupCount=1)
-FILE_HANDLER.setLevel(logging.DEBUG)
-FILE_HANDLER.setFormatter(FORMATTER)
-LOGGER.addHandler(FILE_HANDLER)
-# Logger for Errors, warnings on stderr
-STREAM_HANDLER = logging.StreamHandler()
-STREAM_HANDLER.setLevel(logging.WARNING)
-STREAM_HANDLER.setFormatter(FORMATTER)
-LOGGER.addHandler(STREAM_HANDLER)
-
 ###########  Function(s)  ###########
+
+def config_logger(write_logs, log_level, log_file, verbose):
+    '''
+    Initialize the logger for ToolDog. By default, only WARNING, ERROR and CRITICAL are
+    written on STDERR. You can also write logs to a log file.
+
+    :param write_logs: Decide to write logs to output log file.
+    :type write_logs: BOOLEAN
+    :param log_level: Select the level of logs. 'debug', 'info' or 'warn'. Other value
+    is considered as 'warn'.
+    :type log_level: STRING
+    :param log_file: path to output log file.
+    :type log_file: STRING
+
+    :return: Config dictionnary for logger.
+    :rtype: DICT
+    '''
+    cfg = {'version': 1,
+           'formatters': {'written': {'format': '%(asctime)s :: %(name)s '+\
+                                                ':: %(levelname)s :: %(message)s'},
+                                      'printed': {'format': '%(name)s :: '+\
+                                                            '%(levelname)s :: %(message)s'}},
+           'handlers':{},
+           'loggers':{}}
+    # Configure handler for all logs if user specified so
+    if write_logs:
+        cfg_logfile = {'class': 'logging.handlers.RotatingFileHandler',
+                    'formatter': 'written',
+                    'maxBytes': 1000000,
+                    'backupCount': 1}
+        cfg_logfile['level'] = log_level
+        cfg_logfile['filename'] = log_file
+        cfg['handlers']['logfile'] = cfg_logfile
+    # Configure handler for Errors, warnings on stderr
+    cfg_stderr = {'class': 'logging.StreamHandler',
+                  'formatter': 'printed'}
+    cfg_stderr['level'] = 'WARNING'
+    if verbose:
+        cfg_stderr['level'] = 'INFO'
+    cfg['handlers']['stderr'] = cfg_stderr
+    # Configure loggers for everymodule
+    modules = ['galaxy', 'cwl', 'edam_to_galaxy', 'main']
+    logger = {'handlers': ['stderr'],
+              'propagate': False,
+              'level': 'DEBUG'}
+    if write_logs:
+        logger['handlers'].append('logfile')
+    for module in modules:
+        cfg['loggers']['tooldog.' + module] = logger
+    return cfg
 
 def json_from_biotools(tool_id, tool_version):
     '''
@@ -185,12 +217,20 @@ def run():
     parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
     parser.add_argument('biotool_entry', help='either online (ID/VERSION, e.g. SignalP/4.1) '+\
                         'or from local file (ENTRY.json, e.g. signalp4.1.json)')
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-g', '--galaxy', action='store_true', help='generates XML for Galaxy.',\
-                        dest='GALAXY')
-    group.add_argument('-c', '--cwl', action='store_true', help='generates CWL', dest='CWL')
+    exc_group = parser.add_mutually_exclusive_group()
+    exc_group.add_argument('-g', '--galaxy', action='store_true',\
+                           help='generates XML for Galaxy.', dest='GALAXY')
+    exc_group.add_argument('-c', '--cwl', action='store_true', help='generates CWL', dest='CWL')
     parser.add_argument('-f', '--file', dest='OUTFILE', help='Write in the OUTFILE instead '+\
                         'of STDOUT.')
+    parser.add_argument('-v', '--verbose', action='store_true', dest='VERBOSE', \
+                        help='Display info on stderr.')
+    log_group = parser.add_argument_group('Logs options', 'description')
+    log_group.add_argument('-l', '--logs', action='store_true', help='', dest='LOGS')
+    log_group.add_argument('--log_level', dest='LOG_LEVEL', default='WARN',\
+                           help='')
+    log_group.add_argument('--log_file', dest='LOG_FILE', default='tooldog_activity.log', \
+                           help='')
 
     try:
         args = parser.parse_args()
@@ -201,6 +241,13 @@ def run():
     ###########################################################
 
     ## MAIN
+
+    # Logger configuration
+    import logging.config
+    logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL, \
+                                            args.LOG_FILE, args.VERBOSE))
+    global LOGGER
+    LOGGER = logging.getLogger(__name__)
 
     # Get JSON of the tool
     if '.json' in args.biotool_entry:
@@ -222,10 +269,13 @@ def run():
     if args.GALAXY:
     # Write corresponding XMLs
         write_xml(biotool, args.OUTFILE)
-
-    if args.CWL:
+    elif args.CWL:
     # Write corresponding CWL
         write_cwl(biotool, args.OUTFILE)
+    else:
+        LOGGER.error("You did not select either Galaxy (-g) or CWL (-c) generation.")
+        parser.print_help()
+        sys.exit(1)
 
 if __name__ == "__main__":
     run()

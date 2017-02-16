@@ -17,7 +17,6 @@ import os
 import copy
 import json
 import logging
-from logging.handlers import RotatingFileHandler
 
 # External libraries
 import galaxyxml.tool as gxt
@@ -30,24 +29,10 @@ from ontospy import Ontospy
 ###########  Constant(s)  ###########
 
 LOCAL_DATA = os.path.dirname(__file__) + "/data"
-LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
 
 ###########  Logger  ###########
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
-# Define the format
-FORMATTER = logging.Formatter('%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s')
-# Logger for all logs
-FILE_HANDLER = RotatingFileHandler(LOG_FILE, mode='a', maxBytes=1000000, backupCount=1)
-FILE_HANDLER.setLevel(logging.DEBUG)
-FILE_HANDLER.setFormatter(FORMATTER)
-LOGGER.addHandler(FILE_HANDLER)
-# Logger for Errors, warnings on stderr
-STREAM_HANDLER = logging.StreamHandler()
-STREAM_HANDLER.setLevel(logging.WARNING)
-STREAM_HANDLER.setFormatter(FORMATTER)
-LOGGER.addHandler(STREAM_HANDLER)
 
 ###########  Class(es)  ###########
 
