@@ -94,7 +94,36 @@ class GalaxyInfo(object):
         :return: last common datatype.
         :rtype: STRING
         '''
-        return "MULTI MAPPING"
+        # Build class to ext dictionnary
+        class_to_ext = {}
+        for key, value in self.class_names.items():
+            if value not in class_to_ext:
+                class_to_ext[value] = []
+            class_to_ext[value].append(key)
+        # Create class list from datatypes and subdict of hierarchy
+        selected_class = []
+        sub_dict = {}
+        for datatype in datatypes:
+            if datatype in self.class_names:
+                selected_class.append(self.class_names[datatype])
+                sub_dict[self.class_names[datatype]] = self.hierarchy[self.class_names[datatype]]
+            else:
+                LOGGER.warning(datatype + " was not found in the ext to class mapping. skipped")
+        # Find best class
+        for class_name in sub_dict.keys():
+            for key, value in sub_dict.items():
+                if not class_name == key:
+                    if not class_name in value:
+                        selected_class.remove(class_name)
+                        break
+        if len(selected_class) == 0:
+            LOGGER.warning("No best datatype found, return first datatype")
+            return datatypes[0]
+        elif len(selected_class) > 1:
+            LOGGER.warning("More than one best datatype found, return first")
+        if len(class_to_ext[selected_class[0]]) > 1:
+            LOGGER.warning("More than one extension corresponds to the class, first is kept")
+        return class_to_ext[selected_class[0]][0]
 
 
 class EdamInfo(object):
