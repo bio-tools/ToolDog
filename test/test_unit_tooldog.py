@@ -13,10 +13,12 @@ Unit tests for ToolDog
 
 # General libraries
 import os
+import json
 import filecmp
 import unittest
 
 # External libraries
+import requests_mock
 
 # Class and Objects
 from tooldog import main, model, galaxy, cwl, edam_to_galaxy
@@ -386,10 +388,44 @@ class TestGenerateXml(unittest.TestCase):
             os.remove(tmp_file)
 
 
-class TestEdamToGalaxy(unittest.TestCase):
+class TestGalaxyInfo(unittest.TestCase):
 
     def setUp(self):
         # Create two GalaxyInfo objects
+        self.gi = edam_to_galaxy.GalaxyInfo(None)
+        with requests_mock.mock() as m:
+            edam_format_answer = main.json_from_file(edam_to_galaxy.LOCAL_DATA + \
+                                                     '/edam_formats.json') 
+            m.get('http://supergalaxy.com/api/datatypes/edam_formats', \
+                  json=edam_format_answer)
+            edam_data_answer = main.json_from_file(edam_to_galaxy.LOCAL_DATA + \
+                                                   '/edam_data.json') 
+            m.get('http://supergalaxy.com/api/datatypes/edam_data', \
+                  json=edam_data_answer)
+            mapping_answer = main.json_from_file(edam_to_galaxy.LOCAL_DATA + \
+                                                 '/mapping.json')
+            m.get('http://supergalaxy.com/api/datatypes/mapping', \
+                  json=mapping_answer)
+            self.gi_url = edam_to_galaxy.GalaxyInfo('http://supergalaxy.com')
+
+    def test_init(self):
+        # Tests URLs
+        self.assertIsNone(self.gi.galaxy_url)
+        self.assertEqual(self.gi_url.galaxy_url, 'http://supergalaxy.com')
+        # Tests one EDAM format
+        self.assertEqual(self.gi.edam_formats['format_1930'][0], 'fastq')
+        self.assertEqual(self.gi_url.edam_formats['format_1930'][0], 'fastq')
+        # Tests one EDAM data
+        self.assertEqual(self.gi.edam_data['data_2044'][1], 'fasta')
+        self.assertEqual(self.gi_url.edam_data['data_2044'][1], 'fasta')
+        # Tests class names
+        self.assertEqual(self.gi.class_names['fasta'], 'galaxy.datatypes.sequence.Fasta')
+        self.assertEqual(self.gi_url.class_names['fasta'], 'galaxy.datatypes.sequence.Fasta')
+
+class TestEdamToGalaxy(unittest.TestCase):
+
+    def setUp(self):
+        # Create two EdamToGalaxy objects
         self.etog = edam_to_galaxy.EdamToGalaxy()
         self.etog_url = edam_to_galaxy.EdamToGalaxy(galaxy_url="a_url")
 

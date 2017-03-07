@@ -123,7 +123,6 @@ def json_from_file(json_file):
     # parse file in JSON format
     with open(json_file, 'r') as tool_file:
         json_tool = json.load(tool_file)
-    tool_file.close()
     return json_tool
 
 def json_to_biotool(json_file):
