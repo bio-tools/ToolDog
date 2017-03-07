@@ -353,7 +353,7 @@ class TestGenerateXml(unittest.TestCase):
         # Copy object to test (easier to read)
         input_attrib = self.genxml.tool.inputs.children[0].node.attrib
         self.assertEqual(input_attrib['name'], 'INPUT1')
-        self.assertEqual(input_attrib['format'], 'MULTI MAPPING')
+        self.assertEqual(input_attrib['format'], 'fastq')
         self.assertEqual(input_attrib['label'], EDAM_DATA['term'])
         self.assertEqual(input_attrib['type'], 'data')
 
@@ -364,7 +364,7 @@ class TestGenerateXml(unittest.TestCase):
         # Copy object to test
         output_attrib = self.genxml.tool.outputs.children[0].node.attrib
         self.assertEqual(output_attrib['name'], 'OUTPUT1')
-        self.assertEqual(output_attrib['format'], 'MULTI MAPPING')
+        self.assertEqual(output_attrib['format'], 'fastq')
         self.assertEqual(output_attrib['from_work_dir'], 'OUTPUT1.ext')
 
     def test_add_citation(self):

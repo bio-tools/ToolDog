@@ -14,10 +14,10 @@
   <version_command>COMMAND --version</version_command>
   <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
   <inputs>
-    <param argument="INPUT1" format="MULTI MAPPING" label="Mass spectrometry data" name="INPUT1" type="data"/>
+    <param argument="INPUT1" format="tabular" label="Mass spectrometry data" name="INPUT1" type="data"/>
   </inputs>
   <outputs>
-    <data format="NO mapping" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
+    <data format="data" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
   </outputs>
   <help><![CDATA[This tool allows users to perform an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of DynamX software from Waters. Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.
 

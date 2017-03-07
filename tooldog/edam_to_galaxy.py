@@ -82,16 +82,16 @@ class GalaxyInfo(object):
         self.edam_formats = rev_dict(api_edam_formats)
         self.edam_data = rev_dict(api_edam_data)
         # Store hierarchy from mapping and class names
-        self.hierarchy = mapping["class_to_direct_parents"]
+        self.hierarchy = mapping["class_to_classes"]
         self.class_names = mapping["ext_to_class_name"]
 
-    def select_best(self, datatypes):
+    def select_root(self, datatypes):
         '''
-        Select the last common datatype to all given datatypes.
+        Select the root datatype from all given datatypes.
 
         :param datatypes: list of different datatypes.
         :type datatypes: list of STRING
-        :return: last common datatype.
+        :return: root datatype.
         :rtype: STRING
         '''
         # Build class to ext dictionnary
@@ -100,30 +100,36 @@ class GalaxyInfo(object):
             if value not in class_to_ext:
                 class_to_ext[value] = []
             class_to_ext[value].append(key)
-        # Create class list from datatypes and subdict of hierarchy
-        selected_class = []
+        # Create subdict of hierarchy
         sub_dict = {}
         for datatype in datatypes:
             if datatype in self.class_names:
-                selected_class.append(self.class_names[datatype])
-                sub_dict[self.class_names[datatype]] = self.hierarchy[self.class_names[datatype]]
+                sub_dict[self.class_names[datatype]] = \
+                  self.hierarchy[self.class_names[datatype]]
             else:
                 LOGGER.warning(datatype + " was not found in the ext to class mapping. skipped")
-        # Find best class
-        for class_name in sub_dict.keys():
+        # Remove class that inherit from both Binary and Text
+        datatype_to_remove = []
+        for key, value in sub_dict.items():
+            binary = 'galaxy.datatypes.binary.Binary' in value
+            text = 'galaxy.datatypes.data.Text' in value
+            if binary and text:
+                datatype_to_remove.append(key)
+        for key in datatype_to_remove:
+            del sub_dict[key]
+        LOGGER.debug(sub_dict)
+        # Find root
+        selected_class = None
+        root_dist = 100 # Set up huge root distance for comparison
+        for key, value in sub_dict.items():
             for key, value in sub_dict.items():
-                if not class_name == key:
-                    if not class_name in value:
-                        selected_class.remove(class_name)
-                        break
-        if len(selected_class) == 0:
-            LOGGER.warning("No best datatype found, return first datatype")
+                if len(value) < root_dist:
+                    root_dist = len(value)
+                    selected_class = key
+        if selected_class is None:
+            LOGGER.warning("No best datatype found, return first datatype of the list")
             return datatypes[0]
-        elif len(selected_class) > 1:
-            LOGGER.warning("More than one best datatype found, return first")
-        if len(class_to_ext[selected_class[0]]) > 1:
-            LOGGER.warning("More than one extension corresponds to the class, first is kept")
-        return class_to_ext[selected_class[0]][0]
+        return class_to_ext[selected_class][0]
 
 
 class EdamInfo(object):
@@ -225,7 +231,7 @@ class EdamToGalaxy(object):
                 datatype = galaxy_mapping[edam][0]
             elif len(galaxy_mapping[edam]) > 1:
                 LOGGER.info("More than one datatypes found for " + edam)
-                datatype = self.galaxy.select_best(galaxy_mapping[edam])
+                datatype = self.galaxy.select_root(galaxy_mapping[edam])
             return datatype
 
         def maps_datatype(edam_hierarchy, galaxy_mapping):
