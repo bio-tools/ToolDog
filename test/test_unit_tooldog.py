@@ -422,12 +422,45 @@ class TestGalaxyInfo(unittest.TestCase):
         self.assertEqual(self.gi.class_names['fasta'], 'galaxy.datatypes.sequence.Fasta')
         self.assertEqual(self.gi_url.class_names['fasta'], 'galaxy.datatypes.sequence.Fasta')
 
+    def test_select_root(self):
+        datatypes = ['fastq','fastq.bz2']
+        for gi in [self.gi, self.gi_url]:
+            root = gi.select_root(datatypes)
+            self.assertEqual(root, 'fastq')
+
+
+class TestEdamInfo(unittest.TestCase):
+
+    def setUp(self):
+        # Create one EdamInfo object
+        self.ei = edam_to_galaxy.EdamInfo(None)
+
+    def test_init(self):
+        self.assertEqual(self.ei.edam_ontology.stats()[0][0], 'Ontologies')
+        self.assertEqual(self.ei.edam_ontology.stats()[0][1], 1)
+
+    def test_generate_hierarchy(self):
+        self.ei.generate_hierarchy()
+        self.assertEqual(self.ei.edam_data_hierarchy['data_2887'][0], 'data_0849')
+        self.assertEqual(self.ei.edam_format_hierarchy['format_1930'][0], 'format_2182')
+
+
 class TestEdamToGalaxy(unittest.TestCase):
 
     def setUp(self):
         # Create two EdamToGalaxy objects
         self.etog = edam_to_galaxy.EdamToGalaxy()
-        self.etog_url = edam_to_galaxy.EdamToGalaxy(galaxy_url="a_url")
+        try:
+            self.etog_url = edam_to_galaxy.EdamToGalaxy(mapping_from_local='tmp_mapping.json')
+        finally:
+            os.remove('tmp_mapping.json')
+
+    def test_init(self):
+        for etog in [self.etog, self.etog_url]:
+            self.assertEqual(etog.data_to_datatype['data_2887'], 'asn1')
+            self.assertEqual(etog.format_to_datatype['format_1930'], 'fastq')
+        self.assertEqual(self.etog_url.edam.edam_ontology.stats()[0][1], 1)
+        self.assertIsNone(self.etog_url.galaxy.galaxy_url)
 
 
 class TestGenerateCwl(unittest.TestCase):
