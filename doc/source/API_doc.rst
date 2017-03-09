@@ -34,4 +34,11 @@ cwl.py
    :special-members:
    :exclude-members: __weakref__
 
+edam_to_galaxy.py
+=================
+.. automodule:: tooldog.edam_to_galaxy
+   :members:
+   :special-members:
+   :exclude-members: __weakref__
+
 .. _in_out:
