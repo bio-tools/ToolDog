@@ -14,10 +14,19 @@ the description of tools from [Bio.tools](https://bio.tools).
 
 ## Installation
 
-You can install ToolDog using pip with the following command:
+#### Requirements
+
+Prior to Tooldog installation, you need to have the following packages installed
+on your machine:
+
+* git (as long as ToolDog is not availabe on Pipy)
+* python3-dev
+* libncurses5-dev
+
+You can then install ToolDog using pip with the following command:
 
 ```bash
-pip install --no-cache-dir --process-dependency-links git+https://github.com/khillion/ToolDog.git#egg=tooldog
+pip3 install --no-cache-dir --process-dependency-links git+https://github.com/khillion/ToolDog.git#egg=tooldog
 ```
 
 ## How it works ?

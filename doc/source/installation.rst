@@ -23,12 +23,22 @@ ToolDog is built with Python 3.6 and uses the following libraries:
 Installation procedure
 ======================
 
+Requirements
+------------
+
+Prior to Tooldog installation, you need to have the following packages installed
+on your machine:
+
+* git (as long as ToolDog is not availabe on Pipy)
+* python3-dev
+* libncurses5-dev
+
 Pip
 ---
 
 You can use pip to install directly for the git repository::
 
-    pip install --no-cache-dir --process-dependency-links git+https://github.com/khillion/ToolDog#egg=tooldog
+    pip3 install --no-cache-dir --process-dependency-links git+https://github.com/khillion/ToolDog#egg=tooldog
 
 Manually
 --------
