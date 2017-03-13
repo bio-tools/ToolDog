@@ -146,8 +146,8 @@ class EdamInfo(object):
         :type edam_file: STRING
         '''
         if edam_file is None:
-            LOGGER.info("Loading EDAM info from " + LOCAL_DATA + "/EDAM_dev.owl")
-            self.edam_ontology = Ontospy(uri_or_path=LOCAL_DATA + "/EDAM_dev.owl")
+            LOGGER.info("Loading EDAM info from http://edamontology.org/EDAM.owl")
+            self.edam_ontology = Ontospy(uri_or_path="http://edamontology.org/EDAM.owl")
         else:
             pass
 
