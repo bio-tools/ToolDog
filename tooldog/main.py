@@ -216,22 +216,31 @@ def run():
     '''
     ## Parse arguments
     parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
-    parser.add_argument('biotool_entry', help='either online (ID/VERSION, e.g. SignalP/4.1) '+\
-                        'or from local file (ENTRY.json, e.g. signalp4.1.json)')
+    parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +\
+                        ' (ID/VERSION, e.g. SignalP/4.1) or from local file (ENTRY.json,'+\
+                        ' e.g. signalp4.1.json)')
     exc_group = parser.add_mutually_exclusive_group()
     exc_group.add_argument('-g', '--galaxy', action='store_true',\
                            help='generates XML for Galaxy.', dest='GALAXY')
-    exc_group.add_argument('-c', '--cwl', action='store_true', help='generates CWL', dest='CWL')
-    parser.add_argument('-f', '--file', dest='OUTFILE', help='Write in the OUTFILE instead '+\
+    exc_group.add_argument('-c', '--cwl', action='store_true', help='generates CWL tool ' +\
+                           'descriptor.', dest='CWL')
+    parser.add_argument('-f', '--file', dest='OUTFILE', help='write in the OUTFILE instead '+\
                         'of STDOUT.')
     parser.add_argument('-v', '--verbose', action='store_true', dest='VERBOSE', \
-                        help='Display info on stderr.')
-    log_group = parser.add_argument_group('Logs options', 'description')
+                        help='display info on STDERR.')
+    log_group = parser.add_argument_group('Logs options')
     log_group.add_argument('-l', '--logs', action='store_true', help='', dest='LOGS')
     log_group.add_argument('--log_level', dest='LOG_LEVEL', default='WARN',\
-                           help='')
+                           help='set up the level of the logger.')
     log_group.add_argument('--log_file', dest='LOG_FILE', default='tooldog_activity.log', \
-                           help='')
+                           help='write logs in LOG_FILE (default: tooldog_activity.log)')
+    file_group = parser.add_argument_group('External URLs')
+    file_group.add_argument('--galaxy_url', dest='GAL_URL', default=None,\
+                           help='url of the Galaxy instance (default: '+\
+                           ' ).')
+    file_group.add_argument('--edam_url', dest='EDAM_URL', default=None, \
+                           help='EDAM.owl file either online url or local path '+\
+                           '(default: http://edamontology.org/EDAM.owl).')
 
     try:
         args = parser.parse_args()
