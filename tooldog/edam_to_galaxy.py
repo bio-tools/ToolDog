@@ -14,13 +14,10 @@ and EDAM ontology (by default from http://edamontology.org/EDAM.owl)
 
 # General libraries
 import os
-import copy
 import json
 import logging
 
 # External libraries
-import galaxyxml.tool as gxt
-import galaxyxml.tool.parameters as gxtp
 import requests
 
 # Class and Objects
@@ -46,16 +43,24 @@ class GalaxyInfo(object):
 
     def __init__(self, galaxy_url):
         '''
-        :param galaxy_url: URL of the galaxy instance.
+        :param galaxy_url: URL of the Galaxy instance.
         :type galaxy_url: STRING
 
-        :class:`tooldog.galaxy.GalaxyInfo` object is initialized with two empty
-        dictionnaries:
+        :class:`tooldog.edam_to_galaxy.GalaxyInfo` object is initialized with several
+        information from the given Galaxy instance. It contains:
 
-        * datatypes_from_formats: unique datatype for one given edam_format.
-        * datatypes_from_data: unique datatype for one given edam_data.
-
-        Dictionnaries are then filled in with :meth:`tooldog.galaxy.GalaxyInfo.load_info`.
+        :param self.version: version of the Galaxy instance.
+        :type self.version: STRING
+        :param self.edam_formats: mapping edam_format to LIST of extension of datatypes.
+        :type self.edam_formats: DICT
+        :param self.edam_data: mapping edam_data to LIST of extension of datatypes.
+        :type self.edam_data: DICT
+        :param self.hierarchy: class_to_classes part of the /api/mapping.json which maps
+        the parental classes of each classes.
+        :type self.hierarchy: DICT
+        :param self.class_names: ext_to_class_name part of the /api/mapping.json which
+        maps the extension of a datatype to its class in Galaxy.
+        :type self.class_names: DICT
         '''
         self.galaxy_url = galaxy_url
         if self.galaxy_url is None:
@@ -78,6 +83,9 @@ class GalaxyInfo(object):
         self.version = version['version_major']
         # Reverse EDAMs dictionnaries
         def rev_dict(dictionnary):
+            '''
+            Reverse dictionnary key -> value to value -> LIST of key
+            '''
             new_dict = {}
             for key, value in dictionnary.items():
                 if not value in new_dict:
@@ -149,6 +157,8 @@ class EdamInfo(object):
         '''
         :param edam_url: path to EDAM.owl file
         :type edam_url: STRING
+
+        All the EDAM ontology will be contained in a dictionnary (self.edam_ontology).
         '''
         if edam_url is None:
             LOGGER.info("Loading EDAM info from http://edamontology.org/EDAM.owl")
@@ -162,6 +172,8 @@ class EdamInfo(object):
         structure:
 
         DICT[edam_uri] -> LIST of edam_uri from parents
+
+        The dictionnary can be accessed via self.edam_format_hierarchy
         '''
         self.edam_format_hierarchy = {}
         self.edam_data_hierarchy = {}
@@ -183,15 +195,15 @@ class EdamInfo(object):
 
 class EdamToGalaxy(object):
     '''
-    Class to make the link between edam ontologies (edam_format and edam_data) and galaxy
-    datatypes. 
+    Class to make the link between EDAM ontology terms (edam_format and edam_data) and Galaxy
+    datatypes.
     '''
 
     def __init__(self, galaxy_url=None, edam_url=None, mapping_json=None):
         '''
         :param galaxy_url: URL of the galaxy instance.
         :type galaxy_url: STRING
-        :param edam_url: path to EDAM.owl file
+        :param edam_url: path to EDAM.owl file (URL or local path).
         :type edam_url: STRING
         :param mapping_json: path to personnalized EDAM mapping to Galaxy.
         :type mapping_json: STRING
@@ -215,14 +227,25 @@ class EdamToGalaxy(object):
     def generate_mapping(self):
         '''
         Generates mapping between edam_format and edam_data to Galaxy datatypes
-        based on the information of the Galaxy instance (main by default) and the
-        EDAM ontology.
+        based on the information of the Galaxy instance and the EDAM ontology.
 
         Every edam_format and edam_data will be given a datatype.
         '''
         LOGGER.info("Generating new EDAM mapping to Galaxy datatypes file...")
 
         def find_datatype(edam, edam_hierarchy, galaxy_mapping):
+            '''
+            Find the best datatype for a given EDAM term.
+            :param edam: EDAM term.
+            :type edam: STRING
+            :param edam_hierarchy: edam_hierarchy from :class:`tooldog.edam_to_galaxy.EdamInfo`
+            :type edam_hierarchy: DICT
+            :param galaxy_mapping: mapping from :class:`tooldog.edam_to_galaxy.GalaxyInfo`
+            :type galaxy_mapping: DICT
+
+            The function then create two dictionnaries: self.format_to_datatype and
+            self.data_to_datatype that represents a unique datatype for each EDAM term.
+            '''
             if not edam in galaxy_mapping:
                 LOGGER.info("No datatype found for " + edam)
                 if len(edam_hierarchy[edam]) > 1:
@@ -243,11 +266,20 @@ class EdamToGalaxy(object):
             return datatype
 
         def maps_datatype(edam_hierarchy, galaxy_mapping):
+            '''
+            Maps all edam terms to a Galaxy datatype.
+            :param edam_hierarchy: edam_hierarchy from :class:`tooldog.edam_to_galaxy.EdamInfo`
+            :type edam_hierarchy: DICT
+            :param galaxy_mapping: mapping from :class:`tooldog.edam_to_galaxy.GalaxyInfo`
+            :type galaxy_mapping: DICT
+            :return: mapping EDAM term to Galaxy datatype (unique mapping).
+            :rtype: DICT
+            '''
             map_to_datatype = {}
             for edam in edam_hierarchy.keys():
                 map_to_datatype[edam] = find_datatype(edam, edam_hierarchy, galaxy_mapping)
             return map_to_datatype
-            
+
         # EDAM formats
         self.format_to_datatype = maps_datatype(self.edam.edam_format_hierarchy,\
                                                 self.galaxy.edam_formats)
@@ -265,8 +297,8 @@ class EdamToGalaxy(object):
         '''
         LOGGER.info("Loading EDAM mapping to Galaxy datatypes from " +\
                     local_file)
-        with open(local_file, 'r') as fp:
-            json_file = json.load(fp)
+        with open(local_file, 'r') as file_path:
+            json_file = json.load(file_path)
         self.format_to_datatype = json_file['format']
         self.data_to_datatype = json_file['data']
 
@@ -279,14 +311,19 @@ class EdamToGalaxy(object):
         '''
         LOGGER.info("Exporting new EDAM mapping to Galaxy datatypes file to " +\
                     export_file)
-        with open(export_file, 'w') as fp:
+        with open(export_file, 'w') as file_path:
             json.dump({'format':self.format_to_datatype,
                        'data': self.data_to_datatype,
                        'edam_version': None,
-                       'galaxy_version': self.galaxy.version}, fp)
+                       'galaxy_version': self.galaxy.version}, file_path)
 
     def get_datatype(self, edam_data=None, edam_format=None):
         '''
+        Get datatype from EDAM terms.
+        :param edam_data: EDAM data term.
+        :type edam_data: STRING
+        :param edam_format: EDAM format term.
+        :type edam_format: STRING
         :return: datatype corresponding to given EDAM ontologies.
         :rtype: STRING
         '''
