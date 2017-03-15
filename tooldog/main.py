@@ -209,6 +209,17 @@ def write_cwl(biotool, outfile=None):
         else:
             function_cwl.write_cwl(outfile)
 
+
+###########  Class(es)  ###########
+
+class MyParser(argparse.ArgumentParser):
+    '''
+    Write help message in case of incorrect usage of tooldog command.
+    '''
+    def error(self, message):
+        self.print_help()
+        sys.exit(2)
+
 ###########  Main  ###########
 
 def run():
@@ -216,7 +227,7 @@ def run():
     Running function called by Tooldog.
     '''
     ## Parse arguments
-    parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
+    parser = MyParser(description='Generates XML or CWL from bio.tools entry.')
     parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +\
                         ' (ID/VERSION, e.g. SignalP/4.1) or from local file (ENTRY.json,'+\
                         ' e.g. signalp4.1.json)')
@@ -235,9 +246,9 @@ def run():
                            help='set up the level of the logger.')
     log_group.add_argument('--log_file', dest='LOG_FILE', default='tooldog_activity.log', \
                            help='write logs in LOG_FILE (default: tooldog_activity.log)')
-    file_group = parser.add_argument_group('External URLs')
+    file_group = parser.add_argument_group('External URLs and files')
     file_group.add_argument('--galaxy_url', dest='GAL_URL', default=None,\
-                           help='url of the Galaxy instance (default: '+\
+                           help='url of the Galaxy instance (default: https://usegalaxy.org'+\
                            ' ).')
     file_group.add_argument('--edam_url', dest='EDAM_URL', default=None, \
                            help='EDAM.owl file either online url or local path '+\
@@ -249,7 +260,6 @@ def run():
     try:
         args = parser.parse_args()
     except SystemExit:
-        parser.print_help()
         sys.exit(1)
 
     ###########################################################

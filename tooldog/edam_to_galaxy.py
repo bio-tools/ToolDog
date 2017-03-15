@@ -64,7 +64,7 @@ class GalaxyInfo(object):
         '''
         self.galaxy_url = galaxy_url
         if self.galaxy_url is None:
-            LOGGER.info("Loading galaxy info from " + LOCAL_DATA)
+            LOGGER.info("Loading Galaxy info from " + LOCAL_DATA)
             with open(LOCAL_DATA + "/edam_formats.json") as json_file:
                 api_edam_formats = json.load(json_file)
             with open(LOCAL_DATA + "/edam_data.json") as json_file:
@@ -74,7 +74,7 @@ class GalaxyInfo(object):
             with open(LOCAL_DATA + "/version.json") as json_file:
                 version = json.load(json_file)
         else:
-            LOGGER.info("Loading galaxy info from " + galaxy_url +"/api/datatypes")
+            LOGGER.info("Loading galaxy info from " + galaxy_url +"/api")
             api_edam_formats = requests.get(galaxy_url + "/api/datatypes/edam_formats").json()
             api_edam_data = requests.get(galaxy_url + "/api/datatypes/edam_data").json()
             mapping = requests.get(galaxy_url + "/api/datatypes/mapping").json()
@@ -247,21 +247,22 @@ class EdamToGalaxy(object):
             self.data_to_datatype that represents a unique datatype for each EDAM term.
             '''
             if not edam in galaxy_mapping:
-                LOGGER.info("No datatype found for " + edam)
+                LOGGER.debug("No datatype found for " + edam + ". Looking at parental terms.")
                 if len(edam_hierarchy[edam]) > 1:
-                    LOGGER.warning(edam + " inherits from more than one EDAM. " +\
-                                   "Only first EDAM parent of the list is treated: " + \
-                                   edam_hierarchy[edam][0])
+                    LOGGER.debug(edam + " inherits from more than one EDAM. " +\
+                                 "Only first EDAM parent of the list is treated: " + \
+                                 edam_hierarchy[edam][0])
                 elif len(edam_hierarchy[edam]) == 0:
-                    LOGGER.warning("No parental EDAM found. " + edam + " is skipped.")
+                    LOGGER.debug("No parental EDAM found. " + edam + " is skipped.")
                     return "NO mapping"
                 datatype = find_datatype(edam_hierarchy[edam][0], edam_hierarchy, \
                                          galaxy_mapping)
             elif len(galaxy_mapping[edam]) == 1:
-                LOGGER.info("Exactly one datatype found for " + edam)
+                LOGGER.debug("Exactly one datatype found for " + edam + ": " + \
+                             galaxy_mapping[edam][0])
                 datatype = galaxy_mapping[edam][0]
             elif len(galaxy_mapping[edam]) > 1:
-                LOGGER.info("More than one datatypes found for " + edam)
+                LOGGER.debug("More than one datatypes found for " + edam)
                 datatype = self.galaxy.select_root(galaxy_mapping[edam])
             return datatype
 
@@ -309,7 +310,7 @@ class EdamToGalaxy(object):
         :param export_file: path to the file.
         :type export_file: STRING
         '''
-        LOGGER.info("Exporting new EDAM mapping to Galaxy datatypes file to " +\
+        LOGGER.info("Exporting new EDAM mapping to Galaxy datatypes file to ./" +\
                     export_file)
         with open(export_file, 'w') as file_path:
             json.dump({'format':self.format_to_datatype,

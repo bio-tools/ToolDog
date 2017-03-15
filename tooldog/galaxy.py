@@ -71,7 +71,7 @@ class GenerateXml(object):
         :param topic: Topic object.
         :type topic: :class:`tooldog.model.Topic`
         '''
-        LOGGER.info("Adding EDAM topic to GenerateXml object...")
+        LOGGER.debug("Adding EDAM topic " + topic.get_edam_id() + " to GenerateXml object.")
         if not hasattr(self.tool, 'edam_topics'):
             # First time we add topics to the tool
             self.tool.edam_topics = gxtp.EdamTopics()
@@ -84,7 +84,8 @@ class GenerateXml(object):
         :param topic: Operation object.
         :type topic: :class:`tooldog.model.Operation`
         '''
-        LOGGER.info("Adding EDAM operation to GenerateXml object...")
+        LOGGER.debug("Adding EDAM operation " + operation.get_edam_id() +\
+                     " to GenerateXml object.")
         if not hasattr(self.tool, 'edam_operations'):
             # First time we add operations to the tool
             self.tool.edam_operations = gxtp.EdamOperations()
@@ -97,7 +98,7 @@ class GenerateXml(object):
         :param input_obj: Input object.
         :type input_obj: :class:`tooldog.model.Input`
         '''
-        LOGGER.info("Adding input to GenerateXml object...")
+        LOGGER.debug("Adding input to GenerateXml object...")
         if not hasattr(self.tool, 'inputs'):
             self.tool.inputs = gxtp.Inputs()
         # Build parameter
@@ -130,7 +131,7 @@ class GenerateXml(object):
         :param output: Output object.
         :type output: :class:`tooldog.model.Output`
         '''
-        LOGGER.info("Adding output to GenerateXml object...")
+        LOGGER.debug("Adding output to GenerateXml object...")
         if not hasattr(self.tool, 'outputs'):
             self.tool.outputs = gxtp.Outputs()
         # Build parameter
@@ -161,7 +162,7 @@ class GenerateXml(object):
         :param publication: Publication object.
         :type publication: :class:`tooldog.model.Publication`
         '''
-        LOGGER.info("Adding citation to GenerateXml object...")
+        LOGGER.debug("Adding citation to GenerateXml object...")
         if not hasattr(self.tool, 'citations'):
             self.tool.citations = gxtp.Citations()
         # Add citation depending the type (doi, pmid...)
