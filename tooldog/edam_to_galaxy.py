@@ -6,8 +6,8 @@
 ## Creation : 12-20-2016
 
 '''
-Generation of XML for Galaxy from https://bio.tools based on the Tooldog model using
-galaxyxml library.
+Gather different information from a Galaxy server (by default https://usegalaxy.org)
+and EDAM ontology (by default from http://edamontology.org/EDAM.owl)
 '''
 
 ###########  Import  ###########
@@ -41,7 +41,7 @@ class GalaxyInfo(object):
     Class to gather different information about a Galaxy instance.
 
     By default, if the galaxy_url is None, information is loaded from local files
-    located in the `data/` folder.
+    located in the `data/` folder corresponding to https://usegalaxy.org.
     '''
 
     def __init__(self, galaxy_url):
@@ -66,11 +66,16 @@ class GalaxyInfo(object):
                 api_edam_data = json.load(json_file)
             with open(LOCAL_DATA + "/mapping.json") as json_file:
                 mapping = json.load(json_file)
+            with open(LOCAL_DATA + "/version.json") as json_file:
+                version = json.load(json_file)
         else:
             LOGGER.info("Loading galaxy info from " + galaxy_url +"/api/datatypes")
             api_edam_formats = requests.get(galaxy_url + "/api/datatypes/edam_formats").json()
             api_edam_data = requests.get(galaxy_url + "/api/datatypes/edam_data").json()
             mapping = requests.get(galaxy_url + "/api/datatypes/mapping").json()
+            version = requests.get(galaxy_url + "/api/version").json()
+        # Get version of Galaxy instance
+        self.version = version['version_major']
         # Reverse EDAMs dictionnaries
         def rev_dict(dictionnary):
             new_dict = {}
@@ -140,12 +145,12 @@ class EdamInfo(object):
     for a faster access.
     '''
 
-    def __init__(self, edam_file):
+    def __init__(self, edam_url):
         '''
-        :param edam_file: path to EDAM.owl file
-        :type edam_file: STRING
+        :param edam_url: path to EDAM.owl file
+        :type edam_url: STRING
         '''
-        if edam_file is None:
+        if edam_url is None:
             LOGGER.info("Loading EDAM info from http://edamontology.org/EDAM.owl")
             self.edam_ontology = Ontospy(uri_or_path="http://edamontology.org/EDAM.owl")
         else:
@@ -182,27 +187,30 @@ class EdamToGalaxy(object):
     datatypes. 
     '''
 
-    def __init__(self, galaxy_url=None, edam_file=None, mapping_from_local=None):
+    def __init__(self, galaxy_url=None, edam_url=None, mapping_json=None):
         '''
         :param galaxy_url: URL of the galaxy instance.
         :type galaxy_url: STRING
-        :param edam_file: path to EDAM.owl file
-        :type edam_file: STRING
-        :param mapping_from_local: path to personnalized EDAM mapping to Galaxy.
-        :type mapping_from_local: STRING
+        :param edam_url: path to EDAM.owl file
+        :type edam_url: STRING
+        :param mapping_json: path to personnalized EDAM mapping to Galaxy.
+        :type mapping_json: STRING
         '''
-        if mapping_from_local is None:
-            mapping_from_local = LOCAL_DATA + "/edam_to_galaxy.json"
+        if mapping_json is None:
+            if galaxy_url or edam_url:
+                mapping_json = 'edam_to_galaxy.json'
+            else:
+                mapping_json = LOCAL_DATA + "/edam_to_galaxy.json"
         # Generates or Loads ?
-        if os.path.isfile(mapping_from_local):
-            self.load_local_mapping(mapping_from_local)
+        if os.path.isfile(mapping_json):
+            self.load_local_mapping(mapping_json)
         else:
             # No local file exists, needs to generate it (takes a little bit of time)
-            self.edam = EdamInfo(edam_file)
+            self.edam = EdamInfo(edam_url)
             self.edam.generate_hierarchy()
             self.galaxy = GalaxyInfo(galaxy_url)
             self.generate_mapping()
-            self.export_info(mapping_from_local)
+            self.export_info(mapping_json)
 
     def generate_mapping(self):
         '''
@@ -273,7 +281,9 @@ class EdamToGalaxy(object):
                     export_file)
         with open(export_file, 'w') as fp:
             json.dump({'format':self.format_to_datatype,
-                       'data': self.data_to_datatype}, fp)
+                       'data': self.data_to_datatype,
+                       'edam_version': None,
+                       'galaxy_version': self.galaxy.version}, fp)
 
     def get_datatype(self, edam_data=None, edam_format=None):
         '''

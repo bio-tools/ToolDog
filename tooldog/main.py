@@ -149,7 +149,7 @@ def json_to_biotool(json_file):
     biotool.add_topics(json_file['topic'])
     return biotool
 
-def write_xml(biotool, outfile=None):
+def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_json=None):
     '''
     This function uses :class:`tooldog.galaxy.GenerateXml` to write XML using galaxyxml.
     XML is generated on STDOUT by default.
@@ -160,7 +160,8 @@ def write_xml(biotool, outfile=None):
     :type outfile: STRING
     '''
     LOGGER.info("Writing XML file with galaxy.py module...")
-    biotool_xml = GenerateXml(biotool)
+    biotool_xml = GenerateXml(biotool, galaxy_url=galaxy_url, edam_url=edam_url,\
+                              mapping_json=mapping_json)
     # Add topics to the XML
     for topic in biotool.topics:
         biotool_xml.add_edam_topic(topic)
@@ -241,6 +242,9 @@ def run():
     file_group.add_argument('--edam_url', dest='EDAM_URL', default=None, \
                            help='EDAM.owl file either online url or local path '+\
                            '(default: http://edamontology.org/EDAM.owl).')
+    file_group.add_argument('--mapping_file', dest='MAP_FILE', default=None, \
+                           help='Personalized EDAM to datatypes mapping json file '+\
+                           'generated previously by ToolDog.')
 
     try:
         args = parser.parse_args()
@@ -278,7 +282,8 @@ def run():
 
     if args.GALAXY:
     # Write corresponding XMLs
-        write_xml(biotool, args.OUTFILE)
+        write_xml(biotool, outfile=args.OUTFILE, galaxy_url=args.GAL_URL, \
+                  edam_url=args.EDAM_URL, mapping_json=args.MAP_FILE)
     elif args.CWL:
     # Write corresponding CWL
         write_cwl(biotool, args.OUTFILE)

@@ -39,7 +39,7 @@ class GenerateXml(object):
     Class to support generation of XML from :class:`tooldog.model.Biotool` object.
     '''
 
-    def __init__(self, biotool, galaxy_url=None, edam_file=None, mapping_from_local=None):
+    def __init__(self, biotool, galaxy_url=None, edam_url=None, mapping_json=None):
         '''
         Initialize a [Tool] object from galaxyxml with the minimal information
         (a name, an id, a version, a description, the command, the command version
@@ -50,8 +50,8 @@ class GenerateXml(object):
         '''
         LOGGER.info("Creating new GenerateXml object...")
         # Initialize GalaxyInfo
-        self.etog = EdamToGalaxy(galaxy_url=galaxy_url, edam_file=edam_file,\
-                                 mapping_from_local=mapping_from_local)
+        self.etog = EdamToGalaxy(galaxy_url=galaxy_url, edam_url=edam_url,\
+                                 mapping_json=mapping_json)
         # Initialize counters for inputs and outputs
         self.input_ct = 0
         self.output_ct = 0
