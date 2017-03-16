@@ -406,6 +406,10 @@ class TestGalaxyInfo(unittest.TestCase):
                                                  '/mapping.json')
             m.get('http://supergalaxy.com/api/datatypes/mapping', \
                   json=mapping_answer)
+            version_answer = main.json_from_file(edam_to_galaxy.LOCAL_DATA + \
+                                                 '/version.json')
+            m.get('http://supergalaxy.com/api/version', \
+                  json=version_answer)
             self.gi_url = edam_to_galaxy.GalaxyInfo('http://supergalaxy.com')
 
     def test_init(self):
@@ -413,11 +417,11 @@ class TestGalaxyInfo(unittest.TestCase):
         self.assertIsNone(self.gi.galaxy_url)
         self.assertEqual(self.gi_url.galaxy_url, 'http://supergalaxy.com')
         # Tests one EDAM format
-        self.assertEqual(self.gi.edam_formats['format_1930'][0], 'fastq')
-        self.assertEqual(self.gi_url.edam_formats['format_1930'][0], 'fastq')
+        self.assertEqual(self.gi.edam_formats['format_1930'][0], 'fastqcssanger.gz')
+        self.assertEqual(self.gi_url.edam_formats['format_1930'][0], 'fastqcssanger.gz')
         # Tests one EDAM data
-        self.assertEqual(self.gi.edam_data['data_2044'][1], 'fasta')
-        self.assertEqual(self.gi_url.edam_data['data_2044'][1], 'fasta')
+        self.assertEqual(self.gi.edam_data['data_2044'][1], 'fastqcssanger.gz')
+        self.assertEqual(self.gi_url.edam_data['data_2044'][1], 'fastqcssanger.gz')
         # Tests class names
         self.assertEqual(self.gi.class_names['fasta'], 'galaxy.datatypes.sequence.Fasta')
         self.assertEqual(self.gi_url.class_names['fasta'], 'galaxy.datatypes.sequence.Fasta')
@@ -451,13 +455,13 @@ class TestEdamToGalaxy(unittest.TestCase):
         # Create two EdamToGalaxy objects
         self.etog = edam_to_galaxy.EdamToGalaxy()
         try:
-            self.etog_url = edam_to_galaxy.EdamToGalaxy(mapping_from_local='tmp_mapping.json')
+            self.etog_url = edam_to_galaxy.EdamToGalaxy(mapping_json='tmp_mapping.json')
         finally:
             os.remove('tmp_mapping.json')
 
     def test_init(self):
         for etog in [self.etog, self.etog_url]:
-            self.assertEqual(etog.data_to_datatype['data_2887'], 'asn1')
+            self.assertEqual(etog.data_to_datatype['data_2887'], 'genbank')
             self.assertEqual(etog.format_to_datatype['format_1930'], 'fastq')
         self.assertEqual(self.etog_url.edam.edam_ontology.stats()[0][1], 1)
         self.assertIsNone(self.etog_url.galaxy.galaxy_url)
