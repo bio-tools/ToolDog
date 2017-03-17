@@ -163,7 +163,12 @@ class EdamInfo(object):
         if edam_url is None:
             LOGGER.info("Loading EDAM info from http://edamontology.org/EDAM.owl")
             self.edam_ontology = Ontospy(uri_or_path="http://edamontology.org/EDAM.owl")
-            self.version = "TO.BE.ADDED"
+            # Get version of EDAM ontology
+            for annot in self.edam_ontology.ontologies[0].annotations():
+                if annot[1] == 'doap:Version':
+                    version = annot[2]
+                    break
+            self.version = version
         else:
             pass
 
