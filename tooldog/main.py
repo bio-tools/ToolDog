@@ -26,6 +26,7 @@ import requests
 from tooldog.model import Biotool
 from tooldog.galaxy import GenerateXml
 from tooldog.cwl import GenerateCwl
+from tooldog import version
 
 ########### Constant(s) ##########
 
@@ -240,6 +241,8 @@ def run():
                         'of STDOUT.')
     parser.add_argument('-v', '--verbose', action='store_true', dest='VERBOSE', \
                         help='display info on STDERR.')
+    parser.add_argument('--version', action='version', version=version, \
+                        help='show the version number and exit.')
     log_group = parser.add_argument_group('Logs options')
     log_group.add_argument('-l', '--logs', action='store_true', help='', dest='LOGS')
     log_group.add_argument('--log_level', dest='LOG_LEVEL', default='WARN',\

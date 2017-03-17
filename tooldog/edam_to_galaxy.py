@@ -163,6 +163,7 @@ class EdamInfo(object):
         if edam_url is None:
             LOGGER.info("Loading EDAM info from http://edamontology.org/EDAM.owl")
             self.edam_ontology = Ontospy(uri_or_path="http://edamontology.org/EDAM.owl")
+            self.version = "TO.BE.ADDED"
         else:
             pass
 
@@ -219,8 +220,11 @@ class EdamToGalaxy(object):
         else:
             # No local file exists, needs to generate it (takes a little bit of time)
             self.edam = EdamInfo(edam_url)
+            self.edam_version = self.edam.version
             self.edam.generate_hierarchy()
             self.galaxy = GalaxyInfo(galaxy_url)
+            self.galaxy_url = self.galaxy.galaxy_url
+            self.galaxy_version = self.galaxy.version
             self.generate_mapping()
             self.export_info(mapping_json)
 
@@ -302,6 +306,9 @@ class EdamToGalaxy(object):
             json_file = json.load(file_path)
         self.format_to_datatype = json_file['format']
         self.data_to_datatype = json_file['data']
+        self.galaxy_url = json_file['galaxy_url']
+        self.galaxy_version = json_file['galaxy_version']
+        self.edam_version = json_file['edam_version']
 
     def export_info(self, export_file):
         '''
@@ -315,8 +322,9 @@ class EdamToGalaxy(object):
         with open(export_file, 'w') as file_path:
             json.dump({'format':self.format_to_datatype,
                        'data': self.data_to_datatype,
-                       'edam_version': None,
-                       'galaxy_version': self.galaxy.version}, file_path)
+                       'edam_version': self.edam_version,
+                       'galaxy_url': self.galaxy_url,
+                       'galaxy_version': self.galaxy_version}, file_path)
 
     def get_datatype(self, edam_data=None, edam_format=None):
         '''
