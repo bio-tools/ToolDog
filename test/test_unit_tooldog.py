@@ -414,7 +414,7 @@ class TestGalaxyInfo(unittest.TestCase):
 
     def test_init(self):
         # Tests URLs
-        self.assertIsNone(self.gi.galaxy_url)
+        self.assertEqual(self.gi.galaxy_url, 'https://usegalaxy.org')
         self.assertEqual(self.gi_url.galaxy_url, 'http://supergalaxy.com')
         # Tests one EDAM format
         self.assertEqual(self.gi.edam_formats['format_1930'][0], 'fastqcssanger.gz')
@@ -440,12 +440,11 @@ class TestEdamInfo(unittest.TestCase):
         self.ei = edam_to_galaxy.EdamInfo(None)
 
     def test_init(self):
-        self.assertEqual(self.ei.edam_ontology.stats()[0][0], 'Ontologies')
-        self.assertEqual(self.ei.edam_ontology.stats()[0][1], 1)
+        self.assertEqual(len(self.ei.edam_ontology), 32961)
 
     def test_generate_hierarchy(self):
         self.ei.generate_hierarchy()
-        self.assertEqual(self.ei.edam_data_hierarchy['data_2887'][0], 'data_0849')
+        self.assertEqual(len(self.ei.edam_data_hierarchy['data_2887']), 2)
         self.assertEqual(self.ei.edam_format_hierarchy['format_1930'][0], 'format_2182')
 
 
@@ -461,10 +460,9 @@ class TestEdamToGalaxy(unittest.TestCase):
 
     def test_init(self):
         for etog in [self.etog, self.etog_url]:
-            self.assertEqual(etog.data_to_datatype['data_2887'], 'genbank')
+            self.assertEqual(etog.data_to_datatype['data_3002'], 'genetrack')
             self.assertEqual(etog.format_to_datatype['format_1930'], 'fastq')
-        self.assertEqual(self.etog_url.edam.edam_ontology.stats()[0][1], 1)
-        self.assertIsNone(self.etog_url.galaxy.galaxy_url)
+        self.assertEqual(self.etog_url.galaxy.galaxy_url, 'https://usegalaxy.org')
 
 
 class TestGenerateCwl(unittest.TestCase):

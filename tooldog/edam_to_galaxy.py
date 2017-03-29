@@ -19,9 +19,7 @@ import logging
 
 # External libraries
 import requests
-
-# Class and Objects
-from ontospy import Ontospy
+import rdflib
 
 ###########  Constant(s)  ###########
 
@@ -62,9 +60,9 @@ class GalaxyInfo(object):
         maps the extension of a datatype to its class in Galaxy.
         :type self.class_names: DICT
         '''
-        self.galaxy_url = galaxy_url
-        if self.galaxy_url is None:
-            LOGGER.info("Loading Galaxy info from " + LOCAL_DATA)
+        if galaxy_url is None:
+            self.galaxy_url = "https://usegalaxy.org"
+            LOGGER.info("Loading Galaxy info (https://usegalaxy.org) from " + LOCAL_DATA)
             with open(LOCAL_DATA + "/edam_formats.json") as json_file:
                 api_edam_formats = json.load(json_file)
             with open(LOCAL_DATA + "/edam_data.json") as json_file:
@@ -74,6 +72,7 @@ class GalaxyInfo(object):
             with open(LOCAL_DATA + "/version.json") as json_file:
                 version = json.load(json_file)
         else:
+            self.galaxy_url = galaxy_url
             LOGGER.info("Loading galaxy info from " + galaxy_url +"/api")
             api_edam_formats = requests.get(galaxy_url + "/api/datatypes/edam_formats").json()
             api_edam_data = requests.get(galaxy_url + "/api/datatypes/edam_data").json()
@@ -162,13 +161,14 @@ class EdamInfo(object):
         '''
         if edam_url is None:
             LOGGER.info("Loading EDAM info from http://edamontology.org/EDAM.owl")
-            self.edam_ontology = Ontospy(uri_or_path="http://edamontology.org/EDAM.owl")
+            self.edam_ontology = rdflib.Graph()
+            self.edam_ontology.parse("http://edamontology.org/EDAM.owl")
             # Get version of EDAM ontology
-            for annot in self.edam_ontology.ontologies[0].annotations():
-                if annot[1] == 'doap:Version':
-                    version = annot[2]
-                    break
-            self.version = version
+            version_query = """SELECT ?version WHERE {
+                                     <http://edamontology.org> doap:Version ?version}"""
+            for row in self.edam_ontology.query(version_query):
+                self.version = row[0]
+                break
         else:
             pass
 
@@ -181,23 +181,37 @@ class EdamInfo(object):
 
         The dictionnary can be accessed via self.edam_format_hierarchy
         '''
-        self.edam_format_hierarchy = {}
-        self.edam_data_hierarchy = {}
-        for edam in self.edam_ontology.classes:
-            uri = str(edam.uri).split('/')[-1]
-            if 'format_' in uri:
-                self.edam_format_hierarchy[uri] = []
-                for parent in edam.parents():
-                    p_uri = str(parent.uri).split('/')[-1]
-                    self.edam_format_hierarchy[uri].append(p_uri)
-            elif 'data_' in uri:
-                self.edam_data_hierarchy[uri] = []
-                for parent in edam.parents():
-                    p_uri = str(parent.uri).split('/')[-1]
-                    self.edam_data_hierarchy[uri].append(p_uri)
-            else:
-                pass
 
+        def make_hierarchy(query):
+            '''
+            Build hierarchy for a given query.
+
+            :return: generated hierarchy
+            :rtype: DICT
+            '''
+            hierarchy = {}
+            for row in self.edam_ontology.query(query):
+                uri = row[0].split('/')[-1]
+                p_uri = row[1].split('/')[-1]
+                if uri not in hierarchy:
+                    hierarchy[uri] = []
+                hierarchy[uri].append(p_uri)
+            return hierarchy
+
+        formats_query = """SELECT ?format ?superformat WHERE {
+                                    ?format rdfs:subClassOf ?superformat .
+                                    ?superformat oboInOwl:inSubset 
+                                   <http://purl.obolibrary.org/obo/edam#formats>
+                                    }"""
+        data_query = """SELECT ?data ?superdata WHERE {
+                                 ?data rdfs:subClassOf ?superdata .
+                                 ?superdata oboInOwl:inSubset 
+                                <http://purl.obolibrary.org/obo/edam#data>
+                                 }"""
+        self.edam_format_hierarchy = make_hierarchy(formats_query)
+        self.edam_data_hierarchy = make_hierarchy(data_query)
+        # TO BE DELETED, JUST TO BYPASS EDAM ISSUE
+        del self.edam_data_hierarchy['operation_3458']
 
 class EdamToGalaxy(object):
     '''
