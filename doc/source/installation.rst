@@ -11,12 +11,15 @@ Installation
 ToolDog dependencies
 ====================
 
-ToolDog is built with Python 3.6 and uses the following libraries:
+ToolDog is built with Python 3.6.0 and uses the following libraries:
 
-- galaxyxml_ (>=0.3.1)
+- galaxyxml_ (>=0.3.2)
 - requests (>=2.12.3)
+- rdflib (>=4.2.2)
+- cwlgen_
 
 .. _galaxyxml: https://github.com/erasche/galaxyxml
+.. _cwlgen: https://github.com/common-workflow-language/python-cwlgen
 
 .. _installation:
 
@@ -30,24 +33,29 @@ Prior to Tooldog installation, you need to have the following packages installed
 on your machine:
 
 * git (as long as ToolDog is not availabe on Pipy)
-* python3-dev
-* libncurses5-dev
+* Python 3.6.0
+
+.. Note::
+    We highly recommend the use of a virtual environment with Python 3.6.0
+    [More info](https://virtualenv.pypa.io/en/latest/)
 
 Pip
 ---
 
 You can use pip to install directly for the git repository::
 
-    pip3 install --no-cache-dir --process-dependency-links git+https://github.com/khillion/ToolDog#egg=tooldog
+.. code-block:: bash
+    pip3 install --process-dependency-links git+https://github.com/khillion/ToolDog#egg=tooldog
 
 Manually
 --------
 
 Clone the repository and install ToolDog with the following commands::
 
+.. code-block:: bash
     git clone https://gitlab.pasteur.fr/kehillio/ToolDog.git
     cd ToolDog
-    pip install --no-cache-dir --process-dependency-links .
+    pip3 install --process-dependency-links .
 
 .. _uninstallation:
 

@@ -20,13 +20,12 @@ Prior to Tooldog installation, you need to have the following packages installed
 on your machine:
 
 * git (as long as ToolDog is not availabe on Pipy)
-* python3-dev
-* libncurses5-dev
+* Python 3.6.0 
 
 You can then install ToolDog using pip with the following command:
 
 ```bash
-pip3 install --no-cache-dir --process-dependency-links git+https://github.com/khillion/ToolDog.git#egg=tooldog
+pip3 install --process-dependency-links git+https://github.com/khillion/ToolDog.git#egg=tooldog
 ```
 
 ## How it works ?
@@ -45,10 +44,15 @@ To import from [bio.tools](https://bio.tools), specify the `biotool_entry` with 
 tooldog --galaxy SARTools/1.4.0 > sartools.xml
 ```
 
-You can also use local file by giving its name directly:
+You can also use local file downloaded from [bio.tools](https://bio.tools) API
+by giving its name directly:
 
 ```bash
 tooldog --galaxy sartools.json > sartools.xml
 ```
 
 ## References
+
+Hervé Ménager, Matúš Kalaš, Kristoffer Rapacki and Jon Ison. Using registries to integrate
+bioinformatics tools and services into workbench environments. International Journal on
+Software Tools for Technology Transfer (2016) doi: [10.1007/s10009-015-0392-z](http://link.springer.com/article/10.1007/s10009-015-0392-z)
