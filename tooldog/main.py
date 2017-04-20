@@ -150,19 +150,18 @@ def json_to_biotool(json_file):
     biotool.add_topics(json_file['topic'])
     return biotool
 
-def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_json=None):
-    '''
-    This function uses :class:`tooldog.galaxy.GenerateXml` to write XML using galaxyxml.
+def generate_xml(biotool, biotool_xml, outfile=None):
+    """
+    This function generates a backbone from metadata found on bio.tools.
     XML is generated on STDOUT by default.
 
     :param biotool: Biotool object.
     :type biotool: :class:`tooldog.model.Biotool`
+    :param biotool_xml: GenerateXml object which uses galaxyxml model to build XML.
+    :type biotool_xml: :class:`tooldog.galaxy.GenerateXml`
     :param outfile: path to output file to write the XML.
     :type outfile: STRING
-    '''
-    LOGGER.info("Writing XML file with galaxy.py module...")
-    biotool_xml = GenerateXml(biotool, galaxy_url=galaxy_url, edam_url=edam_url,\
-                              mapping_json=mapping_json)
+    """
     # Add topics to the XML
     for topic in biotool.topics:
         biotool_xml.add_edam_topic(topic)
@@ -183,6 +182,52 @@ def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_jso
             function_xml.write_xml(outfile, biotool.functions.index(function) + 1)
         else:
             function_xml.write_xml(outfile)
+
+def annotate_xml(biotool, biotool_xml, outfile=None):
+    """
+    This function annotates an existing XML with metadata found on bio.tools.
+    XML is generated on STDOUT by default.
+
+    :param biotool: Biotool object.
+    :type biotool: :class:`tooldog.model.Biotool`
+    :param biotool_xml: GenerateXml object which uses galaxyxml model to build XML.
+    :type biotool_xml: :class:`tooldog.galaxy.GenerateXml`
+    :param outfile: path to output file to write the XML.
+    :type outfile: STRING
+    """
+    if not getattr(biotool_xml, 'edam_topics', None):
+        for topic in biotool.topics:
+            biotool_xml.add_edam_topic(topic)
+    if not getattr(biotool_xml, 'edam_operations', None):
+        for function in biotool.functions:
+            for operation in function.operations:
+                biotool_xml.add_edam_operation(operation)
+    if not getattr(biotool_xml, 'citations', None):
+        for publi in biotool.informations.publications:
+            biotool_xml.add_citation(publi)
+    # Write tool
+        biotool_xml.write_xml(out_file=outfile, keep_old_command=True)
+
+def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_json=None,
+              existing_tool=None):
+    """
+    This function uses :class:`tooldog.galaxy.GenerateXml` to write XML using galaxyxml.
+
+    :param biotool: Biotool object.
+    :type biotool: :class:`tooldog.model.Biotool`
+    :param outfile: path to output file to write the XML.
+    :type outfile: STRING
+    """
+    LOGGER.info("Writing XML file with galaxy.py module...")
+    biotool_xml = GenerateXml(biotool, galaxy_url=galaxy_url, edam_url=edam_url,
+                              mapping_json=mapping_json, existing_tool=existing_tool)
+
+    if existing_tool:
+        LOGGER.info("Annotating " + existing_tool + " with missing information...")
+        annotate_xml(biotool, biotool_xml, outfile)
+    else:
+        LOGGER.info("Generating XML backbone for the tool...")
+        generate_xml(biotool, biotool_xml, outfile)
 
 def write_cwl(biotool, outfile=None):
     '''
@@ -250,6 +295,8 @@ def run():
     log_group.add_argument('--log_file', dest='LOG_FILE', default='tooldog_activity.log', \
                            help='write logs in LOG_FILE (default: tooldog_activity.log)')
     file_group = parser.add_argument_group('External URLs and files')
+    file_group.add_argument('--existing_xml', dest='ORI_XML', default=None,
+                            help='Existing Galaxy XML wrapper that you want to annotate.')
     file_group.add_argument('--galaxy_url', dest='GAL_URL', default=None,\
                            help='url of the Galaxy instance (default: https://usegalaxy.org'+\
                            ' ).')
@@ -295,8 +342,9 @@ def run():
 
     if args.GALAXY:
     # Write corresponding XMLs
-        write_xml(biotool, outfile=args.OUTFILE, galaxy_url=args.GAL_URL, \
-                  edam_url=args.EDAM_URL, mapping_json=args.MAP_FILE)
+        write_xml(biotool, outfile=args.OUTFILE, galaxy_url=args.GAL_URL,
+                  edam_url=args.EDAM_URL, mapping_json=args.MAP_FILE,
+                  existing_tool=args.ORI_XML)
     elif args.CWL:
     # Write corresponding CWL
         write_cwl(biotool, args.OUTFILE)

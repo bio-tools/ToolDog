@@ -334,6 +334,16 @@ class TestGenerateXml(unittest.TestCase):
         # Test <description> of the future XML
         self.assertEqual(tool.root.find('description').text, 'a_description.')
 
+    def test_init_existing(self):
+        genxml = galaxy.GenerateXml(self.biotool,
+                                    existing_tool=os.path.dirname(__file__) +
+                                                  '/test_write_xml.xml')
+        self.assertEqual(genxml.tool.version_command, 'COMMAND --version')
+        self.assertEqual(genxml.tool.command, 'COMMAND')
+        self.assertEqual(genxml.tool.root.attrib['id'], 'an_id')
+        self.assertEqual(genxml.tool.root.attrib['name'], 'a_name')
+        self.assertEqual(genxml.tool.root.attrib['version'], 'a_version')
+
     def test_add_edam_topic(self):
         # Create a Topic object
         topic = model.Topic(EDAM_TOPIC)
