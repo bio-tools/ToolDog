@@ -22,7 +22,7 @@ setup(name="tooldog",
         },
         entry_points={'console_scripts':['tooldog=tooldog.main:run']},
         classifiers=[
-            'Development Status :: 3 - Alpha',
+            'Development Status :: 4 - Beta',
             'Topic :: Scientific/Engineering :: Bio-Informatics',
             'Operating System :: OS Independent',
             'Intended Audience :: Developers',
