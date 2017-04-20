@@ -156,8 +156,7 @@ class GenerateXml(object):
                                                            edam_format=format_uri))
         formats = ', '.join(list_formats)
         # Create the parameter
-        param = gxtp.OutputParameter(name, format=formats, from_work_dir=\
-                                     name + '.ext')
+        param = gxtp.OutputData(name, format=formats, from_work_dir=name + '.ext')
         param.command_line_override = ''
         self.tool.outputs.append(param)
 

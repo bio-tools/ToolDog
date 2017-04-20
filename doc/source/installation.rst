@@ -42,7 +42,7 @@ on your machine:
 Pip
 ---
 
-You can use pip to install directly for the git repository::
+You can use pip to install directly for the git repository
 
 .. code-block:: bash
 
@@ -51,7 +51,7 @@ You can use pip to install directly for the git repository::
 Manually
 --------
 
-Clone the repository and install ToolDog with the following commands::
+Clone the repository and install ToolDog with the following commands
 
 .. code-block:: bash
 
