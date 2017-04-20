@@ -15,7 +15,7 @@ setup(name="tooldog",
         license='MIT',
         keywords = ['biotools','galaxy','xml','cwl'],
         install_requires=['rdflib', 'requests', 'galaxyxml', 'cwlgen>=0.1'],
-        dependency_links = ['https://github.com/common-workflow-language/python-cwlgen/archive/master.zip#egg=cwlgen-0.1','https://github.com/erasche/galaxyxml/archive/master.zip#egg=galaxyxml-0.3.3'],
+        dependency_links = ['https://github.com/common-workflow-language/python-cwlgen/archive/master.zip#egg=cwlgen-0.1'],
         packages=["tooldog"],
         package_data={
         'tooldog': ['data/*.json', 'data/*.owl'],

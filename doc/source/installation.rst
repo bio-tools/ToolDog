@@ -45,6 +45,7 @@ Pip
 You can use pip to install directly for the git repository::
 
 .. code-block:: bash
+
     pip3 install --process-dependency-links git+https://github.com/khillion/ToolDog#egg=tooldog
 
 Manually
@@ -53,6 +54,7 @@ Manually
 Clone the repository and install ToolDog with the following commands::
 
 .. code-block:: bash
+
     git clone https://gitlab.pasteur.fr/kehillio/ToolDog.git
     cd ToolDog
     pip3 install --process-dependency-links .
