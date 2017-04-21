@@ -255,17 +255,6 @@ def write_cwl(biotool, outfile=None):
         else:
             function_cwl.write_cwl(outfile)
 
-
-###########  Class(es)  ###########
-
-class MyParser(argparse.ArgumentParser):
-    '''
-    Write help message in case of incorrect usage of tooldog command.
-    '''
-    def error(self, message):
-        self.print_help()
-        sys.exit(2)
-
 ###########  Main  ###########
 
 def run():
@@ -273,39 +262,44 @@ def run():
     Running function called by Tooldog.
     '''
     ## Parse arguments
-    parser = MyParser(description='Generates XML or CWL from bio.tools entry.')
-    parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +\
-                        ' (ID/VERSION, e.g. SignalP/4.1) or from local file (ENTRY.json,'+\
+    parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
+    parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +
+                        ' (ID/VERSION, e.g. SignalP/4.1) or from local file (ENTRY.json,'+
                         ' e.g. signalp4.1.json)')
-    exc_group = parser.add_mutually_exclusive_group()
-    exc_group.add_argument('-g', '--galaxy', action='store_true',\
+    # Group for the choice of tool descriptor
+    choice_desc = parser.add_argument_group('Choice of tool descriptor')
+    exc_group = choice_desc.add_mutually_exclusive_group(required=True)
+    exc_group.add_argument('-g', '--galaxy', action='store_true',
                            help='generates XML for Galaxy.', dest='GALAXY')
-    exc_group.add_argument('-c', '--cwl', action='store_true', help='generates CWL tool ' +\
+    exc_group.add_argument('-c', '--cwl', action='store_true', help='generates CWL tool ' +
                            'descriptor.', dest='CWL')
-    parser.add_argument('-f', '--file', dest='OUTFILE', help='write in the OUTFILE instead '+\
+    parser.add_argument('-f', '--file', dest='OUTFILE', help='write in the OUTFILE instead '+
                         'of STDOUT.')
-    parser.add_argument('-v', '--verbose', action='store_true', dest='VERBOSE', \
+    parser.add_argument('-v', '--verbose', action='store_true', dest='VERBOSE',
                         help='display info on STDERR.')
-    parser.add_argument('--version', action='version', version=version, \
+    parser.add_argument('--version', action='version', version=version,
                         help='show the version number and exit.')
-    log_group = parser.add_argument_group('Logs options')
-    log_group.add_argument('-l', '--logs', action='store_true', help='', dest='LOGS')
-    log_group.add_argument('--log_level', dest='LOG_LEVEL', default='WARN',\
-                           help='set up the level of the logger.')
-    log_group.add_argument('--log_file', dest='LOG_FILE', default='tooldog_activity.log', \
-                           help='write logs in LOG_FILE (default: tooldog_activity.log)')
-    file_group = parser.add_argument_group('External URLs and files')
-    file_group.add_argument('--existing_xml', dest='ORI_XML', default=None,
+    # Group for Galaxy options
+    galaxy_opt = parser.add_argument_group('Options for Galaxy XML generation (-g/--galaxy)')
+    galaxy_opt.add_argument('--existing_xml', dest='ORI_XML', default=None,
                             help='Existing Galaxy XML wrapper that you want to annotate.')
-    file_group.add_argument('--galaxy_url', dest='GAL_URL', default=None,\
-                           help='url of the Galaxy instance (default: https://usegalaxy.org'+\
+    galaxy_opt.add_argument('--galaxy_url', dest='GAL_URL', default=None,
+                           help='url of the Galaxy instance (default: https://usegalaxy.org'+
                            ' ).')
-    file_group.add_argument('--edam_url', dest='EDAM_URL', default=None, \
-                           help='EDAM.owl file either online url or local path '+\
+    galaxy_opt.add_argument('--edam_url', dest='EDAM_URL', default=None,
+                           help='EDAM.owl file either online url or local path '+
                            '(default: http://edamontology.org/EDAM.owl).')
-    file_group.add_argument('--mapping_file', dest='MAP_FILE', default=None, \
-                           help='Personalized EDAM to datatypes mapping json file '+\
+    galaxy_opt.add_argument('--mapping_file', dest='MAP_FILE', default=None,
+                           help='Personalized EDAM to datatypes mapping json file '+
                            'generated previously by ToolDog.')
+    # Group for logger options
+    log_group = parser.add_argument_group('Logs options')
+    log_group.add_argument('-l', '--logs', action='store_true', help='Write logs in tooldog_'+
+                           'activity.log.', dest='LOGS')
+    log_group.add_argument('--log_level', dest='LOG_LEVEL', default='WARN',
+                           help='set up the level of the logger.')
+    log_group.add_argument('--log_file', dest='LOG_FILE', default='tooldog_activity.log',
+                           help='define an output LOG_FILE.')
 
     try:
         args = parser.parse_args()
@@ -348,10 +342,6 @@ def run():
     elif args.CWL:
     # Write corresponding CWL
         write_cwl(biotool, args.OUTFILE)
-    else:
-        LOGGER.error("You did not select either Galaxy (-g) or CWL (-c) generation.")
-        parser.print_help()
-        sys.exit(1)
 
 if __name__ == "__main__":
     run()
