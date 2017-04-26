@@ -1,7 +1,7 @@
 # ToolDog
 
-[![Build Status](https://travis-ci.org/khillion/ToolDog.svg?branch=master)](https://travis-ci.org/khillion/ToolDog)
-[![codecov](https://codecov.io/gh/khillion/ToolDog/branch/master/graph/badge.svg)](https://codecov.io/gh/khillion/ToolDog)
+[![Build Status](https://travis-ci.org/bio-tools/ToolDog.svg?branch=master)](https://travis-ci.org/bio-tools/ToolDog)
+[![codecov](https://codecov.io/gh/bio-tools/ToolDog/branch/master/graph/badge.svg)](https://codecov.io/gh/bio-tools/ToolDog)
 [![Documentation Status](https://readthedocs.org/projects/tooldog/badge/?version=latest)](http://tooldog.readthedocs.io/en/latest/?badge=latest)
 [![Python 3](https://img.shields.io/badge/python-3.6.0-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![Gitter Chat](http://img.shields.io/badge/chat-online-brightgreen.svg)](https://gitter.im/ToolDog/Lobby)
