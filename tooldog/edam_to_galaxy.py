@@ -5,10 +5,10 @@
 ## Python version: 3.6.0
 ## Creation : 12-20-2016
 
-'''
+"""
 Gather different information from a Galaxy server (by default https://usegalaxy.org)
 and EDAM ontology (by default from http://edamontology.org/EDAM.owl)
-'''
+"""
 
 ###########  Import  ###########
 
@@ -32,15 +32,15 @@ LOGGER = logging.getLogger(__name__)
 ###########  Class(es)  ###########
 
 class GalaxyInfo(object):
-    '''
+    """
     Class to gather different information about a Galaxy instance.
 
     By default, if the galaxy_url is None, information is loaded from local files
     located in the `data/` folder corresponding to https://usegalaxy.org.
-    '''
+    """
 
     def __init__(self, galaxy_url):
-        '''
+        """
         :param galaxy_url: URL of the Galaxy instance.
         :type galaxy_url: STRING
 
@@ -59,7 +59,7 @@ class GalaxyInfo(object):
         :param self.class_names: ext_to_class_name part of the /api/mapping.json which
         maps the extension of a datatype to its class in Galaxy.
         :type self.class_names: DICT
-        '''
+        """
         if galaxy_url is None:
             self.galaxy_url = "https://usegalaxy.org"
             LOGGER.info("Loading Galaxy info (https://usegalaxy.org) from " + LOCAL_DATA)
@@ -82,9 +82,9 @@ class GalaxyInfo(object):
         self.version = version['version_major']
         # Reverse EDAMs dictionnaries
         def rev_dict(dictionnary):
-            '''
+            """
             Reverse dictionnary key -> value to value -> LIST of key
-            '''
+            """
             new_dict = {}
             for key, value in dictionnary.items():
                 if not value in new_dict:
@@ -98,14 +98,14 @@ class GalaxyInfo(object):
         self.class_names = mapping["ext_to_class_name"]
 
     def select_root(self, datatypes):
-        '''
+        """
         Select the root datatype from all given datatypes.
 
         :param datatypes: list of different datatypes.
         :type datatypes: list of STRING
         :return: root datatype.
         :rtype: STRING
-        '''
+        """
         # Build class to ext dictionnary
         class_to_ext = {}
         for key, value in self.class_names.items():
@@ -145,20 +145,20 @@ class GalaxyInfo(object):
 
 
 class EdamInfo(object):
-    '''
+    """
     Contains the given EDAM ontology.
 
     It is also possible to generate several dictionnaries to help interrogating the ontology
     for a faster access.
-    '''
+    """
 
     def __init__(self, edam_url):
-        '''
+        """
         :param edam_url: path to EDAM.owl file
         :type edam_url: STRING
 
         All the EDAM ontology will be contained in a dictionnary (self.edam_ontology).
-        '''
+        """
         if edam_url is None:
             LOGGER.info("Loading EDAM info from http://edamontology.org/EDAM.owl")
             self.edam_ontology = rdflib.Graph()
@@ -173,22 +173,22 @@ class EdamInfo(object):
             pass
 
     def generate_hierarchy(self):
-        '''
+        """
         Generates two dictionnaries of the EDAM hierarchy (format and data) with the following
         structure:
 
         DICT[edam_uri] -> LIST of edam_uri from parents
 
         The dictionnary can be accessed via self.edam_format_hierarchy
-        '''
+        """
 
         def make_hierarchy(query):
-            '''
+            """
             Build hierarchy for a given query.
 
             :return: generated hierarchy
             :rtype: DICT
-            '''
+            """
             hierarchy = {}
             for row in self.edam_ontology.query(query):
                 uri = row[0].split('/')[-1]
@@ -214,20 +214,20 @@ class EdamInfo(object):
         del self.edam_data_hierarchy['operation_3458']
 
 class EdamToGalaxy(object):
-    '''
+    """
     Class to make the link between EDAM ontology terms (edam_format and edam_data) and Galaxy
     datatypes.
-    '''
+    """
 
     def __init__(self, galaxy_url=None, edam_url=None, mapping_json=None):
-        '''
+        """
         :param galaxy_url: URL of the galaxy instance.
         :type galaxy_url: STRING
         :param edam_url: path to EDAM.owl file (URL or local path).
         :type edam_url: STRING
         :param mapping_json: path to personnalized EDAM mapping to Galaxy.
         :type mapping_json: STRING
-        '''
+        """
         if mapping_json is None:
             if galaxy_url or edam_url:
                 mapping_json = 'edam_to_galaxy.json'
@@ -248,16 +248,16 @@ class EdamToGalaxy(object):
             self.export_info(mapping_json)
 
     def generate_mapping(self):
-        '''
+        """
         Generates mapping between edam_format and edam_data to Galaxy datatypes
         based on the information of the Galaxy instance and the EDAM ontology.
 
         Every edam_format and edam_data will be given a datatype.
-        '''
+        """
         LOGGER.info("Generating new EDAM mapping to Galaxy datatypes file...")
 
         def find_datatype(edam, edam_hierarchy, galaxy_mapping):
-            '''
+            """
             Find the best datatype for a given EDAM term.
             :param edam: EDAM term.
             :type edam: STRING
@@ -268,7 +268,7 @@ class EdamToGalaxy(object):
 
             The function then create two dictionnaries: self.format_to_datatype and
             self.data_to_datatype that represents a unique datatype for each EDAM term.
-            '''
+            """
             if not edam in galaxy_mapping:
                 LOGGER.debug("No datatype found for " + edam + ". Looking at parental terms.")
                 if len(edam_hierarchy[edam]) > 1:
@@ -290,7 +290,7 @@ class EdamToGalaxy(object):
             return datatype
 
         def maps_datatype(edam_hierarchy, galaxy_mapping):
-            '''
+            """
             Maps all edam terms to a Galaxy datatype.
             :param edam_hierarchy: edam_hierarchy from :class:`tooldog.edam_to_galaxy.EdamInfo`
             :type edam_hierarchy: DICT
@@ -298,7 +298,7 @@ class EdamToGalaxy(object):
             :type galaxy_mapping: DICT
             :return: mapping EDAM term to Galaxy datatype (unique mapping).
             :rtype: DICT
-            '''
+            """
             map_to_datatype = {}
             for edam in edam_hierarchy.keys():
                 map_to_datatype[edam] = find_datatype(edam, edam_hierarchy, galaxy_mapping)
@@ -312,13 +312,13 @@ class EdamToGalaxy(object):
                                               self.galaxy.edam_data)
 
     def load_local_mapping(self, local_file):
-        '''
+        """
         Method to load (from JSON file) mapping previously generated and exported in the
         `local_file`.
 
         :param local_file: path to the mapping local file.
         :type local_file: STRING
-        '''
+        """
         LOGGER.info("Loading EDAM mapping to Galaxy datatypes from " +\
                     local_file)
         with open(local_file, 'r') as file_path:
@@ -330,12 +330,12 @@ class EdamToGalaxy(object):
         self.edam_version = json_file['edam_version']
 
     def export_info(self, export_file):
-        '''
+        """
         Method to export mapping of this object to a JSON file.
 
         :param export_file: path to the file.
         :type export_file: STRING
-        '''
+        """
         LOGGER.info("Exporting new EDAM mapping to Galaxy datatypes file to ./" +\
                     export_file)
         with open(export_file, 'w') as file_path:
@@ -346,7 +346,7 @@ class EdamToGalaxy(object):
                        'galaxy_version': self.galaxy_version}, file_path)
 
     def get_datatype(self, edam_data=None, edam_format=None):
-        '''
+        """
         Get datatype from EDAM terms.
         :param edam_data: EDAM data term.
         :type edam_data: STRING
@@ -354,7 +354,7 @@ class EdamToGalaxy(object):
         :type edam_format: STRING
         :return: datatype corresponding to given EDAM ontologies.
         :rtype: STRING
-        '''
+        """
         if not edam_format is None:
             return self.format_to_datatype[edam_format]
         elif not edam_data is None:

@@ -5,9 +5,9 @@
 ## Python version: 3.6.0
 ## Creation : 12-13-2016
 
-'''
+"""
 Main functions used by ToolDog.
-'''
+"""
 
 ###########  Import  ###########
 
@@ -24,8 +24,8 @@ import requests
 
 # Class and Objects
 from tooldog.model import Biotool
-from tooldog.galaxy import GenerateXml
-from tooldog.cwl import GenerateCwl
+from tooldog.galaxy import GalaxyToolGen
+from tooldog.cwl import CwlToolGen
 from tooldog import version
 
 ########### Constant(s) ##########
@@ -37,7 +37,7 @@ LOGGER = logging.getLogger(__name__) # for tests
 ###########  Function(s)  ###########
 
 def config_logger(write_logs, log_level, log_file, verbose):
-    '''
+    """
     Initialize the logger for ToolDog. By default, only WARNING, ERROR and CRITICAL are
     written on STDERR. You can also write logs to a log file.
 
@@ -51,7 +51,7 @@ def config_logger(write_logs, log_level, log_file, verbose):
 
     :return: Config dictionnary for logger.
     :rtype: DICT
-    '''
+    """
     cfg = {'version': 1,
            'formatters': {'written': {'format': '%(asctime)s :: %(name)s '+\
                                                 ':: %(levelname)s :: %(message)s'},
@@ -87,7 +87,7 @@ def config_logger(write_logs, log_level, log_file, verbose):
     return cfg
 
 def json_from_biotools(tool_id, tool_version):
-    '''
+    """
     Import JSON of a tool from https://bio.tools.
 
     :param tool_id: ID of the tool.
@@ -97,7 +97,7 @@ def json_from_biotools(tool_id, tool_version):
 
     :return: dictionnary corresponding to the JSON from https://bio.tools.
     :rtype: DICT
-    '''
+    """
     LOGGER.info("Loading tool entry from https://bio.tools: " + tool_id + '/' + tool_version)
     biotools_link = "https://bio.tools/api/tool/" + tool_id + "/version/" + tool_version
     # Access the entry with requests and get the JSON part
@@ -111,7 +111,7 @@ def json_from_biotools(tool_id, tool_version):
     return json_tool
 
 def json_from_file(json_file):
-    '''
+    """
     Import JSON of a tool from a local JSON file.
 
     :param json_file: path to the file
@@ -119,7 +119,7 @@ def json_from_file(json_file):
 
     :return: dictionnary corresponding to the JSON.
     :rtype: DICT
-    '''
+    """
     LOGGER.info("Loading tool entry from local file: " + json_file)
     # parse file in JSON format
     with open(json_file, 'r') as tool_file:
@@ -127,7 +127,7 @@ def json_from_file(json_file):
     return json_tool
 
 def json_to_biotool(json_file):
-    '''
+    """
     Takes JSON file from bio.tools description and loads its content to
     :class:`tooldog.model.Biotool` object.
 
@@ -136,7 +136,7 @@ def json_to_biotool(json_file):
 
     :return: Biotool object.
     :rtype: :class:`tooldog.model.Biotool`
-    '''
+    """
     LOGGER.info("Converting biotool entry (JSON) to Biotool object...")
     # Initialize Biotool object with basic parameters
     biotool = Biotool(json_file['name'], json_file['id'], json_file['version'],\
@@ -150,51 +150,20 @@ def json_to_biotool(json_file):
     biotool.add_topics(json_file['topic'])
     return biotool
 
-def generate_xml(biotool, biotool_xml, outfile=None):
+def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_json=None,
+              existing_tool=None):
     """
-    This function generates a backbone from metadata found on bio.tools.
-    XML is generated on STDOUT by default.
+    This function uses :class:`tooldog.galaxy.GalaxyToolGen` to write XML using galaxyxml.
 
     :param biotool: Biotool object.
     :type biotool: :class:`tooldog.model.Biotool`
-    :param biotool_xml: GenerateXml object which uses galaxyxml model to build XML.
-    :type biotool_xml: :class:`tooldog.galaxy.GenerateXml`
     :param outfile: path to output file to write the XML.
     :type outfile: STRING
     """
-    # Add topics to the XML
-    for topic in biotool.topics:
-        biotool_xml.add_edam_topic(topic)
-    for publi in biotool.informations.publications:
-        biotool_xml.add_citation(publi)
-    # Add operations and inputs
-    for function in biotool.functions:
-        # First make a copy of the tool to add function infos
-        function_xml = copy.deepcopy(biotool_xml)
-        for operation in function.operations:
-            function_xml.add_edam_operation(operation)
-        for inpt in function.inputs:
-            function_xml.add_input_file(inpt)
-        for output in function.outputs:
-            function_xml.add_output_file(output)
-        # Write tool
-        if len(biotool.functions) > 1:
-            function_xml.write_xml(outfile, biotool.functions.index(function) + 1)
-        else:
-            function_xml.write_xml(outfile)
-
-def annotate_xml(biotool, biotool_xml, outfile=None):
-    """
-    This function annotates an existing XML with metadata found on bio.tools.
-    XML is generated on STDOUT by default.
-
-    :param biotool: Biotool object.
-    :type biotool: :class:`tooldog.model.Biotool`
-    :param biotool_xml: GenerateXml object which uses galaxyxml model to build XML.
-    :type biotool_xml: :class:`tooldog.galaxy.GenerateXml`
-    :param outfile: path to output file to write the XML.
-    :type outfile: STRING
-    """
+    LOGGER.info("Writing XML file with galaxy.py module...")
+    biotool_xml = GalaxyToolGen(biotool, galaxy_url=galaxy_url, edam_url=edam_url,
+                              mapping_json=mapping_json, existing_tool=existing_tool)
+    # Add EDAM annotation and citations
     if not getattr(biotool_xml, 'edam_topics', None):
         for topic in biotool.topics:
             biotool_xml.add_edam_topic(topic)
@@ -205,42 +174,36 @@ def annotate_xml(biotool, biotool_xml, outfile=None):
     if not getattr(biotool_xml, 'citations', None):
         for publi in biotool.informations.publications:
             biotool_xml.add_citation(publi)
-    # Write tool
-        biotool_xml.write_xml(out_file=outfile, keep_old_command=True)
-
-def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_json=None,
-              existing_tool=None):
-    """
-    This function uses :class:`tooldog.galaxy.GenerateXml` to write XML using galaxyxml.
-
-    :param biotool: Biotool object.
-    :type biotool: :class:`tooldog.model.Biotool`
-    :param outfile: path to output file to write the XML.
-    :type outfile: STRING
-    """
-    LOGGER.info("Writing XML file with galaxy.py module...")
-    biotool_xml = GenerateXml(biotool, galaxy_url=galaxy_url, edam_url=edam_url,
-                              mapping_json=mapping_json, existing_tool=existing_tool)
-
+    # Add inputs and outputs
     if existing_tool:
-        LOGGER.info("Annotating " + existing_tool + " with missing information...")
-        annotate_xml(biotool, biotool_xml, outfile)
+        biotool_xml.write_xml(out_file=outfile, keep_old_command=True)
     else:
-        LOGGER.info("Generating XML backbone for the tool...")
-        generate_xml(biotool, biotool_xml, outfile)
+        # This will need to be changed when incorporating argparse2tool...
+        for function in biotool.functions:
+            # First make a copy of the tool to add function infos
+            function_xml = copy.deepcopy(biotool_xml)
+            for inpt in function.inputs:
+                function_xml.add_input_file(inpt)
+            for output in function.outputs:
+                function_xml.add_output_file(output)
+            # Write tool
+            if len(biotool.functions) > 1:
+                function_xml.write_xml(outfile, biotool.functions.index(function) + 1)
+            else:
+                function_xml.write_xml(outfile)
 
 def write_cwl(biotool, outfile=None):
-    '''
-    This function uses :class:`tooldog.cwl.GenerateCwl` to write CWL using cwlgen.
+    """
+    This function uses :class:`tooldog.cwl.CwlToolGen` to write CWL using cwlgen.
     CWL is generated on STDOUT by default.
 
     :param biotool: Biotool object.
     :type biotool: :class:`tooldog.model.Biotool`
     :param outfile: path to output file to write the CWL.
     :type outfile: STRING
-    '''
+    """
     LOGGER.info("Writing CWL file with cwl.py module...")
-    biotool_cwl = GenerateCwl(biotool)
+    biotool_cwl = CwlToolGen(biotool)
     # Add operations and inputs
     for function in biotool.functions:
         # First make a copy of the tool to add function infos
@@ -258,9 +221,9 @@ def write_cwl(biotool, outfile=None):
 ###########  Main  ###########
 
 def run():
-    '''
+    """
     Running function called by Tooldog.
-    '''
+    """
     ## Parse arguments
     parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
     parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +

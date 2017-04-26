@@ -5,10 +5,10 @@
 ## Python version: 3.6.0
 ## Creation : 12-20-2016
 
-'''
+"""
 Generation of XML for Galaxy from https://bio.tools based on the Tooldog model using
 galaxyxml library.
-'''
+"""
 
 ###########  Import  ###########
 
@@ -34,21 +34,21 @@ LOGGER = logging.getLogger(__name__)
 
 ###########  Class(es)  ###########
 
-class GenerateXml(object):
-    '''
+class GalaxyToolGen(object):
+    """
     Class to support generation of XML from :class:`tooldog.model.Biotool` object.
-    '''
+    """
 
     def __init__(self, biotool, galaxy_url=None, edam_url=None, mapping_json=None,
                  existing_tool=None):
-        '''
+        """
         Initialize a [Tool] object from galaxyxml with the minimal information
         (a name, an id, a version, a description, the command, the command version
         and a help).
 
         :param biotool: Biotool object of an entry from https://bio.tools.
         :type biotool: :class:`tooldog.model.Biotool`
-        '''
+        """
         if existing_tool:
             LOGGER.info("Loading existing XML from " + existing_tool)
             gxp = GalaxyXmlParser()
@@ -57,7 +57,7 @@ class GenerateXml(object):
             self.tool.add_comment("This tool descriptor has been annotated by ToolDog v" +\
                                   version)
         else:    
-            LOGGER.info("Creating new GenerateXml object...")
+            LOGGER.info("Creating new GalaxyToolGen object...")
             # Initialize GalaxyInfo
             self.etog = EdamToGalaxy(galaxy_url=galaxy_url, edam_url=edam_url,\
                                      mapping_json=mapping_json)
@@ -82,40 +82,40 @@ class GenerateXml(object):
                                   version)
 
     def add_edam_topic(self, topic):
-        '''
+        """
         Add the EDAM topic to the tool (XML: edam_topics).
 
         :param topic: Topic object.
         :type topic: :class:`tooldog.model.Topic`
-        '''
-        LOGGER.debug("Adding EDAM topic " + topic.get_edam_id() + " to GenerateXml object.")
+        """
+        LOGGER.debug("Adding EDAM topic " + topic.get_edam_id() + " to GalaxyToolGen object.")
         if not hasattr(self.tool, 'edam_topics'):
             # First time we add topics to the tool
             self.tool.edam_topics = gxtp.EdamTopics()
         self.tool.edam_topics.append(gxtp.EdamTopic(topic.get_edam_id()))
 
     def add_edam_operation(self, operation):
-        '''
+        """
         Add the EDAM operation to the tool (XML: edam_operations).
 
         :param topic: Operation object.
         :type topic: :class:`tooldog.model.Operation`
-        '''
+        """
         LOGGER.debug("Adding EDAM operation " + operation.get_edam_id() +\
-                     " to GenerateXml object.")
+                     " to GalaxyToolGen object.")
         if not hasattr(self.tool, 'edam_operations'):
             # First time we add operations to the tool
             self.tool.edam_operations = gxtp.EdamOperations()
         self.tool.edam_operations.append(gxtp.EdamOperation(operation.get_edam_id()))
 
     def add_input_file(self, input_obj):
-        '''
+        """
         Add an input to the tool (XML: <inputs>).
 
         :param input_obj: Input object.
         :type input_obj: :class:`tooldog.model.Input`
-        '''
-        LOGGER.debug("Adding input to GenerateXml object...")
+        """
+        LOGGER.debug("Adding input to GalaxyToolGen object...")
         if not hasattr(self.tool, 'inputs'):
             self.tool.inputs = gxtp.Inputs()
         # Build parameter
@@ -142,13 +142,13 @@ class GenerateXml(object):
         self.tool.inputs.append(param)
 
     def add_output_file(self, output):
-        '''
+        """
         Add an output to the tool (XML: <outputs>).
 
         :param output: Output object.
         :type output: :class:`tooldog.model.Output`
-        '''
-        LOGGER.debug("Adding output to GenerateXml object...")
+        """
+        LOGGER.debug("Adding output to GalaxyToolGen object...")
         if not hasattr(self.tool, 'outputs'):
             self.tool.outputs = gxtp.Outputs()
         # Build parameter
@@ -172,13 +172,13 @@ class GenerateXml(object):
         self.tool.outputs.append(param)
 
     def add_citation(self, publication):
-        '''
+        """
         Add publication(s) to the tool (XML: <citations>).
 
         :param publication: Publication object.
         :type publication: :class:`tooldog.model.Publication`
-        '''
-        LOGGER.debug("Adding citation to GenerateXml object...")
+        """
+        LOGGER.debug("Adding citation to GalaxyToolGen object...")
         if not hasattr(self.tool, 'citations'):
             self.tool.citations = gxtp.Citations()
         # Add citation depending the type (doi, pmid...)
@@ -190,14 +190,14 @@ class GenerateXml(object):
             self.tool.citations.append(gxtp.Citation('pmcid', publication.pmcid))
 
     def write_xml(self, out_file=None, index=None, keep_old_command=False):
-        '''
+        """
         Write CWL to STDOUT or out_file(s).
 
         :param out_file: path to output file.
         :type out_file: STRING
         :param index: Index in case more than one function is described.
         :type index: INT
-        '''
+        """
         # Copy informations to avoid expension of xml in case we write several XMLs
         export_tool = copy.deepcopy(self.tool)
         # Give XML on STDout

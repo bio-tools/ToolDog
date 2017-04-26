@@ -309,13 +309,13 @@ class TestMainFunctions(unittest.TestCase):
         self.assertEqual(biot.topics[0].term, 'Functional genomics')
 
 
-class TestGenerateXml(unittest.TestCase):
+class TestGalaxyToolGen(unittest.TestCase):
 
     def setUp(self):
         # Create a biotool
         self.biotool = model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
                                      'a_homepage')
-        self.genxml = galaxy.GenerateXml(self.biotool)
+        self.genxml = galaxy.GalaxyToolGen(self.biotool)
 
     def test_init(self):
         # Test counters
@@ -335,7 +335,7 @@ class TestGenerateXml(unittest.TestCase):
         self.assertEqual(tool.root.find('description').text, 'a_description.')
 
     def test_init_existing(self):
-        genxml = galaxy.GenerateXml(self.biotool,
+        genxml = galaxy.GalaxyToolGen(self.biotool,
                                     existing_tool=os.path.dirname(__file__) +
                                                   '/test_write_xml.xml')
         self.assertEqual(genxml.tool.version_command, 'COMMAND --version')
@@ -475,13 +475,13 @@ class TestEdamToGalaxy(unittest.TestCase):
         self.assertEqual(self.etog_url.galaxy.galaxy_url, 'https://usegalaxy.org')
 
 
-class TestGenerateCwl(unittest.TestCase):
+class TestCwlToolGen(unittest.TestCase):
 
     def setUp(self):
         # Create a biotool
         self.biotool = model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
                                      'a_homepage')
-        self.gencwl = cwl.GenerateCwl(self.biotool)
+        self.gencwl = cwl.CwlToolGen(self.biotool)
 
     def test_init(self):
         # Test counters

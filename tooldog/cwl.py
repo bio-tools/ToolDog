@@ -5,10 +5,10 @@
 ## Python version: 3.6.0
 ## Creation : 03-01-2017
 
-'''
+"""
 Generation of CWL tool from https://bio.tools based on the ToolDog model using
 cwlgen library.
-'''
+"""
 
 ###########  Import  ###########
 
@@ -29,20 +29,20 @@ LOGGER = logging.getLogger(__name__)
 
 ###########  Class(es)  ###########
 
-class GenerateCwl(object):
-    '''
+class CwlToolGen(object):
+    """
     Class to support generation of CWL from :class:`tooldog.model.Biotool` object.
-    '''
+    """
 
     def __init__(self, biotool):
-        '''
+        """
         Initialize a [CommandLineTool] object from cwlgen with the minimal information
         (an id, a description, the command and a documentation).
 
         :param biotool: Biotool object of an entry from https://bio.tools.
         :type biotool: :class:`tooldog.model.Biotool`
-        '''
-        LOGGER.info("Creating new GenerateCwl object...")
+        """
+        LOGGER.info("Creating new CwlToolGen object...")
         # Initialize counters for inputs and outputs
         self.input_ct = 0
         self.output_ct = 0
@@ -56,13 +56,13 @@ class GenerateCwl(object):
                                           doc=documentation)
 
     def add_input_file(self, input_obj):
-        '''
+        """
         Add an input to the CWL tool.
 
         :param input_obj: Input object.
         :type input_obj: :class:`tooldog.model.Input`
-        '''
-        LOGGER.info("Adding input to GenerateCwl object...")
+        """
+        LOGGER.info("Adding input to CwlToolGen object...")
         # Build parameter
         self.input_ct += 1
         # Give unique name to the input
@@ -82,13 +82,13 @@ class GenerateCwl(object):
         self.tool.inputs.append(param)
 
     def add_output_file(self, output):
-        '''
+        """
         Add an output to the CWL tool.
 
         :param output: Output object.
         :type output: :class:`tooldog.model.Output`
-        '''
-        LOGGER.info("Adding output to GenerateCwl object...")
+        """
+        LOGGER.info("Adding output to CwlToolGen object...")
         # Build parameter
         self.output_ct += 1
         # Give unique name to the output
@@ -107,14 +107,14 @@ class GenerateCwl(object):
         self.tool.outputs.append(param)
 
     def write_cwl(self, out_file=None, index=None):
-        '''
+        """
         Write CWL to STDOUT or out_file(s).
 
         :param out_file: path to output file.
         :type out_file: STRING
         :param index: Index in case more than one function is described.
         :type index: INT
-        '''
+        """
         # Give CWL on STDout
         if out_file is None:
             if index is not None:
