@@ -15,6 +15,7 @@ ToolDog
    installation
    how_to_use
    references
+   changelog
 
 ToolDog API Documentation
 =========================
