@@ -1,3 +1,5 @@
 .DS_Store
 .idea
 doc/build
+test/__pycache__
+tooldog/__pycache__

@@ -1,7 +1,11 @@
 from setuptools import setup
 import sys, os
+from pip.req import parse_requirements
 
 import tooldog
+
+install_reqs = parse_requirements('requirements.txt', session='')
+reqs = [str(ir.req) for ir in install_reqs]
 
 if sys.argv[-1] == 'publish':
     os.system("python setup.py sdist bdist_wheel upload; git push")
@@ -14,7 +18,7 @@ setup(name="tooldog",
         author_email='kehillio@pasteur.fr and hmenager@pasteur.fr',
         license='MIT',
         keywords = ['biotools','galaxy','xml','cwl'],
-        install_requires=['rdflib', 'requests', 'galaxyxml', 'cwlgen'],
+        install_requires=reqs,
         packages=["tooldog"],
         package_data={
         'tooldog': ['data/*.json', 'data/*.owl'],

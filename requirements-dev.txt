@@ -1,0 +1,6 @@
+nose
+sphinx
+codecov
+coverage
+requests_mock
+nose_parameterized

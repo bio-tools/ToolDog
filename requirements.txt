@@ -1,0 +1,4 @@
+rdflib
+requests
+galaxyxml
+cwlgen
