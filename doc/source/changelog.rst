@@ -2,9 +2,9 @@
 
 .. _changelog:
 
-*********
-Changelog
-*********
+**********
+Changelogs
+**********
 
 Summary of developments of ToolDog software.
 

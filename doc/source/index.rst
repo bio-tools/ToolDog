@@ -4,7 +4,8 @@
 Welcome to ToolDog's documentation!
 ===================================
 
-ToolDog is a program that generates description of a tool entry from https://bio.tools.
+ToolDog is a program that generates tool description from a tool entry
+from https://bio.tools.
 
 ToolDog
 =======
@@ -15,8 +16,6 @@ ToolDog
    installation
    how_to_use
    references
-   hangouts
-   changelog
 
 ToolDog API Documentation
 =========================
@@ -24,6 +23,14 @@ ToolDog API Documentation
    :maxdepth: 2
 
    API_doc
+
+Hangouts and Changelogs
+=======================
+.. toctree::
+   :maxdepth: 1
+
+   hangouts
+   changelog
 
 ..
   Indices and tables
