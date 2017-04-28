@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="589px" height="390px" viewBox="0 0 589 390" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>Untitled</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="163" height="118" rx="8"></rect>
+        <rect id="path-2" x="18" y="25" width="127" height="76" rx="8"></rect>
+        <rect id="path-3" x="0" y="0" width="163" height="118" rx="8"></rect>
+        <rect id="path-4" x="18" y="25" width="127" height="76" rx="8"></rect>
+        <rect id="path-5" x="109" y="154" width="163" height="118" rx="8"></rect>
+        <rect id="path-6" x="127" y="179" width="127" height="76" rx="8"></rect>
+        <rect id="path-7" x="323" y="272" width="163" height="118" rx="8"></rect>
+        <rect id="path-8" x="341" y="297" width="127" height="76" rx="8"></rect>
+        <rect id="path-9" x="213" y="0" width="163" height="118" rx="8"></rect>
+        <rect id="path-10" x="231" y="25" width="127" height="76" rx="8"></rect>
+        <rect id="path-11" x="426" y="0" width="163" height="118" rx="8"></rect>
+        <rect id="path-12" x="444" y="25" width="127" height="76" rx="8"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Rectangle-2">
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+            <rect stroke="#979797" stroke-width="1" x="0.5" y="0.5" width="162" height="117" rx="8"></rect>
+        </g>
+        <g id="Rectangle">
+            <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-2"></use>
+            <rect stroke="#979797" stroke-width="1" x="18.5" y="25.5" width="126" height="75" rx="8"></rect>
+        </g>
+        <text id="Biotool" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="55.2509766" y="41">Biotool</tspan>
+        </text>
+        <text id="tooldog" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="55.2509766" y="16">tooldog</tspan>
+        </text>
+        <path d="M18.5,48.5 L144.5,48.5" id="Line" stroke="#979797" stroke-linecap="square"></path>
+        <g id="Rectangle-2">
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+            <rect stroke="#979797" stroke-width="1" x="0.5" y="0.5" width="162" height="117" rx="8"></rect>
+        </g>
+        <g id="Rectangle">
+            <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-4"></use>
+            <rect stroke="#979797" stroke-width="1" x="18.5" y="25.5" width="126" height="75" rx="8"></rect>
+        </g>
+        <text id="Biotool" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="55.2509766" y="41">Biotool</tspan>
+        </text>
+        <text id="tooldog" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="55.2509766" y="16">tooldog</tspan>
+        </text>
+        <path d="M18.5,48.5 L144.5,48.5" id="Line" stroke="#979797" stroke-linecap="square"></path>
+        <g id="Rectangle-2-Copy">
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-5"></use>
+            <rect stroke="#979797" stroke-width="1" x="109.5" y="154.5" width="162" height="117" rx="8"></rect>
+        </g>
+        <g id="Rectangle-Copy">
+            <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-6"></use>
+            <rect stroke="#979797" stroke-width="1" x="127.5" y="179.5" width="126" height="75" rx="8"></rect>
+        </g>
+        <text id="GalaxyToolGen" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="141.323242" y="195">GalaxyToolGen</tspan>
+        </text>
+        <text id="tooldog-copy" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="164.250977" y="170">tooldog</tspan>
+        </text>
+        <path d="M127.5,202.5 L253.5,202.5" id="Line-Copy" stroke="#979797" stroke-linecap="square"></path>
+        <g id="Rectangle-2-Copy-2">
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-7"></use>
+            <rect stroke="#979797" stroke-width="1" x="323.5" y="272.5" width="162" height="117" rx="8"></rect>
+        </g>
+        <g id="Rectangle-Copy-2">
+            <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-8"></use>
+            <rect stroke="#979797" stroke-width="1" x="341.5" y="297.5" width="126" height="75" rx="8"></rect>
+        </g>
+        <text id="CwlToolGen" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="366.287109" y="313">CwlToolGen</tspan>
+        </text>
+        <text id="tooldog-copy-2" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="378.250977" y="288">tooldog</tspan>
+        </text>
+        <path d="M341.5,320.5 L467.5,320.5" id="Line-Copy-2" stroke="#979797" stroke-linecap="square"></path>
+        <g id="Rectangle-2">
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-9"></use>
+            <rect stroke="#979797" stroke-width="1" x="213.5" y="0.5" width="162" height="117" rx="8"></rect>
+        </g>
+        <g id="Rectangle">
+            <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-10"></use>
+            <rect stroke="#979797" stroke-width="1" x="231.5" y="25.5" width="126" height="75" rx="8"></rect>
+        </g>
+        <text id="Tool" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="279.714844" y="41">Tool</tspan>
+        </text>
+        <text id="galaxyxml" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="260.608398" y="16">galaxyxml</tspan>
+        </text>
+        <path d="M231.5,48.5 L357.5,48.5" id="Line" stroke="#979797" stroke-linecap="square"></path>
+        <g id="Rectangle-2">
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-11"></use>
+            <rect stroke="#979797" stroke-width="1" x="426.5" y="0.5" width="162" height="117" rx="8"></rect>
+        </g>
+        <g id="Rectangle">
+            <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-12"></use>
+            <rect stroke="#979797" stroke-width="1" x="444.5" y="25.5" width="126" height="75" rx="8"></rect>
+        </g>
+        <text id="Tool" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="492.714844" y="41">Tool</tspan>
+        </text>
+        <text id="cwlgen" font-family="AnonymousPro, Anonymous Pro" font-size="14" font-weight="normal" fill="#000000">
+            <tspan x="485.072266" y="16">cwlgen</tspan>
+        </text>
+        <path d="M444.5,48.5 L570.5,48.5" id="Line" stroke="#979797" stroke-linecap="square"></path>
+        <polyline id="Path-2" stroke="#979797" stroke-width="2" points="79.0995237 101 79.0995237 225.226272 125.099524 225.226272"></polyline>
+        <path id="Path-2-decoration-1" d="M114.299524,228.226272 L125.099524,225.226272 L114.299524,222.226272" stroke="#979797" stroke-width="2"></path>
+        <polyline id="Path-2" stroke="#979797" stroke-width="2" points="42 101 42 335 341 335"></polyline>
+        <path id="Path-2-decoration-1" d="M330.2,338 L341,335 L330.2,332" stroke="#979797" stroke-width="2"></path>
+        <polyline id="Path-3" stroke="#979797" stroke-width="2" points="253.958017 224.777319 295.034275 224.777319 295.034275 101.852879"></polyline>
+        <path id="Path-3-decoration-1" d="M298.034275,112.652879 L295.034275,101.852879 L292.034275,112.652879" stroke="#979797" stroke-width="2"></path>
+        <polyline id="Path-3" stroke="#979797" stroke-width="2" points="467.461871 334.924439 508.538129 334.924439 508.538129 100.924439"></polyline>
+        <path id="Path-3-decoration-1" d="M511.538129,111.724439 L508.538129,100.924439 L505.538129,111.724439" stroke="#979797" stroke-width="2"></path>
+    </g>
+</svg>

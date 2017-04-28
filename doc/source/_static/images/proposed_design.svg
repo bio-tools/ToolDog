@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="589" height="286" viewBox="0, 0, 589, 286">
+  <g id="Page-2">
+    <g id="Rectangle-2">
+      <path d="M8,0 L155,0 C159.418,0 163,3.582 163,8 L163,110 C163,114.418 159.418,118 155,118 L8,118 C3.582,118 0,114.418 0,110 L0,8 C0,3.582 3.582,0 8,0 z" fill="#FFFFFF" id="path-1"/>
+      <path d="M8.5,0.5 L154.5,0.5 C158.918,0.5 162.5,4.082 162.5,8.5 L162.5,109.5 C162.5,113.918 158.918,117.5 154.5,117.5 L8.5,117.5 C4.082,117.5 0.5,113.918 0.5,109.5 L0.5,8.5 C0.5,4.082 4.082,0.5 8.5,0.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <g id="Rectangle">
+      <path d="M26,25 L137,25 C141.418,25 145,28.582 145,33 L145,93 C145,97.418 141.418,101 137,101 L26,101 C21.582,101 18,97.418 18,93 L18,33 C18,28.582 21.582,25 26,25 z" fill="#D8D8D8" id="path-2"/>
+      <path d="M26.5,25.5 L136.5,25.5 C140.918,25.5 144.5,29.082 144.5,33.5 L144.5,92.5 C144.5,96.918 140.918,100.5 136.5,100.5 L26.5,100.5 C22.082,100.5 18.5,96.918 18.5,92.5 L18.5,33.5 C18.5,29.082 22.082,25.5 26.5,25.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <text transform="matrix(1, 0, 0, 1, 82.5, 36)">
+      <tspan x="-27.249" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">Biotool</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 82.5, 11)">
+      <tspan x="-27.249" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">tooldog</tspan>
+    </text>
+    <path d="M18.5,48.5 L144.5,48.5" fill-opacity="0" stroke="#979797" stroke-width="1" stroke-linecap="square" id="Line"/>
+    <g id="Rectangle-2">
+      <path d="M8,0 L155,0 C159.418,0 163,3.582 163,8 L163,110 C163,114.418 159.418,118 155,118 L8,118 C3.582,118 0,114.418 0,110 L0,8 C0,3.582 3.582,0 8,0 z" fill="#FFFFFF" id="path-3"/>
+      <path d="M8.5,0.5 L154.5,0.5 C158.918,0.5 162.5,4.082 162.5,8.5 L162.5,109.5 C162.5,113.918 158.918,117.5 154.5,117.5 L8.5,117.5 C4.082,117.5 0.5,113.918 0.5,109.5 L0.5,8.5 C0.5,4.082 4.082,0.5 8.5,0.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <g id="Rectangle">
+      <path d="M26,25 L137,25 C141.418,25 145,28.582 145,33 L145,93 C145,97.418 141.418,101 137,101 L26,101 C21.582,101 18,97.418 18,93 L18,33 C18,28.582 21.582,25 26,25 z" fill="#D8D8D8" id="path-4"/>
+      <path d="M26.5,25.5 L136.5,25.5 C140.918,25.5 144.5,29.082 144.5,33.5 L144.5,92.5 C144.5,96.918 140.918,100.5 136.5,100.5 L26.5,100.5 C22.082,100.5 18.5,96.918 18.5,92.5 L18.5,33.5 C18.5,29.082 22.082,25.5 26.5,25.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <text transform="matrix(1, 0, 0, 1, 82.5, 36)">
+      <tspan x="-27.249" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">Biotool</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 82.5, 11)">
+      <tspan x="-27.249" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">tooldog</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 75.355, 65)">
+      <tspan x="-46.355" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">[+] export()</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 75.355, 85)">
+      <tspan x="-46.355" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">[+] import()</tspan>
+    </text>
+    <path d="M18.5,48.5 L144.5,48.5" fill-opacity="0" stroke="#979797" stroke-width="1" stroke-linecap="square" id="Line"/>
+    <path d="M18.5,53.5 L144.5,53.5" fill-opacity="0" stroke="#979797" stroke-width="1" stroke-linecap="square" id="Line"/>
+    <g id="Rectangle-2">
+      <path d="M221,0 L368,0 C372.418,0 376,3.582 376,8 L376,110 C376,114.418 372.418,118 368,118 L221,118 C216.582,118 213,114.418 213,110 L213,8 C213,3.582 216.582,0 221,0 z" fill="#FFFFFF" id="path-5"/>
+      <path d="M221.5,0.5 L367.5,0.5 C371.918,0.5 375.5,4.082 375.5,8.5 L375.5,109.5 C375.5,113.918 371.918,117.5 367.5,117.5 L221.5,117.5 C217.082,117.5 213.5,113.918 213.5,109.5 L213.5,8.5 C213.5,4.082 217.082,0.5 221.5,0.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <g id="Rectangle">
+      <path d="M239,25 L350,25 C354.418,25 358,28.582 358,33 L358,93 C358,97.418 354.418,101 350,101 L239,101 C234.582,101 231,97.418 231,93 L231,33 C231,28.582 234.582,25 239,25 z" fill="#D8D8D8" id="path-6"/>
+      <path d="M239.5,25.5 L349.5,25.5 C353.918,25.5 357.5,29.082 357.5,33.5 L357.5,92.5 C357.5,96.918 353.918,100.5 349.5,100.5 L239.5,100.5 C235.082,100.5 231.5,96.918 231.5,92.5 L231.5,33.5 C231.5,29.082 235.082,25.5 239.5,25.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <text transform="matrix(1, 0, 0, 1, 295.5, 36)">
+      <tspan x="-15.785" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">Tool</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 295.5, 11)">
+      <tspan x="-34.892" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">galaxyxml</tspan>
+    </text>
+    <path d="M231.5,48.5 L357.5,48.5" fill-opacity="0" stroke="#979797" stroke-width="1" stroke-linecap="square" id="Line"/>
+    <g id="Rectangle-2">
+      <path d="M222,168 L369,168 C373.418,168 377,171.582 377,176 L377,278 C377,282.418 373.418,286 369,286 L222,286 C217.582,286 214,282.418 214,278 L214,176 C214,171.582 217.582,168 222,168 z" fill="#FFFFFF" id="path-7"/>
+      <path d="M222.5,168.5 L368.5,168.5 C372.918,168.5 376.5,172.082 376.5,176.5 L376.5,277.5 C376.5,281.918 372.918,285.5 368.5,285.5 L222.5,285.5 C218.082,285.5 214.5,281.918 214.5,277.5 L214.5,176.5 C214.5,172.082 218.082,168.5 222.5,168.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <g id="Rectangle">
+      <path d="M240,193 L351,193 C355.418,193 359,196.582 359,201 L359,261 C359,265.418 355.418,269 351,269 L240,269 C235.582,269 232,265.418 232,261 L232,201 C232,196.582 235.582,193 240,193 z" fill="#D8D8D8" id="path-8"/>
+      <path d="M240.5,193.5 L350.5,193.5 C354.918,193.5 358.5,197.082 358.5,201.5 L358.5,260.5 C358.5,264.918 354.918,268.5 350.5,268.5 L240.5,268.5 C236.082,268.5 232.5,264.918 232.5,260.5 L232.5,201.5 C232.5,197.082 236.082,193.5 240.5,193.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <text transform="matrix(1, 0, 0, 1, 296, 204)">
+      <tspan x="-15.785" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">Tool</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 296, 179)">
+      <tspan x="-27.249" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">tooldog</tspan>
+    </text>
+    <path d="M232.5,216.5 L358.5,216.5" fill-opacity="0" stroke="#979797" stroke-width="1" stroke-linecap="square" id="Line"/>
+    <g id="Rectangle-2">
+      <path d="M434,0 L581,0 C585.418,0 589,3.582 589,8 L589,110 C589,114.418 585.418,118 581,118 L434,118 C429.582,118 426,114.418 426,110 L426,8 C426,3.582 429.582,0 434,0 z" fill="#FFFFFF" id="path-9"/>
+      <path d="M434.5,0.5 L580.5,0.5 C584.918,0.5 588.5,4.082 588.5,8.5 L588.5,109.5 C588.5,113.918 584.918,117.5 580.5,117.5 L434.5,117.5 C430.082,117.5 426.5,113.918 426.5,109.5 L426.5,8.5 C426.5,4.082 430.082,0.5 434.5,0.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <g id="Rectangle">
+      <path d="M452,25 L563,25 C567.418,25 571,28.582 571,33 L571,93 C571,97.418 567.418,101 563,101 L452,101 C447.582,101 444,97.418 444,93 L444,33 C444,28.582 447.582,25 452,25 z" fill="#D8D8D8" id="path-10"/>
+      <path d="M452.5,25.5 L562.5,25.5 C566.918,25.5 570.5,29.082 570.5,33.5 L570.5,92.5 C570.5,96.918 566.918,100.5 562.5,100.5 L452.5,100.5 C448.082,100.5 444.5,96.918 444.5,92.5 L444.5,33.5 C444.5,29.082 448.082,25.5 452.5,25.5 z" fill-opacity="0" stroke="#979797" stroke-width="1"/>
+    </g>
+    <text transform="matrix(1, 0, 0, 1, 288.355, 65)">
+      <tspan x="-46.355" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">[+] export()</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 288.355, 85)">
+      <tspan x="-46.355" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">[+] import()</tspan>
+    </text>
+    <path d="M231.5,53.5 L357.5,53.5" fill-opacity="0" stroke="#979797" stroke-width="1" stroke-linecap="square" id="Line-Copy"/>
+    <text transform="matrix(1, 0, 0, 1, 501.355, 65)">
+      <tspan x="-46.355" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">[+] export()</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 501.355, 85)">
+      <tspan x="-46.355" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">[+] import()</tspan>
+    </text>
+    <path d="M444.5,53.5 L570.5,53.5" fill-opacity="0" stroke="#979797" stroke-width="1" stroke-linecap="square" id="Line-Copy-2"/>
+    <text transform="matrix(1, 0, 0, 1, 508.5, 36)">
+      <tspan x="-15.785" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">Tool</tspan>
+    </text>
+    <text transform="matrix(1, 0, 0, 1, 508.5, 11)">
+      <tspan x="-23.428" y="5" font-family="AnonymousPro" font-size="14" fill="#000000">cwlgen</tspan>
+    </text>
+    <path d="M444.5,48.5 L570.5,48.5" fill-opacity="0" stroke="#979797" stroke-width="1" stroke-linecap="square" id="Line"/>
+    <path d="M66.657,101 L66.657,254 L229.657,254" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-2"/>
+    <path d="M218.857,257 L229.657,254 L218.857,251" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-2-decoration-1"/>
+    <path d="M93,101 L93,227 L232.657,227" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-2"/>
+    <path d="M90,111.8 L93,101 L96,111.8" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-2-decoration-1"/>
+    <path d="M525.657,101 L525.657,254 L362.657,254" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-2"/>
+    <path d="M498.657,101 L498.657,227 L359,227" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-2"/>
+    <path d="M495.65,111.8 L498.65,101 L501.65,111.8" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-2-decoration-1"/>
+    <path d="M283,101 L283,169" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-3"/>
+    <path d="M280,158.2 L283,169 L286,158.2" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-3-decoration-1"/>
+    <path d="M307,100 L307,168" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-3"/>
+    <path d="M304,110.8 L307,100 L310,110.8" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-3-decoration-1"/>
+    <path d="M372,257 L361.2,254 L372,251" fill-opacity="0" stroke="#979797" stroke-width="2" id="Path-2-decoration-1"/>
+  </g>
+</svg>
