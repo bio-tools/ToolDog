@@ -23,10 +23,9 @@ import logging
 import requests
 
 # Class and Objects
-from tooldog.model import Biotool
-from tooldog.galaxy import GalaxyToolGen
-from tooldog.cwl import CwlToolGen
-from tooldog import version
+from tooldog import __version__, Biotool
+from tooldog.annotate.galaxy import GalaxyToolGen
+from tooldog.annotate.cwl import CwlToolGen
 
 ########### Constant(s) ##########
 
@@ -53,9 +52,9 @@ def config_logger(write_logs, log_level, log_file, verbose):
     :rtype: DICT
     """
     cfg = {'version': 1,
-           'formatters': {'written': {'format': '%(asctime)s :: %(name)s '+\
+           'formatters': {'written': {'format': '%(asctime)s :: %(name)s '+
                                                 ':: %(levelname)s :: %(message)s'},
-                                      'printed': {'format': '%(name)s :: '+\
+                                      'printed': {'format': '%(name)s :: '+
                                                             '%(levelname)s :: %(message)s'}},
            'handlers':{},
            'loggers':{}}
@@ -139,10 +138,10 @@ def json_to_biotool(json_file):
     """
     LOGGER.info("Converting biotool entry (JSON) to Biotool object...")
     # Initialize Biotool object with basic parameters
-    biotool = Biotool(json_file['name'], json_file['id'], json_file['version'],\
+    biotool = Biotool(json_file['name'], json_file['id'], json_file['version'],
                       json_file['description'], json_file['homepage'])
     # Add informations
-    biotool.set_informations(json_file['credit'], json_file['contact'],\
+    biotool.set_informations(json_file['credit'], json_file['contact'],
                              json_file['publication'], json_file['documentation'])
     # Add Function(s)
     biotool.add_functions(json_file['function'])
@@ -240,7 +239,7 @@ def run():
                         'of STDOUT.')
     parser.add_argument('-v', '--verbose', action='store_true', dest='VERBOSE',
                         help='display info on STDERR.')
-    parser.add_argument('--version', action='version', version=version,
+    parser.add_argument('--version', action='version', version=__version__,
                         help='show the version number and exit.')
     # Group for Galaxy options
     galaxy_opt = parser.add_argument_group('Options for Galaxy XML generation (-g/--galaxy)')
@@ -275,7 +274,7 @@ def run():
 
     # Logger configuration
     import logging.config
-    logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL, \
+    logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL, 
                                             args.LOG_FILE, args.VERBOSE))
     # Reset LOGGER with new config
     LOGGER = logging.getLogger(__name__)

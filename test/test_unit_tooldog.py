@@ -21,7 +21,8 @@ import unittest
 import requests_mock
 
 # Class and Objects
-from tooldog import main, model, galaxy, cwl, edam_to_galaxy
+from tooldog import main, biotool_model
+from tooldog.annotate import galaxy, cwl, edam_to_galaxy
 
 ###########  Constant(s)  ###########
 
@@ -42,7 +43,7 @@ EDAM_FORMAT = {'uri':'http://edamontology.org/format_1930',
 class TestBiotool(unittest.TestCase):
 
     def setUp(self):
-        self.biotool = model.Biotool('name', 'an_id', 'a_version', 'a description '+\
+        self.biotool = biotool_model.Biotool('name', 'an_id', 'a_version', 'a description '+\
                                        'with spaces.', 'http://urltohomepage.com')
 
     def test_init(self):
@@ -125,7 +126,7 @@ class TestBiotool(unittest.TestCase):
 class TestInformations(unittest.TestCase):
 
     def test_init(self):
-        info = model.Informations()
+        info = biotool_model.Informations()
         self.assertListEqual(info.publications, [])
         self.assertListEqual(info.documentations, [])
         self.assertListEqual(info.contacts, [])
@@ -138,7 +139,7 @@ class TestCredit(unittest.TestCase):
         dict_credit = {'comment':'a_comment', 'email':'an_email', 'gridId':'a_grid_id',\
                        'name':'a_name', 'typeEntity':'a_type_entity', 'typeRole':'a_type_role', \
                        'url':'an_url', 'orcidId':'an_orcid_id'}
-        credit = model.Credit(dict_credit)
+        credit = biotool_model.Credit(dict_credit)
         self.assertEqual(credit.comment, dict_credit['comment'])
         self.assertEqual(credit.email, dict_credit['email'])
         self.assertEqual(credit.grid_id, dict_credit['gridId'])
@@ -153,7 +154,7 @@ class TestPublication(unittest.TestCase):
 
     def test_init(self):
         dict_publi = {'doi':'a_doi', 'pmid':'a_pm_id', 'pmcid':'a_pmc_id', 'type':'a_type'}
-        publication = model.Publication(dict_publi)
+        publication = biotool_model.Publication(dict_publi)
         self.assertEqual(publication.doi, dict_publi['doi'])
         self.assertEqual(publication.pmid, dict_publi['pmid'])
         self.assertEqual(publication.pmcid, dict_publi['pmcid'])
@@ -164,7 +165,7 @@ class TestDocumentation(unittest.TestCase):
 
     def test_init(self):
         dict_doc = {'url':'one_url', 'type':'one_type', 'comment':'one comment with spaces.'}
-        documentation = model.Documentation(dict_doc)
+        documentation = biotool_model.Documentation(dict_doc)
         self.assertEqual(documentation.url, dict_doc['url'])
         self.assertEqual(documentation.type, dict_doc['type'])
         self.assertEqual(documentation.comment, dict_doc['comment'])
@@ -174,7 +175,7 @@ class TestContact(unittest.TestCase):
 
     def test_init(self):
         dict_contact = {'email':'an_email', 'name':'a_name'}
-        contact = model.Contact(dict_contact)
+        contact = biotool_model.Contact(dict_contact)
         self.assertEqual(contact.email, dict_contact['email'])
         self.assertEqual(contact.name, dict_contact['name'])
 
@@ -182,7 +183,7 @@ class TestContact(unittest.TestCase):
 class TestFunction(unittest.TestCase):
 
     def setUp(self):
-        self.function = model.Function([EDAM_TOPIC])
+        self.function = biotool_model.Function([EDAM_TOPIC])
 
     def test_init(self):
         self.assertEqual(self.function.operations[0].uri, EDAM_TOPIC['uri'])
@@ -217,7 +218,7 @@ class TestData(unittest.TestCase):
         data_type = EDAM_DATA
         formats = [EDAM_FORMAT]
         description = 'a description of a data with spaces.'
-        data = model.Data(data_type, formats, description)
+        data = biotool_model.Data(data_type, formats, description)
         self.assertEqual(data.data_type.uri, EDAM_DATA['uri'])
         self.assertEqual(data.data_type.term, EDAM_DATA['term'])
         self.assertEqual(data.formats[0].uri, EDAM_FORMAT['uri'])
@@ -238,7 +239,7 @@ class TestOutput(TestData):
 class TestEdam(unittest.TestCase):
 
     def setUp(self):
-        self.edam = model.Edam(EDAM_TOPIC)
+        self.edam = biotool_model.Edam(EDAM_TOPIC)
 
     def test_init(self):
         self.assertEqual(self.edam.uri, EDAM_TOPIC['uri'])
@@ -313,7 +314,7 @@ class TestGalaxyToolGen(unittest.TestCase):
 
     def setUp(self):
         # Create a biotool
-        self.biotool = model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
+        self.biotool = biotool_model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
                                      'a_homepage')
         self.genxml = galaxy.GalaxyToolGen(self.biotool)
 
@@ -346,21 +347,21 @@ class TestGalaxyToolGen(unittest.TestCase):
 
     def test_add_edam_topic(self):
         # Create a Topic object
-        topic = model.Topic(EDAM_TOPIC)
+        topic = biotool_model.Topic(EDAM_TOPIC)
         self.genxml.add_edam_topic(topic)
         # Test
         self.assertEqual(self.genxml.tool.edam_topics.children[0].node.text, 'topic_0091')
 
     def test_add_edam_operation(self):
         # Create a Operation object (Warning: EDAM_TOPIC is a topic)
-        operation = model.Operation(EDAM_OPE)
+        operation = biotool_model.Operation(EDAM_OPE)
         self.genxml.add_edam_operation(operation)
         # Test
         self.assertEqual(self.genxml.tool.edam_operations.children[0].node.text, 'operation_2429')
 
     def test_add_input_file(self):
         # Create a Input object (Warning both Type and Format will be a topic)
-        an_input = model.Input(EDAM_DATA, [EDAM_FORMAT])
+        an_input = biotool_model.Input(EDAM_DATA, [EDAM_FORMAT])
         self.genxml.add_input_file(an_input)
         # Copy object to test (easier to read)
         input_attrib = self.genxml.tool.inputs.children[0].node.attrib
@@ -371,7 +372,7 @@ class TestGalaxyToolGen(unittest.TestCase):
 
     def test_add_output_file(self):
         # Create a Output object (Warning both Type and Format will be a topic)
-        output = model.Output(EDAM_DATA, [EDAM_FORMAT])
+        output = biotool_model.Output(EDAM_DATA, [EDAM_FORMAT])
         self.genxml.add_output_file(output)
         # Copy object to test
         output_attrib = self.genxml.tool.outputs.children[0].node.attrib
@@ -382,7 +383,7 @@ class TestGalaxyToolGen(unittest.TestCase):
     def test_add_citation(self):
         # Create a Publication object
         dict_pub = {'doi':'doi:123', 'pmid':'', 'pmcid':'', 'type':'a_type'}
-        publication = model.Publication(dict_pub)
+        publication = biotool_model.Publication(dict_pub)
         self.genxml.add_citation(publication)
         # Test
         self.assertEqual(self.genxml.tool.citations.children[0].node.text, 'doi:123')
@@ -450,7 +451,7 @@ class TestEdamInfo(unittest.TestCase):
         self.ei = edam_to_galaxy.EdamInfo(None)
 
     def test_init(self):
-        self.assertEqual(len(self.ei.edam_ontology), 32961)
+        self.assertEqual(len(self.ei.edam_ontology), 33192)
 
     def test_generate_hierarchy(self):
         self.ei.generate_hierarchy()
@@ -479,7 +480,7 @@ class TestCwlToolGen(unittest.TestCase):
 
     def setUp(self):
         # Create a biotool
-        self.biotool = model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
+        self.biotool = biotool_model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
                                      'a_homepage')
         self.gencwl = cwl.CwlToolGen(self.biotool)
 
@@ -500,7 +501,7 @@ class TestCwlToolGen(unittest.TestCase):
 
     def test_add_input_file(self):
         # Create a Input object (Warning both Type and Format will be a topic)
-        input = model.Input(EDAM_DATA, [EDAM_FORMAT])
+        input = biotool_model.Input(EDAM_DATA, [EDAM_FORMAT])
         self.gencwl.add_input_file(input)
         # Copy object to test (easier to read)
         input_attrib = self.gencwl.tool.inputs[0]
@@ -512,7 +513,7 @@ class TestCwlToolGen(unittest.TestCase):
 
     def test_add_output_file(self):
         # Create a Output object (Warning both Type and Format will be a topic)
-        output = model.Output(EDAM_DATA, [EDAM_FORMAT])
+        output = biotool_model.Output(EDAM_DATA, [EDAM_FORMAT])
         self.gencwl.add_output_file(output)
         # Copy object to test
         output_attrib = self.gencwl.tool.outputs[0]
