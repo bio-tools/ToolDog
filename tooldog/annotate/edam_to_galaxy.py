@@ -210,8 +210,6 @@ class EdamInfo(object):
                                  }"""
         self.edam_format_hierarchy = make_hierarchy(formats_query)
         self.edam_data_hierarchy = make_hierarchy(data_query)
-        # TO BE DELETED, JUST TO BYPASS EDAM ISSUE
-        del self.edam_data_hierarchy['operation_3458']
 
 class EdamToGalaxy(object):
     """

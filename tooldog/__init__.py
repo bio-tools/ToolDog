@@ -1,2 +1,4 @@
-version_info = (0, 2, 0)
-version = '.'.join(str(c) for c in version_info)
+from .version import __version__
+from tooldog.biotool_model import Biotool, Informations, Credit, Publication, Documentation,\
+                                  Contact, Function, Data, Input, Output, Edam, Operation,\
+                                  DataType, Format, Topic

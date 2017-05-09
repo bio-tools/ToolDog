@@ -2,7 +2,7 @@ from setuptools import setup
 import sys, os
 from pip.req import parse_requirements
 
-import tooldog
+exec(open('tooldog/version.py').read())
 
 install_reqs = parse_requirements('requirements.txt', session='')
 reqs = [str(ir.req) for ir in install_reqs]
@@ -12,16 +12,16 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 setup(name="tooldog",
-        version=tooldog.version,
+        version=__version__,
         description='Tool description generator (from https//bio.tools to XML and CWL)',
         author='Kenzo-Hugo Hillion and Herve Menager',
         author_email='kehillio@pasteur.fr and hmenager@pasteur.fr',
         license='MIT',
         keywords = ['biotools','galaxy','xml','cwl'],
         install_requires=reqs,
-        packages=["tooldog"],
+        packages=["tooldog", "tooldog.annotate", "tooldog.analyse"],
         package_data={
-        'tooldog': ['data/*.json', 'data/*.owl'],
+        'tooldog': ['annotate/data/*'],
         },
         entry_points={'console_scripts':['tooldog=tooldog.main:run']},
         classifiers=[
