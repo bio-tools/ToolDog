@@ -30,6 +30,7 @@ Hangouts and Changelogs
    :maxdepth: 1
 
    hangouts
+   roadmap
    changelog
 
 ..
