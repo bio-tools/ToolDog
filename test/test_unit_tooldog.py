@@ -451,7 +451,11 @@ class TestEdamInfo(unittest.TestCase):
         self.ei = edam_to_galaxy.EdamInfo(None)
 
     def test_init(self):
-        self.assertEqual(len(self.ei.edam_ontology), 33192)
+        try:
+            self.assertEqual(len(self.ei.edam_ontology), 33192)
+        except AssertionError:
+            print("It is likely that EDAM has been updated.")
+            raise
 
     def test_generate_hierarchy(self):
         self.ei.generate_hierarchy()
