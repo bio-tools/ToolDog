@@ -24,7 +24,7 @@ You can then install ToolDog using pip with the following command:
 pip3 install tooldog
 ```
 
-## How it works ?
+## How does it work ?
 
 ToolDog supports import either from [bio.tools](https://bio.tools) or from a local
 file (downloaded from [bio.tools](https://bio.tools) in JSON format). It can generates XML
