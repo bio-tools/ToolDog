@@ -11,6 +11,11 @@ Summary of developments of ToolDog software.
 v0.2
 ====
 
+v0.2.2
+------
+
+* Add import feature from cwlgen to the workflow
+
 v0.2.1
 ------
 

@@ -248,7 +248,7 @@ def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_jso
                 function_xml.write_xml(outfile)
 
 
-def write_cwl(biotool, outfile=None):
+def write_cwl(biotool, outfile=None, existing_tool=None):
     """
     This function uses :class:`tooldog.cwl.CwlToolGen` to write CWL using cwlgen.
     CWL is generated on STDOUT by default.
@@ -259,20 +259,24 @@ def write_cwl(biotool, outfile=None):
     :type outfile: STRING
     """
     LOGGER.info("Writing CWL file with cwl.py module...")
-    biotool_cwl = CwlToolGen(biotool)
+    biotool_cwl = CwlToolGen(biotool, existing_tool=existing_tool)
     # Add operations and inputs
-    for function in biotool.functions:
-        # First make a copy of the tool to add function infos
-        function_cwl = copy.deepcopy(biotool_cwl)
-        for inp in function.inputs:
-            function_cwl.add_input_file(inp)
-        for outp in function.outputs:
-            function_cwl.add_output_file(outp)
-        # Write tool
-        if len(biotool.functions) > 1:
-            function_cwl.write_cwl(outfile, biotool.functions.index(function) + 1)
-        else:
-            function_cwl.write_cwl(outfile)
+    if existing_tool:
+        # For the moment, there is no way to add metadata to the cwl
+        biotool_cwl.write_cwl(outfile)
+    else:
+        for function in biotool.functions:
+            # First make a copy of the tool to add function infos
+            function_cwl = copy.deepcopy(biotool_cwl)
+            for inp in function.inputs:
+                function_cwl.add_input_file(inp)
+            for outp in function.outputs:
+                function_cwl.add_output_file(outp)
+            # Write tool
+            if len(biotool.functions) > 1:
+                function_cwl.write_cwl(outfile, biotool.functions.index(function) + 1)
+            else:
+                function_cwl.write_cwl(outfile)
 
 
 def analyse(biotool, args):
@@ -303,7 +307,7 @@ def annotate(biotool, args, existing_desc=None):
                   existing_tool=existing_desc)
     elif args.CWL:
         # Write corresponding CWL
-        write_cwl(biotool, args.OUTFILE)
+        write_cwl(biotool, args.OUTFILE, existing_tool=existing_desc)
 
 
 def run():

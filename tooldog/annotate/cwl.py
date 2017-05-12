@@ -18,6 +18,7 @@ import logging
 
 # External libraries
 import cwlgen
+from cwlgen.import_cwl import CWLToolParser
 
 # Class and Objects
 
@@ -34,26 +35,31 @@ class CwlToolGen(object):
     Class to support generation of CWL from :class:`tooldog.model.Biotool` object.
     """
 
-    def __init__(self, biotool):
+    def __init__(self, biotool, existing_tool=None):
         """
-        Initialize a [CommandLineTool] object from cwlgen with the minimal information
-        (an id, a description, the command and a documentation).
+        Initialize a [CommandLineTool] object from cwlgen.
 
         :param biotool: Biotool object of an entry from https://bio.tools.
         :type biotool: :class:`tooldog.model.Biotool`
         """
-        LOGGER.info("Creating new CwlToolGen object...")
-        # Initialize counters for inputs and outputs
-        self.input_ct = 0
-        self.output_ct = 0
-        # Initialize tool
-        #   Get the first sentence of the description only
-        description = biotool.description.split('.')[0] + '.'
-        documentation = (biotool.description + "\n\nTool Homepage: " + \
-                         biotool.homepage)
-        self.tool = cwlgen.CommandLineTool(tool_id=biotool.tool_id, label=description, \
-                                          base_command="COMMAND", \
-                                          doc=documentation)
+        if existing_tool:
+            LOGGER.info("Loading existing CWL tool from " + existing_tool)
+            ctp = CWLToolParser()
+            self.tool = ctp.import_cwl(existing_tool)
+        else:
+            LOGGER.info("Creating new CwlToolGen object...")
+            # Initialize counters for inputs and outputs
+            self.input_ct = 0
+            self.output_ct = 0
+            # Initialize tool
+            #   Get the first sentence of the description only
+            description = biotool.description.split('.')[0] + '.'
+            documentation = (biotool.description + "\n\nTool Homepage: " + \
+                             biotool.homepage)
+            self.tool = cwlgen.CommandLineTool(tool_id=biotool.tool_id,
+                                               label=description, \
+                                               base_command="COMMAND", \
+                                               doc=documentation)
 
     def add_input_file(self, input_obj):
         """
