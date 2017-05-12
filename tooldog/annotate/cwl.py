@@ -53,6 +53,7 @@ class CwlToolGen(object):
                          biotool.homepage)
         self.tool = cwlgen.CommandLineTool(tool_id=biotool.tool_id, label=description, \
                                           base_command="COMMAND", \
+                                          cwl_version='v1.0',
                                           doc=documentation)
 
     def add_input_file(self, input_obj):

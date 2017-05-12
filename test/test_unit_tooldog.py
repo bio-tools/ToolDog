@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 
-## Author(s): Kenzo-Hugo Hillion
-## Contact(s): kehillio@pasteur.fr
-## Python version: 3.6.0
-## Creation : 12-19-2016
-
 '''
 Unit tests for ToolDog
 '''
 
-###########  Import  ###########
+#  Import  ------------------------------
 
 # General libraries
 import os
@@ -24,7 +19,7 @@ import requests_mock
 from tooldog import main, biotool_model
 from tooldog.annotate import galaxy, cwl, edam_to_galaxy
 
-###########  Constant(s)  ###########
+#  Constant(s)  ------------------------------
 
 # Declare one ontology for all the test
 EDAM_TOPIC = {'uri':'http://edamontology.org/topic_0091',
@@ -36,9 +31,9 @@ EDAM_DATA = {'uri':'http://edamontology.org/data_0924',
 EDAM_FORMAT = {'uri':'http://edamontology.org/format_1930',
                'term':'fastq'}
 
-###########  Function(s)  ###########
+#  Function(s)  ------------------------------
 
-###########  Class(es)  ###########
+#  Class(es)  ------------------------------
 
 class TestBiotool(unittest.TestCase):
 
@@ -495,9 +490,9 @@ class TestCwlToolGen(unittest.TestCase):
         # Copy tool to make it easier to read
         tool = self.gencwl.tool
         # Test simple values of the tool
-        self.assertEqual(tool.tool_id, "an_id")
+        self.assertEqual(tool.id, "an_id")
         self.assertEqual(tool.label, "a_description.")
-        self.assertEqual(tool.base_command, "COMMAND")
+        self.assertEqual(tool.baseCommand, "COMMAND")
         self.assertEqual(tool.doc, self.biotool.description + \
                          "\n\nTool Homepage: " + self.biotool.homepage)
         self.assertListEqual(tool.inputs, [])
@@ -513,7 +508,7 @@ class TestCwlToolGen(unittest.TestCase):
         self.assertEqual(input_attrib.type, 'File')
         self.assertEqual(input_attrib.label, EDAM_DATA['term'])
         self.assertEqual(input_attrib.format, EDAM_FORMAT['uri'])
-        self.assertEqual(input_attrib.input_binding.prefix, '--INPUT1')
+        self.assertEqual(input_attrib.inputBinding.prefix, '--INPUT1')
 
     def test_add_output_file(self):
         # Create a Output object (Warning both Type and Format will be a topic)
@@ -525,7 +520,7 @@ class TestCwlToolGen(unittest.TestCase):
         self.assertEqual(output_attrib.type, 'File')
         self.assertEqual(output_attrib.label, EDAM_DATA['term'])
         self.assertEqual(output_attrib.format, EDAM_FORMAT['uri'])
-        self.assertEqual(output_attrib.output_binding.glob, 'OUTPUT1.ext')
+        self.assertEqual(output_attrib.outputBinding.glob, 'OUTPUT1.ext')
 
     def test_write_cwl(self):
         tmp_file = 'tmp_test_write_cwl.cwl'
