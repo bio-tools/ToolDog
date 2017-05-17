@@ -3,3 +3,5 @@
 doc/build
 test/__pycache__
 tooldog/__pycache__
+tooldog/annotate/__pycache__
+tooldog/analyse/__pycache__

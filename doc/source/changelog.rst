@@ -11,6 +11,12 @@ Summary of developments of ToolDog software.
 v0.2
 ====
 
+v0.2.1
+------
+
+* Modify architecture of ToolDog
+* add `--analyse` (feature not available yet) and `--annotate` arguments
+
 v0.2.0
 ------
 

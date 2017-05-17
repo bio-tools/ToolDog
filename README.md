@@ -24,7 +24,7 @@ You can then install ToolDog using pip with the following command:
 pip3 install tooldog
 ```
 
-## How it works ?
+## How does it work ?
 
 ToolDog supports import either from [bio.tools](https://bio.tools) or from a local
 file (downloaded from [bio.tools](https://bio.tools) in JSON format). It can generates XML
@@ -51,19 +51,10 @@ More information about ToolDog usage [here](http://tooldog.readthedocs.io/en/lat
 
 ## Last changelog
 
-#### v0.2.0
+#### v0.2.1
 
-This is the first release of Tooldog:
-
-* Import bio.tools description from online or local JSON file
-* Generation of Galaxy XML:
-
-  * Generates skeleton from bio.tools description (metadata)
-  * Possibility to add EDAM annotation and citations to existing Galaxy XML 
-
-* Generation CWL tool:
-
-  * Generates skeleton from bio.tools description (metadata)
+* Modify architecture of ToolDog
+* add `--analyse` (feature not available yet) and `--annotate` arguments
 
 Full list of changelogs [here](http://tooldog.readthedocs.io/en/latest/changelog.html).
 
