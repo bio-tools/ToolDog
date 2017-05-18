@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
 
-## Author(s): Kenzo-Hugo Hillion
-## Contact(s): kehillio@pasteur.fr
-## Python version: 3.6.0
-## Creation : 03-01-2017
-
 """
 Generation of CWL tool from https://bio.tools based on the ToolDog model using
 cwlgen library.
 """
 
-###########  Import  ###########
+#  Import  ------------------------------
 
 # General libraries
 import os
@@ -22,13 +17,12 @@ from cwlgen.import_cwl import CWLToolParser
 
 # Class and Objects
 
-###########  Constant(s)  ###########
-
-###########  Logger  ###########
+#  Constant(s)  ------------------------------
 
 LOGGER = logging.getLogger(__name__)
 
-###########  Class(es)  ###########
+#  Class(es)  ------------------------------
+
 
 class CwlToolGen(object):
     """
@@ -54,11 +48,11 @@ class CwlToolGen(object):
             # Initialize tool
             #   Get the first sentence of the description only
             description = biotool.description.split('.')[0] + '.'
-            documentation = (biotool.description + "\n\nTool Homepage: " + \
+            documentation = (biotool.description + "\n\nTool Homepage: " +
                              biotool.homepage)
             self.tool = cwlgen.CommandLineTool(tool_id=biotool.tool_id,
-                                               label=description, \
-                                               base_command="COMMAND", \
+                                               label=description,
+                                               base_command="COMMAND",
                                                doc=documentation)
 
     def add_input_file(self, input_obj):
@@ -80,10 +74,10 @@ class CwlToolGen(object):
         formats = ', '.join(list_formats)
         # Create the parameter
         param_binding = cwlgen.CommandLineBinding(prefix='--' + name)
-        param = cwlgen.CommandInputParameter(name, param_type='File', \
-                                            label=input_obj.data_type.term,\
-                                            param_format=formats, \
-                                            input_binding=param_binding)
+        param = cwlgen.CommandInputParameter(name, param_type='File',
+                                             label=input_obj.data_type.term,
+                                             param_format=formats,
+                                             input_binding=param_binding)
         # Appends parameter to inputs
         self.tool.inputs.append(param)
 
@@ -106,10 +100,10 @@ class CwlToolGen(object):
         formats = ', '.join(list_formats)
         # Create the parameter
         param_binding = cwlgen.CommandOutputBinding(glob=name + '.ext')
-        param = cwlgen.CommandOutputParameter(name, param_type='File', \
-                                             label=output.data_type.term, \
-                                             param_format=formats, \
-                                             output_binding=param_binding)
+        param = cwlgen.CommandOutputParameter(name, param_type='File',
+                                              label=output.data_type.term,
+                                              param_format=formats,
+                                              output_binding=param_binding)
         self.tool.outputs.append(param)
 
     def write_cwl(self, out_file=None, index=None):

@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
 
-## Author(s): Kenzo-Hugo Hillion
-## Contact(s): kehillio@pasteur.fr
-## Python version: 3.6.0
-## Creation : 12-20-2016
-
 """
 Gather different information from a Galaxy server (by default https://usegalaxy.org)
 and EDAM ontology (by default from http://edamontology.org/EDAM.owl)
 """
 
-###########  Import  ###########
+#  Import  ------------------------------
 
 # General libraries
 import os
@@ -21,15 +16,15 @@ import logging
 import requests
 import rdflib
 
-###########  Constant(s)  ###########
+#  Constant(s)  ------------------------------
 
 LOCAL_DATA = os.path.dirname(__file__) + "/data"
 
-###########  Logger  ###########
-
+# Logger
 LOGGER = logging.getLogger(__name__)
 
-###########  Class(es)  ###########
+#  Class(es)  ------------------------------
+
 
 class GalaxyInfo(object):
     """
@@ -73,21 +68,21 @@ class GalaxyInfo(object):
                 version = json.load(json_file)
         else:
             self.galaxy_url = galaxy_url
-            LOGGER.info("Loading galaxy info from " + galaxy_url +"/api")
+            LOGGER.info("Loading galaxy info from " + galaxy_url + "/api")
             api_edam_formats = requests.get(galaxy_url + "/api/datatypes/edam_formats").json()
             api_edam_data = requests.get(galaxy_url + "/api/datatypes/edam_data").json()
             mapping = requests.get(galaxy_url + "/api/datatypes/mapping").json()
             version = requests.get(galaxy_url + "/api/version").json()
         # Get version of Galaxy instance
         self.version = version['version_major']
-        # Reverse EDAMs dictionnaries
+
         def rev_dict(dictionnary):
             """
             Reverse dictionnary key -> value to value -> LIST of key
             """
             new_dict = {}
             for key, value in dictionnary.items():
-                if not value in new_dict:
+                if value not in new_dict:
                     new_dict[value] = []
                 new_dict[value].append(key)
             return new_dict
@@ -132,7 +127,7 @@ class GalaxyInfo(object):
         LOGGER.debug(sub_dict)
         # Find root
         selected_class = None
-        root_dist = 100 # Set up huge root distance for comparison
+        root_dist = 100  # Set up huge root distance for comparison
         for key, value in sub_dict.items():
             for key, value in sub_dict.items():
                 if len(value) < root_dist:
@@ -200,16 +195,17 @@ class EdamInfo(object):
 
         formats_query = """SELECT ?format ?superformat WHERE {
                                     ?format rdfs:subClassOf ?superformat .
-                                    ?superformat oboInOwl:inSubset 
+                                    ?superformat oboInOwl:inSubset
                                    <http://purl.obolibrary.org/obo/edam#formats>
                                     }"""
         data_query = """SELECT ?data ?superdata WHERE {
                                  ?data rdfs:subClassOf ?superdata .
-                                 ?superdata oboInOwl:inSubset 
+                                 ?superdata oboInOwl:inSubset
                                 <http://purl.obolibrary.org/obo/edam#data>
                                  }"""
         self.edam_format_hierarchy = make_hierarchy(formats_query)
         self.edam_data_hierarchy = make_hierarchy(data_query)
+
 
 class EdamToGalaxy(object):
     """
@@ -267,19 +263,19 @@ class EdamToGalaxy(object):
             The function then create two dictionnaries: self.format_to_datatype and
             self.data_to_datatype that represents a unique datatype for each EDAM term.
             """
-            if not edam in galaxy_mapping:
+            if edam not in galaxy_mapping:
                 LOGGER.debug("No datatype found for " + edam + ". Looking at parental terms.")
                 if len(edam_hierarchy[edam]) > 1:
-                    LOGGER.debug(edam + " inherits from more than one EDAM. " +\
-                                 "Only first EDAM parent of the list is treated: " + \
+                    LOGGER.debug(edam + " inherits from more than one EDAM. " +
+                                 "Only first EDAM parent of the list is treated: " +
                                  edam_hierarchy[edam][0])
                 elif len(edam_hierarchy[edam]) == 0:
                     LOGGER.debug("No parental EDAM found. " + edam + " is skipped.")
                     return "NO mapping"
-                datatype = find_datatype(edam_hierarchy[edam][0], edam_hierarchy, \
+                datatype = find_datatype(edam_hierarchy[edam][0], edam_hierarchy,
                                          galaxy_mapping)
             elif len(galaxy_mapping[edam]) == 1:
-                LOGGER.debug("Exactly one datatype found for " + edam + ": " + \
+                LOGGER.debug("Exactly one datatype found for " + edam + ": " +
                              galaxy_mapping[edam][0])
                 datatype = galaxy_mapping[edam][0]
             elif len(galaxy_mapping[edam]) > 1:
@@ -303,10 +299,10 @@ class EdamToGalaxy(object):
             return map_to_datatype
 
         # EDAM formats
-        self.format_to_datatype = maps_datatype(self.edam.edam_format_hierarchy,\
+        self.format_to_datatype = maps_datatype(self.edam.edam_format_hierarchy,
                                                 self.galaxy.edam_formats)
         # EDAM data
-        self.data_to_datatype = maps_datatype(self.edam.edam_data_hierarchy,\
+        self.data_to_datatype = maps_datatype(self.edam.edam_data_hierarchy,
                                               self.galaxy.edam_data)
 
     def load_local_mapping(self, local_file):
@@ -317,7 +313,7 @@ class EdamToGalaxy(object):
         :param local_file: path to the mapping local file.
         :type local_file: STRING
         """
-        LOGGER.info("Loading EDAM mapping to Galaxy datatypes from " +\
+        LOGGER.info("Loading EDAM mapping to Galaxy datatypes from " +
                     local_file)
         with open(local_file, 'r') as file_path:
             json_file = json.load(file_path)
@@ -334,10 +330,10 @@ class EdamToGalaxy(object):
         :param export_file: path to the file.
         :type export_file: STRING
         """
-        LOGGER.info("Exporting new EDAM mapping to Galaxy datatypes file to ./" +\
+        LOGGER.info("Exporting new EDAM mapping to Galaxy datatypes file to ./" +
                     export_file)
         with open(export_file, 'w') as file_path:
-            json.dump({'format':self.format_to_datatype,
+            json.dump({'format': self.format_to_datatype,
                        'data': self.data_to_datatype,
                        'edam_version': self.edam_version,
                        'galaxy_url': self.galaxy_url,
@@ -353,9 +349,9 @@ class EdamToGalaxy(object):
         :return: datatype corresponding to given EDAM ontologies.
         :rtype: STRING
         """
-        if not edam_format is None:
+        if edam_format is not None:
             return self.format_to_datatype[edam_format]
-        elif not edam_data is None:
+        elif edam_data is not None:
             return self.data_to_datatype[edam_data]
         else:
             return "no EDAM given"
