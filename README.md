@@ -51,10 +51,9 @@ More information about ToolDog usage [here](http://tooldog.readthedocs.io/en/lat
 
 ## Last changelog
 
-#### v0.2.1
+#### v0.2.2
 
-* Modify architecture of ToolDog
-* add `--analyse` (feature not available yet) and `--annotate` arguments
+* Add import feature from cwlgen to the workflow
 
 Full list of changelogs [here](http://tooldog.readthedocs.io/en/latest/changelog.html).
 

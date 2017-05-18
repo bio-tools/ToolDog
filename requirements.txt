@@ -1,4 +1,4 @@
 rdflib
 requests
 galaxyxml
-cwlgen
+cwlgen>=0.2.0
