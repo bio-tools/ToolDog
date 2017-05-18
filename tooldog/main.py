@@ -21,6 +21,7 @@ import requests
 from tooldog import __version__, Biotool
 from tooldog.annotate.galaxy import GalaxyToolGen
 from tooldog.annotate.cwl import CwlToolGen
+from tooldog.analyse import analyse
 
 # Constant(s)  ------------------------------
 
@@ -127,7 +128,7 @@ def config_logger(write_logs, log_level, log_file, verbose):
         cfg_stderr['level'] = 'INFO'
     cfg['handlers']['stderr'] = cfg_stderr
     # Configure loggers for everymodule
-    modules = ['galaxy', 'cwl', 'edam_to_galaxy', 'main']
+    modules = ['annotate.galaxy', 'annotate.cwl', 'annotate.edam_to_galaxy', 'main', 'analyse']
     logger = {'handlers': ['stderr'],
               'propagate': False,
               'level': 'DEBUG'}
@@ -277,17 +278,6 @@ def write_cwl(biotool, outfile=None, existing_tool=None):
                 function_cwl.write_cwl(outfile, biotool.functions.index(function) + 1)
             else:
                 function_cwl.write_cwl(outfile)
-
-
-def analyse(biotool, args):
-    """
-    Run analysis of the source code from bio.tools or given locally.
-
-    :param biotool: Biotool object.
-    :type biotool: :class:`tooldog.model.Biotool`
-    :param args: Parsed arguments.
-    """
-    LOGGER.warn("Analysis feature is not available yet for this version.")
 
 
 def annotate(biotool, args, existing_desc=None):
