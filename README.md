@@ -49,14 +49,6 @@ tooldog --galaxy sartools.json > sartools.xml
 
 More information about ToolDog usage [here](http://tooldog.readthedocs.io/en/latest/how_to_use.html).
 
-## Last changelog
-
-#### v0.2.2
-
-* Add import feature from cwlgen to the workflow
-
-Full list of changelogs [here](http://tooldog.readthedocs.io/en/latest/changelog.html).
-
 ## References
 
 Hervé Ménager, Matúš Kalaš, Kristoffer Rapacki and Jon Ison. Using registries to integrate
