@@ -1,4 +1,0 @@
-rdflib
-requests
-galaxyxml
-cwlgen>=0.2.0
