@@ -479,7 +479,7 @@ class TestCwlToolGen(unittest.TestCase):
 
     def setUp(self):
         # Create a biotool
-        self.biotool = biotool_model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',\
+        self.biotool = biotool_model.Biotool('a_name', 'an_id', 'a_version', 'a_description.',
                                      'a_homepage')
         self.gencwl = cwl.CwlToolGen(self.biotool)
 
