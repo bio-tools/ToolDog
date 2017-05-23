@@ -198,7 +198,8 @@ def json_to_biotool(json_file):
                       json_file['description'], json_file['homepage'])
     # Add informations
     biotool.set_informations(json_file['credit'], json_file['contact'],
-                             json_file['publication'], json_file['documentation'])
+                             json_file['publication'], json_file['documentation'],
+                             json_file['language'], json_file['link'], json_file['download'])
     # Add Function(s)
     biotool.add_functions(json_file['function'])
     # Add Topics(s)

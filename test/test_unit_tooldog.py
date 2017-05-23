@@ -59,7 +59,10 @@ class TestBiotool(unittest.TestCase):
         contacts = [{'email':'an_email', 'name':'a_name'}]
         pubs = [{'doi':'a_doi', 'pmid':'a_pm_id', 'pmcid':'a_pmc_id', 'type':'a_type'}]
         docs = [{'url':'an_url', 'type':'a_type', 'comment':'a_comment'}]
-        self.biotool.set_informations(tool_credits, contacts, pubs, docs)
+        language = ['Python']
+        link = [{'url': 'a_url', 'type': 'Repository', 'comment': 'a comment'}]
+        download = [{'url': 'a_url', 'type': 'Source code', 'comment': 'a comment'}]
+        self.biotool.set_informations(tool_credits, contacts, pubs, docs, language, link, download)
         # Check credits params
         self.assertEqual(self.biotool.informations.tool_credits[0].comment, 'a_comment')
         self.assertEqual(self.biotool.informations.tool_credits[0].email, 'an_email')
@@ -81,6 +84,15 @@ class TestBiotool(unittest.TestCase):
         self.assertEqual(self.biotool.informations.documentations[0].url, 'an_url')
         self.assertEqual(self.biotool.informations.documentations[0].type, 'a_type')
         self.assertEqual(self.biotool.informations.documentations[0].comment, 'a_comment')
+        # Check language params
+        self.assertEqual(self.biotool.informations.language[0], 'Python')
+        # Check links
+        self.assertEqual(self.biotool.informations.links[0].url, 'a_url')
+        self.assertEqual(self.biotool.informations.links[0].type, 'Repository')
+        self.assertEqual(self.biotool.informations.links[0].comment, 'a comment')
+        self.assertEqual(self.biotool.informations.links[1].url, 'a_url')
+        self.assertEqual(self.biotool.informations.links[1].type, 'Source code')
+        self.assertEqual(self.biotool.informations.links[1].comment, 'a comment')
 
     def test_add_functions(self):
         function = [{'operation':[EDAM_OPE],
