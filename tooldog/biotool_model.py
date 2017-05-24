@@ -47,7 +47,7 @@ class Biotool(object):
         self.informations = None  # Informations object
 
     def set_informations(self, tool_credits, contacts, publications, docs,
-		         language, links, download):
+                         language, links, download):
         '''
         Add an :class:`tooldog.model.Informations` object to the Biotool.
 

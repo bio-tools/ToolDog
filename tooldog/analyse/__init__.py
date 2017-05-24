@@ -56,6 +56,7 @@ def __run_analysis(biotool, source_code, args):
     :type biotool: :class:`tooldog.biotool_model.Biotool`
     :param source_code: path to source code
     :type source_code: STRING
+    :param args: Parsed arguments
     :return: path to generated file
     :rtype: STRING
     """
@@ -64,16 +65,19 @@ def __run_analysis(biotool, source_code, args):
         source_code = __get_source_code(biotool)
     if args.GALAXY:
         # Need to run argparse2tool to generate galaxy XML
+        # and return path to genetared file
         pass
     elif args.CWL:
         # Need to run argparse2tool to generate CWL
+        # and return path to genetared file
         pass
     # Alternative approach is to generate both in the docker container
     # and only use the one we need
     return None
 
+
 def analyse(biotool, args, language=None, source_code=None):
-    """ 
+    """
     Run analysis of the source code from bio.tools or given locally.
 
     :param biotool: Biotool object.
@@ -83,7 +87,7 @@ def analyse(biotool, args, language=None, source_code=None):
     LOGGER.warn("Analysis feature is not available yet for this version.")
     # Check language
     if language is None:
-       language = __check_language(biotool) 
+        language = __check_language(biotool)
     # Perform analysis
     if language == 'Python':
         return __run_analysis(biotool, source_code, args)

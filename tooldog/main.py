@@ -190,7 +190,7 @@ def json_to_biotool(json_file):
     :type param_json: DICT
 
     :return: Biotool object.
-    :rtype: :class:`tooldog.model.Biotool`
+    :rtype: :class:`tooldog.biotool_model.Biotool`
     """
     LOGGER.info("Converting biotool entry (JSON) to Biotool object...")
     # Initialize Biotool object with basic parameters
@@ -213,7 +213,7 @@ def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_jso
     This function uses :class:`tooldog.galaxy.GalaxyToolGen` to write XML using galaxyxml.
 
     :param biotool: Biotool object.
-    :type biotool: :class:`tooldog.model.Biotool`
+    :type biotool: :class:`tooldog.biotool_model.Biotool`
     :param outfile: path to output file to write the XML.
     :type outfile: STRING
     """
