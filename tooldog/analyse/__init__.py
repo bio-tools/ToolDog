@@ -76,7 +76,7 @@ def __run_analysis(biotool, source_code, args):
     return None
 
 
-def analyse(biotool, args, language=None, source_code=None):
+def analyse(biotool, args):
     """
     Run analysis of the source code from bio.tools or given locally.
 
@@ -85,6 +85,8 @@ def analyse(biotool, args, language=None, source_code=None):
     :param args: Parsed arguments.
     """
     LOGGER.warn("Analysis feature is not available yet for this version.")
+    # Instantiate ToolAnalyzer object
+    ta = ToolAnalyzer(biotool, )
     # Check language
     if language is None:
         language = __check_language(biotool)
