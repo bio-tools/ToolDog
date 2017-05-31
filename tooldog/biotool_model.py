@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 
-## Author(s): Kenzo-Hugo Hillion
-## Contact(s): kehillio@pasteur.fr
-## Python version: 3.6.0
-## Creation : 12-13-2016
-
 '''
 Model used to process information contained in JSON from https://bio.tools description.
 
@@ -12,7 +7,8 @@ The content of a description on https://bio.tools is contained in a JSON file an
 model aims to store the different information.
 '''
 
-###########  Class(es)  ###########
+#  Class(es)  ------------------------------
+
 
 class Biotool(object):
     '''
@@ -46,11 +42,12 @@ class Biotool(object):
         self.version = version
         self.description = description
         self.homepage = homepage
-        self.functions = [] # List of Function objects
+        self.functions = []  # List of Function objects
         self.topics = []    # List of Topic objects
-        self.informations = None # Informations object
+        self.informations = None  # Informations object
 
-    def set_informations(self, tool_credits, contacts, publications, docs):
+    def set_informations(self, tool_credits, contacts, publications, docs,
+                         language, links, download):
         '''
         Add an :class:`tooldog.model.Informations` object to the Biotool.
 
@@ -72,6 +69,11 @@ class Biotool(object):
             self.informations.publications.append(Publication(pub))
         for doc in docs:
             self.informations.documentations.append(Documentation(doc))
+        self.informations.language = language
+        for link in links:
+            self.informations.links.append(Link(link))
+        for link in download:
+            self.informations.links.append(Link(link))
 
     def add_functions(self, functions):
         '''
@@ -115,11 +117,30 @@ class Informations(object):
         * documentations: list of :class:`tooldog.model.Documentation`
         * contacts: list of :class:`tooldog.model.Contact`
         * tool_credits: list of :class:`tooldog.model.Credit`
+        * language: list of coding language
+        * link: list of :class:`tooldog.model.Link`
         '''
         self.publications = []
         self.documentations = []
         self.contacts = []
         self.tool_credits = []
+        self.language = []
+        self.links = []
+
+
+class Link(object):
+    '''
+    Class to store download and links content.
+    '''
+
+    def __init__(self, link):
+        '''
+        :param link: links or download content of the JSON from http://bio.tools.
+        :type link: DICT
+        '''
+        self.url = link['url']
+        self.type = link['type']
+        self.comment = link['comment']
 
 
 class Credit(object):
@@ -132,14 +153,14 @@ class Credit(object):
         :param credit: credit part of the JSON from http://bio.tools.
         :type credit: DICT
         '''
-        self.comment = credit['comment'] # [STRING]
-        self.email = credit['email'] # [STRING]
-        self.grid_id = credit['gridId'] # [STRING]
-        self.name = credit['name'] # [STRING]
-        self.type_entity = credit['typeEntity'] # [STRING]
-        self.type_role = credit['typeRole'] # [STRING]
-        self.url = credit['url'] # [STRING]
-        self.orcid_id = credit['orcidId'] # [STRING]
+        self.comment = credit['comment']  # [STRING]
+        self.email = credit['email']  # [STRING]
+        self.grid_id = credit['gridId']  # [STRING]
+        self.name = credit['name']  # [STRING]
+        self.type_entity = credit['typeEntity']  # [STRING]
+        self.type_role = credit['typeRole']  # [STRING]
+        self.url = credit['url']  # [STRING]
+        self.orcid_id = credit['orcidId']  # [STRING]
 
 
 class Publication(object):
@@ -152,10 +173,10 @@ class Publication(object):
         :param publication: publication part of the JSON from http://bio.tools.
         :type publication: DICT
         '''
-        self.doi = publication['doi'] # [STRING]
-        self.pmid = publication['pmid'] # [STRING]
-        self.pmcid = publication['pmcid'] # [STRING]
-        self.type = publication['type'] # [STRING]
+        self.doi = publication['doi']  # [STRING]
+        self.pmid = publication['pmid']  # [STRING]
+        self.pmcid = publication['pmcid']  # [STRING]
+        self.type = publication['type']  # [STRING]
 
 
 class Documentation(object):
@@ -168,9 +189,9 @@ class Documentation(object):
         :param documentation: documentation part of the JSON from http://bio.tools.
         :type documentation: DICT
         '''
-        self.url = documentation['url'] # [STRING]
-        self.type = documentation['type'] # [STRING]
-        self.comment = documentation['comment'] # [STRING]
+        self.url = documentation['url']  # [STRING]
+        self.type = documentation['type']  # [STRING]
+        self.comment = documentation['comment']  # [STRING]
 
 
 class Contact(object):
@@ -183,8 +204,8 @@ class Contact(object):
         :param contact: contact part of the JSON from http://bio.tools.
         :type contact: DICT
         '''
-        self.email = contact['email'] # [STRING]
-        self.name = contact['name'] # [STRING]
+        self.email = contact['email']  # [STRING]
+        self.name = contact['name']  # [STRING]
         # self.role = contact['contactRole']
         # self.tel = contact['contactTel']
         # self.url = contact['contactURL']
@@ -254,6 +275,7 @@ class Data(object):
             self.formats.append(Format(frmt))
         self.description = description
 
+
 class Input(Data):
     '''
     Input of a described function.
@@ -310,6 +332,7 @@ class Edam(object):
         '''
         return self.uri.split('/')[-1]
 
+
 class Operation(Edam):
     '''
     EDAM operation associated to a function.
@@ -321,6 +344,7 @@ class Operation(Edam):
         :type edam: DICT
         '''
         Edam.__init__(self, edam)
+
 
 class DataType(Edam):
     '''
@@ -334,6 +358,7 @@ class DataType(Edam):
         '''
         Edam.__init__(self, edam)
 
+
 class Format(Edam):
     '''
     EDAM format associated to either input or output.
@@ -345,6 +370,7 @@ class Format(Edam):
         :type edam: DICT
         '''
         Edam.__init__(self, edam)
+
 
 class Topic(Edam):
     '''

@@ -21,6 +21,7 @@ import requests
 from tooldog import __version__, Biotool
 from tooldog.annotate.galaxy import GalaxyToolGen
 from tooldog.annotate.cwl import CwlToolGen
+from tooldog.analyse import analyse
 
 # Constant(s)  ------------------------------
 
@@ -127,7 +128,7 @@ def config_logger(write_logs, log_level, log_file, verbose):
         cfg_stderr['level'] = 'INFO'
     cfg['handlers']['stderr'] = cfg_stderr
     # Configure loggers for everymodule
-    modules = ['galaxy', 'cwl', 'edam_to_galaxy', 'main']
+    modules = ['annotate.galaxy', 'annotate.cwl', 'annotate.edam_to_galaxy', 'main', 'analyse']
     logger = {'handlers': ['stderr'],
               'propagate': False,
               'level': 'DEBUG'}
@@ -189,7 +190,7 @@ def json_to_biotool(json_file):
     :type param_json: DICT
 
     :return: Biotool object.
-    :rtype: :class:`tooldog.model.Biotool`
+    :rtype: :class:`tooldog.biotool_model.Biotool`
     """
     LOGGER.info("Converting biotool entry (JSON) to Biotool object...")
     # Initialize Biotool object with basic parameters
@@ -197,7 +198,8 @@ def json_to_biotool(json_file):
                       json_file['description'], json_file['homepage'])
     # Add informations
     biotool.set_informations(json_file['credit'], json_file['contact'],
-                             json_file['publication'], json_file['documentation'])
+                             json_file['publication'], json_file['documentation'],
+                             json_file['language'], json_file['link'], json_file['download'])
     # Add Function(s)
     biotool.add_functions(json_file['function'])
     # Add Topics(s)
@@ -211,7 +213,7 @@ def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_jso
     This function uses :class:`tooldog.galaxy.GalaxyToolGen` to write XML using galaxyxml.
 
     :param biotool: Biotool object.
-    :type biotool: :class:`tooldog.model.Biotool`
+    :type biotool: :class:`tooldog.biotool_model.Biotool`
     :param outfile: path to output file to write the XML.
     :type outfile: STRING
     """
@@ -248,7 +250,7 @@ def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_jso
                 function_xml.write_xml(outfile)
 
 
-def write_cwl(biotool, outfile=None):
+def write_cwl(biotool, outfile=None, existing_tool=None):
     """
     This function uses :class:`tooldog.cwl.CwlToolGen` to write CWL using cwlgen.
     CWL is generated on STDOUT by default.
@@ -259,31 +261,24 @@ def write_cwl(biotool, outfile=None):
     :type outfile: STRING
     """
     LOGGER.info("Writing CWL file with cwl.py module...")
-    biotool_cwl = CwlToolGen(biotool)
+    biotool_cwl = CwlToolGen(biotool, existing_tool=existing_tool)
     # Add operations and inputs
-    for function in biotool.functions:
-        # First make a copy of the tool to add function infos
-        function_cwl = copy.deepcopy(biotool_cwl)
-        for inp in function.inputs:
-            function_cwl.add_input_file(inp)
-        for outp in function.outputs:
-            function_cwl.add_output_file(outp)
-        # Write tool
-        if len(biotool.functions) > 1:
-            function_cwl.write_cwl(outfile, biotool.functions.index(function) + 1)
-        else:
-            function_cwl.write_cwl(outfile)
-
-
-def analyse(biotool, args):
-    """
-    Run analysis of the source code from bio.tools or given locally.
-
-    :param biotool: Biotool object.
-    :type biotool: :class:`tooldog.model.Biotool`
-    :param args: Parsed arguments.
-    """
-    LOGGER.warn("Analysis feature is not available yet for this version.")
+    if existing_tool:
+        # For the moment, there is no way to add metadata to the cwl
+        biotool_cwl.write_cwl(outfile)
+    else:
+        for function in biotool.functions:
+            # First make a copy of the tool to add function infos
+            function_cwl = copy.deepcopy(biotool_cwl)
+            for inp in function.inputs:
+                function_cwl.add_input_file(inp)
+            for outp in function.outputs:
+                function_cwl.add_output_file(outp)
+            # Write tool
+            if len(biotool.functions) > 1:
+                function_cwl.write_cwl(outfile, biotool.functions.index(function) + 1)
+            else:
+                function_cwl.write_cwl(outfile)
 
 
 def annotate(biotool, args, existing_desc=None):
@@ -303,7 +298,7 @@ def annotate(biotool, args, existing_desc=None):
                   existing_tool=existing_desc)
     elif args.CWL:
         # Write corresponding CWL
-        write_cwl(biotool, args.OUTFILE)
+        write_cwl(biotool, args.OUTFILE, existing_tool=existing_desc)
 
 
 def run():
