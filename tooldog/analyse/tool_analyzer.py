@@ -71,8 +71,9 @@ class ToolAnalyzer(object):
         """
         Get source code to give to analyzer.
         """
-        # At the end of this method, self.source_code should point to directory
-        self.source_code = None
+        # At the end of this method, self.source_code should point to directory or archive
+        cc = CodeCollector(self.biotool)
+        self.source_code = cc.get_source()
 
     def run_analysis(self):
         """
