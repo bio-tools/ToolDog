@@ -21,7 +21,7 @@ import requests
 from tooldog import __version__, Biotool
 from tooldog.annotate.galaxy import GalaxyToolGen
 from tooldog.annotate.cwl import CwlToolGen
-from tooldog.analyse import analyse
+from tooldog.analyse.tool_analyzer import ToolAnalyzer
 
 # Constant(s)  ------------------------------
 
@@ -61,15 +61,21 @@ def parse_arguments():
                            help='generates XML for Galaxy.', dest='GALAXY')
     exc_group.add_argument('-c', '--cwl', action='store_true', help='generates CWL tool ' +
                            'descriptor.', dest='CWL')
+    # Group for analysis options
+    analy_opt = parser.add_argument_group('Options for source code analysis')
+    analy_opt.add_argument('--source_language', dest='LANG',
+                           help='Language of the tool.')
+    analy_opt.add_argument('--source_code', dest='SOURCE',
+                           help='Path the source code directory.')
     # Group for Galaxy options
     galaxy_opt = parser.add_argument_group('Options for Galaxy XML generation (-g/--galaxy)')
-    galaxy_opt.add_argument('--galaxy_url', dest='GAL_URL', default=None,
+    galaxy_opt.add_argument('--galaxy_url', dest='GAL_URL',
                             help='url of the Galaxy instance (default: https://usegalaxy.org' +
                             ' ).')
-    galaxy_opt.add_argument('--edam_url', dest='EDAM_URL', default=None,
+    galaxy_opt.add_argument('--edam_url', dest='EDAM_URL',
                             help='EDAM.owl file either online url or local path ' +
                             '(default: http://edamontology.org/EDAM.owl).')
-    galaxy_opt.add_argument('--mapping_file', dest='MAP_FILE', default=None,
+    galaxy_opt.add_argument('--mapping_file', dest='MAP_FILE',
                             help='Personalized EDAM to datatypes mapping json file ' +
                             'generated previously by ToolDog.')
     # Group for logger options
@@ -301,6 +307,24 @@ def annotate(biotool, args, existing_desc=None):
     elif args.CWL:
         # Write corresponding CWL
         write_cwl(biotool, args.OUTFILE, existing_tool=existing_desc)
+
+
+def analyse(biotool, args):
+    """ 
+    Run analysis of the source code from bio.tools or given locally.
+
+    :param biotool: Biotool object.
+    :type biotool: :class:`tooldog.model.Biotool`
+    :param args: Parsed arguments.
+    """
+    LOGGER.warn("Analysis feature is not available yet for this version.")
+    # Instantiate ToolAnalyzer object
+    if args.GALAXY:
+        ta = ToolAnalyzer(biotool, 'galaxy', language=args.LANG, source_code=args.SOURCE)
+    else:
+        ta = ToolAnalyzer(biotool, 'cwl', language=args.LANG, source_code=args.SOURCE)
+    # Run analysis
+    return ta.run_analysis()
 
 
 def run():
