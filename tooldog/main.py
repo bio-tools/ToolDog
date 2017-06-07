@@ -333,7 +333,7 @@ def analyse(biotool, args):
         else:
             ta = ToolAnalyzer(biotool, 'cwl', language=args.LANG, source_code=args.SOURCE)
         # Run analysis
-            output = ta.run_analysis()  # Here it depends on how the method works
+        output = ta.run_analysis()  # Here it depends on how the method works
     finally:
         # Need to save generated file and delete TEMP DIR
         pass

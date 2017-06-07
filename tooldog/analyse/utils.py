@@ -16,7 +16,7 @@ def execute(ctx, cmd, verbose=True):
 
 
 def gen_cmd(tool_name, gen_format):
-    return tool_name + " " + "--generate_cwl_tool" if gen_format == 'cwl' else "--generate_galaxy_xml"
+    return tool_name + " " + ("--generate_cwl_tool" if gen_format == 'cwl' else "--generate_galaxy_xml")
 
 
 def get_workdir(unzip_output):
