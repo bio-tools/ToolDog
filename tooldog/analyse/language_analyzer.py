@@ -62,10 +62,12 @@ class PythonAnalyzer(LanguageAnalyzer):
 
             toolname = execute(c, cd(workdir, "python setup.py --name"))
 
-            cd(workdir, pip(2, "install ."))
-            cd(workdir, pip(2, "install argparse2tool"))
+            execute(c,
+                    cd(workdir, pip(2, "install .")))
+            execute(c,
+                    cd(workdir, pip(2, "install argparse2tool")))
 
-            output = cd(workdir, gen_cmd(toolname, self.gen_format))
+            output = execute(c, cd(workdir, gen_cmd(toolname, self.gen_format)))
 
         current_path = os.path.realpath(os.getcwd())
         output_path = os.path.join(current_path, "tmp", tool_filename(toolname, self.gen_format))

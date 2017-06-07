@@ -28,6 +28,7 @@ class ToolAnalyzer(object):
         self.language = language
         self.source_code = source_code
         self.source_format = None
+        self.output = ''
 
     def _analyse_python(self):
         """
@@ -80,14 +81,15 @@ class ToolAnalyzer(object):
         """
         Method to run analysis of source code of the entry.
         """
+        output = ''
         if self.source_code is None:
             self.get_source()
         if self.language is None:
             self.set_language()
         language = self.language.lower().translate(str.maketrans(' ','_'))
         try:
-            getattr(self, '_analyse_{}'.format(language))()
+            output = getattr(self, '_analyse_{}'.format(language))()
         except AttributeError:
             LOGGER.warn(language + " language is not processed yet by ToolDog.")
         # Need to return the generated code here
-        return None
+        return output

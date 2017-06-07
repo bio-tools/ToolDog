@@ -39,15 +39,17 @@ class CodeCollector(object):
         """
         # Here we deal with repository, have to use regex to test the url and
         # use appropriate strategy to get the code depending the type of repository
-        if "github.com" in url:
-            return self._get_from_github(url)
+        if "github.com" in url.url:
+            return self._get_from_github(url.url)
         else:
             LOGGER.warn(url + ' points to unknown repo.')
             raise Exception('Unknown repo type.')
 
     def _get_from_github(self, url):
+        print(url)
         try:
-            zip_url = os.path.join(url, "/archive/master.zip")
+            zip_url = os.path.join(url, "archive/master.zip")
+            print(zip_url)
             response = urllib.request.urlopen(zip_url)
             data = response.read()
 
@@ -59,7 +61,7 @@ class CodeCollector(object):
             write_to_file(zip_path, data, 'wb')
 
             LOGGER.info('Making tar...')
-            self._make_tar(zip_path, self.TAR_NAME)
+            self._make_tar(zip_path, tar_path)
 
             return "zip", tar_path
         except:
