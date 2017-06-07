@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
 import logging
+import os
+import urllib.parse
+import urllib.request
+import tarfile
+
+from .utils import *
 
 LOGGER = logging.getLogger(__name__)
 
@@ -9,12 +15,20 @@ class CodeCollector(object):
     Class to download source code from a https://bio.tools entry 
     """
 
+    ZIP_NAME = "tool.zip"
+    TAR_NAME = "tool.tar"
+    TMP_NAME = "tmp"
+
     def __init__(self, biotool):
         """
         :param biotool: Biotool object
         :type biotool: :class:`tooldog.biotool_model.Biotool`
         """
         self.biotool = biotool
+
+    def _make_tar(self, file_path, tarname):
+        with tarfile.open(tarname, mode='w') as archive:
+            archive.add(file_path, arcname=self.ZIP_NAME)
 
     def _get_from_repository(self, url):
         """
@@ -25,7 +39,32 @@ class CodeCollector(object):
         """
         # Here we deal with repository, have to use regex to test the url and
         # use appropriate strategy to get the code depending the type of repository
-        return None
+        if "github.com" in url:
+            return self._get_from_github(url)
+        else:
+            LOGGER.warn(url + ' points to unknown repo.')
+            raise Exception('Unknown repo type.')
+
+    def _get_from_github(self, url):
+        try:
+            zip_url = os.path.join(url, "/archive/master.zip")
+            response = urllib.request.urlopen(zip_url)
+            data = response.read()
+
+            LOGGER.info('Writing data to zip file...')
+            current_path = os.path.realpath(os.getcwd())
+            zip_path = os.path.join(current_path, self.TMP_NAME, self.ZIP_NAME)
+            tar_path = os.path.join(current_path, self.TMP_NAME, self.TAR_NAME)
+
+            write_to_file(zip_path, data, 'wb')
+
+            LOGGER.info('Making tar...')
+            self._make_tar(zip_path, self.TAR_NAME)
+
+            return "zip", tar_path
+        except:
+            LOGGER.warn(url + ' points to unknown repo.')
+            raise Exception('Unknown repo type.')
 
     def _get_from_source_code(self, url):
         """
