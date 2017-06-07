@@ -43,7 +43,7 @@ def parse_arguments():
                         ' (ID/VERSION, e.g. SignalP/4.1) or from local file (ENTRY.json,' +
                         ' e.g. signalp4.1.json)')
     ana_or_desc = parser.add_mutually_exclusive_group(required=False)
-    ana_or_desc.add_argument('tooldog ', dest='ANALYSE', action='store_true',
+    ana_or_desc.add_argument('--analyse', dest='ANALYSE', action='store_true',
                              help='run only analysis step of ToolDog.')
     parser.add_argument('--annotate', dest='ANNOTATE', action='store_true',
                         help='run only annotation step of ToolDog.')
