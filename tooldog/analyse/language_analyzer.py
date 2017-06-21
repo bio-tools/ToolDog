@@ -65,7 +65,7 @@ class PythonAnalyzer(LanguageAnalyzer):
             execute(c,
                     cd(workdir, pip(2, "install .")))
             execute(c,
-                    cd(workdir, pip(2, "install argparse2tool")))
+                    cd(workdir, pip(2, "install git+https://github.com/erasche/argparse2tool")))
 
             output = execute(c, cd(workdir, gen_cmd(toolname, self.gen_format)))
 
