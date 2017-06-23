@@ -31,7 +31,8 @@ class Container:
         :param mount: absolute path to file to mount
         :type mount: STRING
         """
-        self.client = None
+        self.client = docker.APIClient()
+        self.pull(image)
         self.id = None
         self.run(image, command, environment)
 
@@ -58,7 +59,6 @@ class Container:
         """
         Do real work of __init__.
         """
-        self.client = docker.APIClient()
         result = self.client.create_container(
             image,
             command=command,
@@ -122,3 +122,11 @@ class Container:
         Remove the container and associated volumes.
         """
         return self.client.remove_container(self.id, v=True)
+
+    def pull(self, image):
+        """
+        Pull image
+        :param image: the image to pull
+        :type image: STRING
+        """
+        self.client.pull(image)
