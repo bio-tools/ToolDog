@@ -46,7 +46,8 @@ class Biotool(object):
         self.topics = []    # List of Topic objects
         self.informations = None  # Informations object
 
-    def set_informations(self, tool_credits, contacts, publications, docs):
+    def set_informations(self, tool_credits, contacts, publications, docs,
+                         language, links, download):
         '''
         Add an :class:`tooldog.model.Informations` object to the Biotool.
 
@@ -68,6 +69,11 @@ class Biotool(object):
             self.informations.publications.append(Publication(pub))
         for doc in docs:
             self.informations.documentations.append(Documentation(doc))
+        self.informations.language = language
+        for link in links:
+            self.informations.links.append(Link(link))
+        for link in download:
+            self.informations.links.append(Link(link))
 
     def add_functions(self, functions):
         '''
@@ -111,11 +117,30 @@ class Informations(object):
         * documentations: list of :class:`tooldog.model.Documentation`
         * contacts: list of :class:`tooldog.model.Contact`
         * tool_credits: list of :class:`tooldog.model.Credit`
+        * language: list of coding language
+        * link: list of :class:`tooldog.model.Link`
         '''
         self.publications = []
         self.documentations = []
         self.contacts = []
         self.tool_credits = []
+        self.language = []
+        self.links = []
+
+
+class Link(object):
+    '''
+    Class to store download and links content.
+    '''
+
+    def __init__(self, link):
+        '''
+        :param link: links or download content of the JSON from http://bio.tools.
+        :type link: DICT
+        '''
+        self.url = link['url']
+        self.type = link['type']
+        self.comment = link['comment']
 
 
 class Credit(object):
