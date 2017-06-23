@@ -47,12 +47,12 @@ class PythonAnalyzer(LanguageAnalyzer):
         """
 
         try:
-            LOGGER.info("Trying to analyse code as python3")
-            return self._analyse(3)
-        except DockerException:
-            LOGGER.warn("Trying to analyse code as python3")
             LOGGER.info("Trying to analyse code as python2")
             return self._analyse(2)
+        except DockerException:
+            LOGGER.warn("Trying to analyse code as python2")
+            LOGGER.info("Trying to analyse code as python3")
+            return self._analyse(3)
 
     def _analyse(self, version):
         python_path = "/usr/local/lib/python3.5/dist-packages/" if version == 3 else \
