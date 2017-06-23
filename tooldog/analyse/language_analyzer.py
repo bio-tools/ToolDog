@@ -75,6 +75,6 @@ class PythonAnalyzer(LanguageAnalyzer):
         write_to_file(output_path, output, 'w')
 
 
-        return output
+        return output_path
 
 
