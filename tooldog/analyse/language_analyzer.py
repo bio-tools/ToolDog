@@ -72,9 +72,9 @@ class PythonAnalyzer(LanguageAnalyzer):
         current_path = os.path.realpath(os.getcwd())
         output_path = os.path.join(current_path, "tmp", tool_filename(toolname, self.gen_format))
 
-        write_to_file(output_path, output, 'w')
+        # write_to_file(output_path, output, 'w')
 
 
-        return output_path
+        return output
 
 

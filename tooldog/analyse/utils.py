@@ -1,3 +1,10 @@
+# Set of util functions for work with ToolDog container
+
+import sys
+import logging
+
+LOGGER = logging.getLogger(__name__)
+
 def cd(path, cmd):
     return "bash -c 'cd " + path + " && " + cmd + "'"
 
@@ -6,12 +13,13 @@ def pip(v, cmd):
     return "pip" + str(v) + " " + cmd
 
 
-def execute(ctx, cmd, verbose=True):
+def execute(ctx, cmd):
     result = ''
     exe = ctx.exec(cmd)
     for line in exe:
-        if verbose: print(line)
-        result += line.decode("utf-8")[:-1]
+        output = line.decode("utf-8")[:-1]
+        LOGGER.info(output)
+        result += output
     return result
 
 
@@ -29,7 +37,10 @@ def tool_filename(tool_name, gen_format):
     return tool_name + "." + ("cwl" if gen_format == 'cwl' else "xml")
 
 
-def write_to_file(filename, data='', mode='w'):
-    f = open(filename, mode)
-    f.write(data)
-    f.close()
+def write_to_file(filename=None, data='', mode='w'):
+    if filename:
+        f = open(filename, mode)
+        f.write(data)
+        f.close()
+    else:
+        sys.stdout.write(data)

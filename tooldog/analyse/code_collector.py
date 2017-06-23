@@ -46,10 +46,8 @@ class CodeCollector(object):
             raise Exception('Unknown repo type.')
 
     def _get_from_github(self, url):
-        print(url)
         try:
             zip_url = os.path.join(url, "archive/master.zip")
-            print(zip_url)
             response = urllib.request.urlopen(zip_url)
             data = response.read()
 
