@@ -46,7 +46,17 @@ class PythonAnalyzer(LanguageAnalyzer):
         Run source code analysis
         """
 
-        python_path = "/usr/local/lib/python2.7/dist-packages/"
+        try:
+            LOGGER.info("Trying to analyse code as python3")
+            return self._analyse(3)
+        except DockerException:
+            LOGGER.warn("Trying to analyse code as python3")
+            LOGGER.info("Trying to analyse code as python2")
+            return self._analyse(2)
+
+    def _analyse(self, version):
+        python_path = "/usr/local/lib/python3.5/dist-packages/" if version == 3 else \
+            "/usr/local/lib/python2.7/dist-packages/"
 
         c = Container("tooldog/analyser",
                       "tail -f /dev/null",  # run until we will stop the container
@@ -63,18 +73,20 @@ class PythonAnalyzer(LanguageAnalyzer):
             toolname = execute(c, cd(workdir, "python setup.py --name"))
 
             execute(c,
-                    cd(workdir, pip(2, "install .")))
+                    cd(workdir, pip(version, "install .")))
             execute(c,
-                    cd(workdir, pip(2, "install git+https://github.com/erasche/argparse2tool")))
+                    cd(workdir, pip(version, "install git+https://github.com/erasche/argparse2tool")))
 
             output = execute(c, cd(workdir, gen_cmd(toolname, self.gen_format)))
 
-        current_path = os.path.realpath(os.getcwd())
-        output_path = os.path.join(current_path, "tmp", tool_filename(toolname, self.gen_format))
+        if if_installed(toolname, output):
+            current_path = os.path.realpath(os.getcwd())
+            output_path = os.path.join(current_path, "tmp", tool_filename(toolname, self.gen_format))
 
-        write_to_file(output_path, output, 'w')
+            write_to_file(output_path, output, 'w')
 
-
-        return output_path
+            return output_path
+        else:
+            raise DockerException("Tool was not installed properly")
 
 
