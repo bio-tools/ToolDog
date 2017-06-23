@@ -1,5 +1,0 @@
-rdflib
-requests
-galaxyxml
-cwlgen
-docker
