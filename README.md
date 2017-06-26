@@ -37,14 +37,14 @@ usage: tooldog [-h] [-g/--galaxy] [-c/--cwl] [-f OUTFILE] biotool_entry
 To import from [bio.tools](https://bio.tools), specify the `biotool_entry` with the following format: `id/version`:
 
 ```bash
-tooldog --galaxy SARTools/1.4.0 > sartools.xml
+tooldog --galaxy integron_finder/1.5.1 > integron_finder.xml
 ```
 
 You can also use local file downloaded from [bio.tools](https://bio.tools) API
 by giving its name directly:
 
 ```bash
-tooldog --galaxy sartools.json > sartools.xml
+tooldog --galaxy integron_finder.json > integron_finder.xml
 ```
 
 More information about ToolDog usage [here](http://tooldog.readthedocs.io/en/latest/how_to_use.html).

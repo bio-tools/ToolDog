@@ -40,8 +40,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
     # Common arguments for analysis and annotations
     parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +
-                        ' (ID/VERSION, e.g. SignalP/4.1) or from local file (ENTRY.json,' +
-                        ' e.g. signalp4.1.json)')
+                        ' (ID/VERSION, e.g. integron_finder/1.5.1) or from local file (ENTRY.json,' +
+                        ' e.g. integron_finder.json)')
     ana_or_desc = parser.add_mutually_exclusive_group(required=False)
     ana_or_desc.add_argument('--analyse', dest='ANALYSE', action='store_true',
                              help='run only analysis step of ToolDog.')
