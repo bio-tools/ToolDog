@@ -42,8 +42,8 @@ class CodeCollector(object):
         if "github.com" in url:
             return self._get_from_github(url)
         else:
-            LOGGER.warn(url + ' points to unknown repo.')
-            raise Exception('Unknown repo type.')
+            LOGGER.warn("The url ({}) is not a Github url".format(url))
+            LOGGER.warn("ToolDog only deals with Github repository for the moment...")
 
     def _get_from_github(self, url):
         try:
@@ -63,8 +63,7 @@ class CodeCollector(object):
 
             return "zip", tar_path
         except:
-            LOGGER.warn(url + ' points to unknown repo.')
-            raise Exception('Unknown repo type.')
+            LOGGER.warn('Something went wrong with the following Github repository: {}'.format(zip_url))
 
     def _get_from_source_code(self, url):
         """
