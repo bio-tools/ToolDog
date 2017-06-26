@@ -5,6 +5,7 @@ import os
 import urllib.parse
 import urllib.request
 import tarfile
+from tooldog import TMP_DIR
 
 from .utils import *
 
@@ -52,16 +53,15 @@ class CodeCollector(object):
             data = response.read()
 
             LOGGER.info('Writing data to zip file...')
-            current_path = os.path.realpath(os.getcwd())
-            zip_path = os.path.join(current_path, self.TMP_NAME, self.ZIP_NAME)
-            tar_path = os.path.join(current_path, self.TMP_NAME, self.TAR_NAME)
+            zip_path = os.path.join(TMP_DIR, self.ZIP_NAME)
+            tar_path = os.path.join(TMP_DIR, self.TAR_NAME)
 
             write_to_file(zip_path, data, 'wb')
 
             LOGGER.info('Making tar...')
             self._make_tar(zip_path, tar_path)
 
-            return "zip", tar_path
+            return tar_path
         except:
             LOGGER.warn('Something went wrong with the following Github repository: {}'.format(zip_url))
 

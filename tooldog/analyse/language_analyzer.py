@@ -4,6 +4,7 @@ import logging
 import os
 from .container import Container
 from .utils import *
+from tooldog import TMP_DIR
 
 LOGGER = logging.getLogger(__name__)
 
@@ -32,14 +33,13 @@ class PythonAnalyzer(LanguageAnalyzer):
     Object to specifically analyze Python source code.
     """
 
-    def __init__(self, gen_format, source_code, source_format):
+    def __init__(self, gen_format, source_code):
         """
         :param gen_format: tool description language (Galaxy XML or CWL)
         :type gen_format: STRING
         """
         self.gen_format = gen_format  # To be used as an option when running Docker
         self.source_code = source_code
-        self.source_format = source_format
 
     def analyse(self):
         """
@@ -80,8 +80,7 @@ class PythonAnalyzer(LanguageAnalyzer):
             output = execute(c, cd(workdir, gen_cmd(toolname, self.gen_format)))
 
         if if_installed(toolname, output):
-            current_path = os.path.realpath(os.getcwd())
-            output_path = os.path.join(current_path, "tmp", tool_filename(toolname, self.gen_format))
+            output_path = os.path.join(TMP_DIR, tool_filename(toolname, self.gen_format))
 
             write_to_file(output_path, output, 'w')
 

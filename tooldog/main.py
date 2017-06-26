@@ -18,17 +18,17 @@ import shutil
 # External libraries
 import requests
 
-# Class and Objects
-from tooldog import __version__, Biotool
-from tooldog.annotate.galaxy import GalaxyToolGen
-from tooldog.annotate.cwl import CwlToolGen
-from tooldog.analyse.tool_analyzer import ToolAnalyzer
-
 # Constant(s)  ------------------------------
 
 LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
 global LOGGER
 LOGGER = logging.getLogger(__name__)  # for tests
+
+# Class and Objects
+from tooldog import __version__, Biotool, TMP_DIR
+from tooldog.annotate.galaxy import GalaxyToolGen
+from tooldog.annotate.cwl import CwlToolGen
+from tooldog.analyse.tool_analyzer import ToolAnalyzer
 
 #  Function(s)  ------------------------------
 
@@ -53,8 +53,6 @@ def parse_arguments():
                         'of STDOUT.')
     parser.add_argument('-v', '--verbose', action='store_true', dest='VERBOSE',
                         help='display info on STDERR.')
-    parser.add_argument('--debug', action='store_true', dest='DEBUG',
-                        help='Do not remove tmp folder')
     parser.add_argument('--version', action='version', version=__version__,
                         help='show the version number and exit.')
     # Group for the choice of tool descriptor
@@ -321,69 +319,50 @@ def analyse(biotool, args):
     :param args: Parsed arguments.
     """
     LOGGER.warn("Analysis feature is in beta version.")
-    # Need to create TEMP DIR
-
-    current_path = os.path.realpath(os.getcwd())
-    tmp_path = os.path.join(current_path, "tmp")
-
-    os.mkdir(tmp_path)
     output = ''
     # Instantiate ToolAnalyzer object
-    try:
-        if args.GALAXY:
-            ta = ToolAnalyzer(biotool, 'galaxy', language=args.LANG, source_code=args.SOURCE)
-        else:
-            ta = ToolAnalyzer(biotool, 'cwl', language=args.LANG, source_code=args.SOURCE)
-        # Run analysis
-        output = ta.run_analysis()  # Here it depends on how the method works
-    finally:
-        # Need to save generated file and delete TEMP DIR
-        pass
-    # Return path to generated file
+    if args.GALAXY:
+        ta = ToolAnalyzer(biotool, 'galaxy', language=args.LANG, source_code=args.SOURCE)
+    else:
+        ta = ToolAnalyzer(biotool, 'cwl', language=args.LANG, source_code=args.SOURCE)
+    # Run analysis
+    output = ta.run_analysis()  # Here it depends on how the method works
+    # Return path to generated file / descriptor
     return output
-
-def clean_tmp():
-    """
-    Remove tmp folder
-    """
-    current_path = os.path.realpath(os.getcwd())
-    tmp_path = os.path.join(current_path, "tmp")
-    if os.path.isdir(tmp_path):
-        shutil.rmtree(tmp_path)
 
 def run():
     """
     Running function called by Tooldog.
     """
 
-    # Parse arguments
-    args = parse_arguments()
-
-    # Logger configuration
-    import logging.config
-    logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL,
-                                            args.LOG_FILE, args.VERBOSE))
-    # Reset LOGGER with new config
-    LOGGER = logging.getLogger(__name__)
-
-    # Get JSON of the tool
-    if '.json' in args.biotool_entry:
-        # Importation from local file
-        json_tool = json_from_file(args.biotool_entry)
-    elif ('/' in args.biotool_entry) and (len(args.biotool_entry.split('/')) == 2):
-        # Importation from https://bio.tools
-        tool_ids = args.biotool_entry.split('/')
-        json_tool = json_from_biotools(tool_ids[0], tool_ids[1])
-    else:
-        # Wrong argument given for the entry
-        LOGGER.error('biotool_entry does not have the correct syntax. Exit')
-        parser.print_help()
-        sys.exit(1)
-
-    # Load Biotool object
-    biotool = json_to_biotool(json_tool)
-
     try:
+        # Parse arguments
+        args = parse_arguments()
+
+        # Logger configuration
+        import logging.config
+        logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL,
+                                                args.LOG_FILE, args.VERBOSE))
+        # Reset LOGGER with new config
+        LOGGER = logging.getLogger(__name__)
+
+        # Get JSON of the tool
+        if '.json' in args.biotool_entry:
+            # Importation from local file
+            json_tool = json_from_file(args.biotool_entry)
+        elif ('/' in args.biotool_entry) and (len(args.biotool_entry.split('/')) == 2):
+            # Importation from https://bio.tools
+            tool_ids = args.biotool_entry.split('/')
+            json_tool = json_from_biotools(tool_ids[0], tool_ids[1])
+        else:
+            # Wrong argument given for the entry
+            LOGGER.error('biotool_entry does not have the correct syntax. Exit')
+            parser.print_help()
+            sys.exit(1)
+
+        # Load Biotool object
+        biotool = json_to_biotool(json_tool)
+
         if args.ORI_DESC:
             annotate(biotool, args, args.ORI_DESC)
         elif args.ANALYSE and not args.ANNOTATE:
@@ -395,10 +374,9 @@ def run():
             gen_tool = analyse(biotool, args)
             # The existing_tool need to be changed to what will be generated by analyse().
             annotate(biotool, args, gen_tool)
-
     finally:
-        if not args.DEBUG:
-            clean_tmp()
+        shutil.rmtree(TMP_DIR)
+
 
 if __name__ == "__main__":
     run()

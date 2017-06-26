@@ -27,14 +27,13 @@ class ToolAnalyzer(object):
         self.gen_format = gen_format
         self.language = language
         self.source_code = source_code
-        self.source_format = None
         self.output = ''
 
     def _analyse_python(self):
         """
         Perform analysis of Python.
         """
-        pa = PythonAnalyzer(self.gen_format, self.source_code, self.source_format)
+        pa = PythonAnalyzer(self.gen_format, self.source_code)
         return pa.analyse()
 
     def _analyse_no_language(self):
@@ -77,7 +76,7 @@ class ToolAnalyzer(object):
         cc = CodeCollector(self.biotool)
         source = cc.get_source()
         if source is not None:
-            self.source_format, self.source_code = cc.get_source()
+            self.source_code = source
 
 
     def run_analysis(self):
