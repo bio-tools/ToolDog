@@ -39,8 +39,8 @@ class CodeCollector(object):
         """
         # Here we deal with repository, have to use regex to test the url and
         # use appropriate strategy to get the code depending the type of repository
-        if "github.com" in url.url:
-            return self._get_from_github(url.url)
+        if "github.com" in url:
+            return self._get_from_github(url)
         else:
             LOGGER.warn(url + ' points to unknown repo.')
             raise Exception('Unknown repo type.')
@@ -83,7 +83,7 @@ class CodeCollector(object):
         for link in links:
             link_type = link.type.lower().translate(str.maketrans(' ','_'))
             try:
-                source_code = getattr(self, '_get_from_{}'.format(link_type))(link)
+                source_code = getattr(self, '_get_from_{}'.format(link_type))(link.url)
             except AttributeError:
                 LOGGER.warn(link_type + ' link type is not processed yet by ToolDog.')
             if source_code is not None:
