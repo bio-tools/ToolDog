@@ -8,6 +8,24 @@ Changelogs
 
 Summary of developments of ToolDog software.
 
+v0.3
+====
+
+v0.3.0
+------
+
+* Addition of source code analysis feature:
+
+  * use argparse2tool in a docker container
+  * only cover python tools using argparse
+
+* Both part of ToolDog can be run independently:
+
+  * `tooldog --analyse tool_id/version`
+  * `tooldog --annotate tool_id/version`
+
+* Options are available to specify language of the tool manually, as well as a path to access source code locally
+
 v0.2
 ====
 
