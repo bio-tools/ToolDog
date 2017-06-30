@@ -18,6 +18,8 @@ the description of tools from [Bio.tools](https://bio.tools).
 
 #### Requirements
 
+You need Docker to be installed on your computer in order to perform the code analysis step of ToolDog.
+
 You can then install ToolDog using pip with the following command:
 
 ```bash
@@ -37,19 +39,23 @@ usage: tooldog [-h] [-g/--galaxy] [-c/--cwl] [-f OUTFILE] biotool_entry
 To import from [bio.tools](https://bio.tools), specify the `biotool_entry` with the following format: `id/version`:
 
 ```bash
-tooldog --galaxy SARTools/1.4.0 > sartools.xml
+tooldog --galaxy integron_finder/1.5.1 > integron_finder.xml
 ```
 
 You can also use local file downloaded from [bio.tools](https://bio.tools) API
 by giving its name directly:
 
 ```bash
-tooldog --galaxy sartools.json > sartools.xml
+tooldog --galaxy integron_finder.json > integron_finder.xml
 ```
 
 More information about ToolDog usage [here](http://tooldog.readthedocs.io/en/latest/how_to_use.html).
 
 ## References
+
+Kenzo-Hugo Hillion, Jon Ison and Hervé Ménager. ToolDog – generating tool descriptors from the ELIXIR tool registry.
+F1000Research 2017, 6:767 (poster at ELIXIR all hands meeting).
+doi: [10.7490/f1000research.1114125.1](https://f1000research.com/posters/6-767)
 
 Hervé Ménager, Matúš Kalaš, Kristoffer Rapacki and Jon Ison. Using registries to integrate
 bioinformatics tools and services into workbench environments. International Journal on

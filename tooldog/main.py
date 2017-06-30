@@ -13,21 +13,22 @@ import sys
 import json
 import copy
 import logging
+import shutil
 
 # External libraries
 import requests
-
-# Class and Objects
-from tooldog import __version__, Biotool
-from tooldog.annotate.galaxy import GalaxyToolGen
-from tooldog.annotate.cwl import CwlToolGen
-from tooldog.analyse import analyse
 
 # Constant(s)  ------------------------------
 
 LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
 global LOGGER
 LOGGER = logging.getLogger(__name__)  # for tests
+
+# Class and Objects
+from tooldog import __version__, Biotool, TMP_DIR
+from tooldog.annotate.galaxy import GalaxyToolGen
+from tooldog.annotate.cwl import CwlToolGen
+from tooldog.analyse.tool_analyzer import ToolAnalyzer
 
 #  Function(s)  ------------------------------
 
@@ -39,8 +40,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
     # Common arguments for analysis and annotations
     parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +
-                        ' (ID/VERSION, e.g. SignalP/4.1) or from local file (ENTRY.json,' +
-                        ' e.g. signalp4.1.json)')
+                        ' (ID/VERSION, e.g. integron_finder/1.5.1) or from local file (ENTRY.json,' +
+                        ' e.g. integron_finder.json)')
     ana_or_desc = parser.add_mutually_exclusive_group(required=False)
     ana_or_desc.add_argument('--analyse', dest='ANALYSE', action='store_true',
                              help='run only analysis step of ToolDog.')
@@ -61,15 +62,21 @@ def parse_arguments():
                            help='generates XML for Galaxy.', dest='GALAXY')
     exc_group.add_argument('-c', '--cwl', action='store_true', help='generates CWL tool ' +
                            'descriptor.', dest='CWL')
+    # Group for analysis options
+    analy_opt = parser.add_argument_group('Options for source code analysis')
+    analy_opt.add_argument('--source_language', dest='LANG',
+                           help='Language of the tool.')
+    analy_opt.add_argument('--source_code', dest='SOURCE',
+                           help='Path the source code directory.')
     # Group for Galaxy options
     galaxy_opt = parser.add_argument_group('Options for Galaxy XML generation (-g/--galaxy)')
-    galaxy_opt.add_argument('--galaxy_url', dest='GAL_URL', default=None,
+    galaxy_opt.add_argument('--galaxy_url', dest='GAL_URL',
                             help='url of the Galaxy instance (default: https://usegalaxy.org' +
                             ' ).')
-    galaxy_opt.add_argument('--edam_url', dest='EDAM_URL', default=None,
+    galaxy_opt.add_argument('--edam_url', dest='EDAM_URL',
                             help='EDAM.owl file either online url or local path ' +
                             '(default: http://edamontology.org/EDAM.owl).')
-    galaxy_opt.add_argument('--mapping_file', dest='MAP_FILE', default=None,
+    galaxy_opt.add_argument('--mapping_file', dest='MAP_FILE',
                             help='Personalized EDAM to datatypes mapping json file ' +
                             'generated previously by ToolDog.')
     # Group for logger options
@@ -128,7 +135,9 @@ def config_logger(write_logs, log_level, log_file, verbose):
         cfg_stderr['level'] = 'INFO'
     cfg['handlers']['stderr'] = cfg_stderr
     # Configure loggers for everymodule
-    modules = ['annotate.galaxy', 'annotate.cwl', 'annotate.edam_to_galaxy', 'main', 'analyse']
+    modules = ['annotate.galaxy', 'annotate.cwl', 'annotate.edam_to_galaxy',
+               'analyse', 'analyse.tool_analazer', 'analyse.code_collector',
+               'analyse.language_analyzer', 'main', 'analyse']
     logger = {'handlers': ['stderr'],
               'propagate': False,
               'level': 'DEBUG'}
@@ -190,7 +199,7 @@ def json_to_biotool(json_file):
     :type param_json: DICT
 
     :return: Biotool object.
-    :rtype: :class:`tooldog.model.Biotool`
+    :rtype: :class:`tooldog.biotool_model.Biotool`
     """
     LOGGER.info("Converting biotool entry (JSON) to Biotool object...")
     # Initialize Biotool object with basic parameters
@@ -198,7 +207,8 @@ def json_to_biotool(json_file):
                       json_file['description'], json_file['homepage'])
     # Add informations
     biotool.set_informations(json_file['credit'], json_file['contact'],
-                             json_file['publication'], json_file['documentation'])
+                             json_file['publication'], json_file['documentation'],
+                             json_file['language'], json_file['link'], json_file['download'])
     # Add Function(s)
     biotool.add_functions(json_file['function'])
     # Add Topics(s)
@@ -212,7 +222,7 @@ def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_jso
     This function uses :class:`tooldog.galaxy.GalaxyToolGen` to write XML using galaxyxml.
 
     :param biotool: Biotool object.
-    :type biotool: :class:`tooldog.model.Biotool`
+    :type biotool: :class:`tooldog.biotool_model.Biotool`
     :param outfile: path to output file to write the XML.
     :type outfile: STRING
     """
@@ -300,48 +310,73 @@ def annotate(biotool, args, existing_desc=None):
         write_cwl(biotool, args.OUTFILE, existing_tool=existing_desc)
 
 
+def analyse(biotool, args):
+    """ 
+    Run analysis of the source code from bio.tools or given locally.
+
+    :param biotool: Biotool object.
+    :type biotool: :class:`tooldog.model.Biotool`
+    :param args: Parsed arguments.
+    """
+    LOGGER.warn("Analysis feature is in beta version.")
+    output = ''
+    # Instantiate ToolAnalyzer object
+    if args.GALAXY:
+        ta = ToolAnalyzer(biotool, 'galaxy', language=args.LANG, source_code=args.SOURCE)
+    else:
+        ta = ToolAnalyzer(biotool, 'cwl', language=args.LANG, source_code=args.SOURCE)
+    # Run analysis
+    output = ta.run_analysis()  # Here it depends on how the method works
+    # Return path to generated file / descriptor
+    return output
+
 def run():
     """
     Running function called by Tooldog.
     """
 
-    # Parse arguments
-    args = parse_arguments()
+    try:
+        # Parse arguments
+        args = parse_arguments()
 
-    # Logger configuration
-    import logging.config
-    logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL,
-                                            args.LOG_FILE, args.VERBOSE))
-    # Reset LOGGER with new config
-    LOGGER = logging.getLogger(__name__)
+        # Logger configuration
+        import logging.config
+        logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL,
+                                                args.LOG_FILE, args.VERBOSE))
+        # Reset LOGGER with new config
+        LOGGER = logging.getLogger(__name__)
 
-    # Get JSON of the tool
-    if '.json' in args.biotool_entry:
-        # Importation from local file
-        json_tool = json_from_file(args.biotool_entry)
-    elif ('/' in args.biotool_entry) and (len(args.biotool_entry.split('/')) == 2):
-        # Importation from https://bio.tools
-        tool_ids = args.biotool_entry.split('/')
-        json_tool = json_from_biotools(tool_ids[0], tool_ids[1])
-    else:
-        # Wrong argument given for the entry
-        LOGGER.error('biotool_entry does not have the correct syntax. Exit')
-        parser.print_help()
-        sys.exit(1)
+        # Get JSON of the tool
+        if '.json' in args.biotool_entry:
+            # Importation from local file
+            json_tool = json_from_file(args.biotool_entry)
+        elif ('/' in args.biotool_entry) and (len(args.biotool_entry.split('/')) == 2):
+            # Importation from https://bio.tools
+            tool_ids = args.biotool_entry.split('/')
+            json_tool = json_from_biotools(tool_ids[0], tool_ids[1])
+        else:
+            # Wrong argument given for the entry
+            LOGGER.error('biotool_entry does not have the correct syntax. Exit')
+            parser.print_help()
+            sys.exit(1)
 
-    # Load Biotool object
-    biotool = json_to_biotool(json_tool)
+        # Load Biotool object
+        biotool = json_to_biotool(json_tool)
 
-    if args.ORI_DESC:
-        annotate(biotool, args, args.ORI_DESC)
-    elif args.ANALYSE and not args.ANNOTATE:
-        analyse(biotool, args)
-    elif args.ANNOTATE and not args.ANALYSE:
-        annotate(biotool, args)
-    else:
-        analyse(biotool, args)
-        # The existing_tool need to be changed to what will be generated by analyse().
-        annotate(biotool, args, args.ORI_DESC)
+        if args.ORI_DESC:
+            annotate(biotool, args, args.ORI_DESC)
+        elif args.ANALYSE and not args.ANNOTATE:
+            analyse(biotool, args)
+        elif args.ANNOTATE and not args.ANALYSE:
+            annotate(biotool, args)
+        else:
+            # analyse(biotool, args)
+            gen_tool = analyse(biotool, args)
+            # The existing_tool need to be changed to what will be generated by analyse().
+            annotate(biotool, args, gen_tool)
+    finally:
+        shutil.rmtree(TMP_DIR)
+
 
 if __name__ == "__main__":
     run()

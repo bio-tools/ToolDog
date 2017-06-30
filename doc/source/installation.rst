@@ -19,6 +19,8 @@ ToolDog is built with Python 3.6.0 and uses the following libraries:
 .. _galaxyxml: https://github.com/erasche/galaxyxml
 .. _cwlgen: https://github.com/common-workflow-language/python-cwlgen
 
+Docker is also required in order to perform the code analysis part of the code.
+
 .. Note::
     We highly recommend the use of a virtual environment with Python 3.6.0
     using `virtualenv`_ or `conda`_.
