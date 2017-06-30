@@ -51,6 +51,10 @@ More information about ToolDog usage [here](http://tooldog.readthedocs.io/en/lat
 
 ## References
 
+Kenzo-Hugo Hillion, Jon Ison and Hervé Ménager. ToolDog – generating tool descriptors from the ELIXIR tool registry.
+F1000Research 2017, 6:767 (poster at ELIXIR all hands meeting).
+doi: [10.7490/f1000research.1114125.1](https://f1000research.com/posters/6-767)
+
 Hervé Ménager, Matúš Kalaš, Kristoffer Rapacki and Jon Ison. Using registries to integrate
 bioinformatics tools and services into workbench environments. International Journal on
 Software Tools for Technology Transfer (2016) doi: [10.1007/s10009-015-0392-z](http://link.springer.com/article/10.1007/s10009-015-0392-z)
