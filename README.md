@@ -18,6 +18,8 @@ the description of tools from [Bio.tools](https://bio.tools).
 
 #### Requirements
 
+You need Docker to be installed on your computer in order to perform the code analysis step of ToolDog.
+
 You can then install ToolDog using pip with the following command:
 
 ```bash
