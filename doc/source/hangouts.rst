@@ -2,9 +2,26 @@
 
 .. _hangouts:
 
-************
+********
 Hangouts
-************
+********
+
+23 May 2017
+===========
+
+Ivan Kuzmin and Kenzo-Hugo Hillion
+
+Discussion about the following points:
+
+* Deliverable by the end of June
+
+  * Link analysis part into ToolDog
+  * Identify good example from https://bio.tools for demo
+
+* Discussion about possible evolution of Tooldog and the library it uses
+
+  * Evolution of the library galaxyxml and cwlgen
+  * Build a similar model for bio.tools entries
 
 24–28 April 2017, Paris
 =======================

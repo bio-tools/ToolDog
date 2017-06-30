@@ -27,12 +27,13 @@ class ToolAnalyzer(object):
         self.gen_format = gen_format
         self.language = language
         self.source_code = source_code
+        self.output = ''
 
     def _analyse_python(self):
         """
         Perform analysis of Python.
         """
-        pa = PythonAnalyzer(self.gen_format)
+        pa = PythonAnalyzer(self.gen_format, self.source_code)
         return pa.analyse()
 
     def _analyse_no_language(self):
@@ -73,20 +74,28 @@ class ToolAnalyzer(object):
         """
         # At the end of this method, self.source_code should point to directory or archive
         cc = CodeCollector(self.biotool)
-        self.source_code = cc.get_source()
+        source = cc.get_source()
+        if source is not None:
+            self.source_code = source
+
 
     def run_analysis(self):
         """
         Method to run analysis of source code of the entry.
         """
+        output = None
         if self.source_code is None:
             self.get_source()
-        if self.language is None:
-            self.set_language()
-        language = self.language.lower().translate(str.maketrans(' ','_'))
-        try:
-            getattr(self, '_analyse_{}'.format(language))()
-        except AttributeError:
-            LOGGER.warn(language + " language is not processed yet by ToolDog.")
+
+        if self.source_code is not None:
+
+            if self.language is None:
+                self.set_language()
+            language = self.language.lower().translate(str.maketrans(' ','_'))
+            try:
+                output = getattr(self, '_analyse_{}'.format(language))()
+            except AttributeError:
+                LOGGER.warn(language + " language is not processed yet by ToolDog.")
+
         # Need to return the generated code here
-        return None
+        return output
