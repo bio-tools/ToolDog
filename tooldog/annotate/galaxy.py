@@ -85,7 +85,8 @@ class GalaxyToolGen(object):
         if not hasattr(self.tool, 'edam_topics'):
             # First time we add topics to the tool
             self.tool.edam_topics = gxtp.EdamTopics()
-        self.tool.edam_topics.append(gxtp.EdamTopic(topic.get_edam_id()))
+        if not self.tool.edam_topics.has_topic(topic.get_edam_id()):
+            self.tool.edam_topics.append(gxtp.EdamTopic(topic.get_edam_id()))
 
     def add_edam_operation(self, operation):
         """
@@ -99,7 +100,8 @@ class GalaxyToolGen(object):
         if not hasattr(self.tool, 'edam_operations'):
             # First time we add operations to the tool
             self.tool.edam_operations = gxtp.EdamOperations()
-        self.tool.edam_operations.append(gxtp.EdamOperation(operation.get_edam_id()))
+        if not self.tool.edam_operations.has_operation(operation.get_edam_id()):
+            self.tool.edam_operations.append(gxtp.EdamOperation(operation.get_edam_id()))
 
     def add_input_file(self, input_obj):
         """
@@ -176,11 +178,15 @@ class GalaxyToolGen(object):
             self.tool.citations = gxtp.Citations()
         # Add citation depending the type (doi, pmid...)
         if publication.doi is not None:
-            self.tool.citations.append(gxtp.Citation('doi', publication.doi))
+            if not self.tool.citations.has_citation('doi', publication.doi):
+                self.tool.citations.append(gxtp.Citation('doi', publication.doi))
+        # <citation> only supports doi and bibtex as a type
         elif publication.pmid is not None:
-            self.tool.citations.append(gxtp.Citation('pmid', publication.pmid))
+            # self.tool.citations.append(gxtp.Citation('pmid', publication.pmid))
+            LOGGER.warn('pmid is not supported by <citation>, citation skipped')
         elif publication.pmcid is not None:
-            self.tool.citations.append(gxtp.Citation('pmcid', publication.pmcid))
+            # self.tool.citations.append(gxtp.Citation('pmcid', publication.pmcid))
+            LOGGER.warn('pmcid is not supported by <citation>, citation skipped')
 
     def write_xml(self, out_file=None, index=None, keep_old_command=False):
         """

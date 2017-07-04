@@ -27,7 +27,5 @@
 SHAMAN is based on DESeq2 R package [Anders and Huber 2010] for the analysis of metagenomic data, as suggested in [McMurdie and Holmes 2014, Jonsson2016] . SHAMAN robustly identifies the differential abundant genera with the Generalized Linear Model implemented in DESeq2 [Love 2014] . Resulting p-values are adjusted according to the Benjamini and Hochberg procedure [Benjamini and Hochberg 1995]. The PCOA is performed with the ade4 R package and plots are generated with ggplot2 or D3.js packages. SHAMAN is compatible with standard formats for metagenomic analysis.
 
 Tool Homepage: http://shaman.c3bi.pasteur.fr/]]></help>
-  <citations>
-    <citation type="pmcid">PMC4878514</citation>
-  </citations>
+  <citations/>
 </tool>
