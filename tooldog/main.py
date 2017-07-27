@@ -40,7 +40,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Generates XML or CWL from bio.tools entry.')
     # Common arguments for analysis and annotations
     parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +
-                        ' (ID/VERSION, e.g. integron_finder/1.5.1) or from local file (ENTRY.json,' +
+                        ' (ID[/VERSION], e.g. integron_finder/1.5.1 or integron_finder,' +
+                        ' the latest version will be fetched in the latter case)' +
+                        ' or from local file (ENTRY.json,' +
                         ' e.g. integron_finder.json)')
     ana_or_desc = parser.add_mutually_exclusive_group(required=False)
     ana_or_desc.add_argument('--analyse', dest='ANALYSE', action='store_true',
@@ -148,7 +150,7 @@ def config_logger(write_logs, log_level, log_file, verbose):
     return cfg
 
 
-def json_from_biotools(tool_id, tool_version):
+def json_from_biotools(tool_id, tool_version="latest"):
     """
     Import JSON of a tool from https://bio.tools.
 
@@ -161,7 +163,7 @@ def json_from_biotools(tool_id, tool_version):
     :rtype: DICT
     """
     LOGGER.info("Loading tool entry from https://bio.tools: " + tool_id + '/' + tool_version)
-    biotools_link = "https://bio.tools/api/tool/" + tool_id + "/version/" + tool_version
+    biotools_link = "https://bio.tools/api/tool/" + tool_id + ("/version/" + tool_version if tool_version != "latest" else "/")
     # Access the entry with requests and get the JSON part
     http_tool = requests.get(biotools_link)
     json_tool = http_tool.json()
@@ -355,10 +357,11 @@ def run():
             tool_ids = args.biotool_entry.split('/')
             json_tool = json_from_biotools(tool_ids[0], tool_ids[1])
         else:
+            json_tool = json_from_biotools(args.biotool_entry)
             # Wrong argument given for the entry
-            LOGGER.error('biotool_entry does not have the correct syntax. Exit')
-            parser.print_help()
-            sys.exit(1)
+            # LOGGER.error('biotool_entry does not have the correct syntax. Exit')
+            # parser.print_help()
+            # sys.exit(1)
 
         # Load Biotool object
         biotool = json_to_biotool(json_tool)
