@@ -47,6 +47,9 @@ class GalaxyToolGen(object):
             LOGGER.info("Loading existing XML from " + existing_tool)
             gxp = GalaxyXmlParser()
             self.tool = gxp.import_xml(existing_tool)
+            # Add a description if missing from description
+            if self.tool.root.find('description').text is None:
+                self.tool.root.find('description').text = biotool.description.split('.')[0] + '.'
             # Add information about Tooldog version
             self.tool.add_comment("This tool descriptor has been annotated by ToolDog v" +
                                   __version__)
