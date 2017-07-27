@@ -332,8 +332,6 @@ class TestGalaxyToolGen(unittest.TestCase):
         # Copy tool to make it easier to read
         tool = self.genxml.tool
         # Test simple values of the tool
-        self.assertEqual(tool.help, self.biotool.description + \
-                         "\n\nTool Homepage: " + self.biotool.homepage)
         self.assertEqual(tool.version_command, "COMMAND --version")
         # Test <tool> of the future XML
         self.assertEqual(tool.root.attrib['id'], 'an_id')
@@ -459,7 +457,7 @@ class TestEdamInfo(unittest.TestCase):
 
     def test_init(self):
         try:
-            self.assertEqual(len(self.ei.edam_ontology), 33192)
+            self.assertEqual(len(self.ei.edam_ontology), 33300)
         except AssertionError:
             print("It is likely that EDAM has been updated.")
             raise

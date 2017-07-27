@@ -20,7 +20,19 @@
   <outputs>
     <data format="html" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
   </outputs>
-  <help><![CDATA[Show coverage and interval of confidence to identify under and over represented genomic regions. The tool also creates an HTML report with various images showing the coverage and GC versus coverage plots. It also provides a set of CSV files with low or high coverage regions (as compared to the average coverage).
+  <help><![CDATA[
 
-Tool Homepage: http://sequana.readthedocs.io]]></help>
+What it is ?
+============
+
+Show coverage and interval of confidence to identify under and over represented genomic regions. The tool also creates an HTML report with various images showing the coverage and GC versus coverage plots. It also provides a set of CSV files with low or high coverage regions (as compared to the average coverage).
+
+External links:
+===============
+
+- Tool homepage_
+- bio.tools_ entry
+
+.. _homepage: http://sequana.readthedocs.io
+.. _bio.tools: https://bio.tools/tool/sequana_coverage]]></help>
 </tool>

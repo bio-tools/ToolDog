@@ -21,9 +21,21 @@
   <outputs>
     <data format="data" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
   </outputs>
-  <help><![CDATA[This tool allows users to perform an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of DynamX software from Waters. Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.
+  <help><![CDATA[
 
-Tool Homepage: http://memhdx.c3bi.pasteur.fr/]]></help>
+What it is ?
+============
+
+This tool allows users to perform an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of DynamX software from Waters. Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.
+
+External links:
+===============
+
+- Tool homepage_
+- bio.tools_ entry
+
+.. _homepage: http://memhdx.c3bi.pasteur.fr/
+.. _bio.tools: https://bio.tools/tool/MEMHDX]]></help>
   <citations>
     <citation type="doi">10.1093/bioinformatics/btw420</citation>
   </citations>

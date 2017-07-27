@@ -17,9 +17,21 @@
   <inputs>
     <param argument="INPUT1" format="json" label="Report" name="INPUT1" type="data"/>
   </inputs>
-  <help><![CDATA[MacSyFinder is a program to model and detect macromolecular systems, genetic pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily conserved properties: they are made of conserved components, and are encoded in compact loci (conserved genetic architecture). The user models these systems with MacSyFinder to reflect these conserved features, and to allow their efficient detection.
+  <help><![CDATA[
 
-Tool Homepage: https://github.com/gem-pasteur/macsyfinder]]></help>
+What it is ?
+============
+
+MacSyFinder is a program to model and detect macromolecular systems, genetic pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily conserved properties: they are made of conserved components, and are encoded in compact loci (conserved genetic architecture). The user models these systems with MacSyFinder to reflect these conserved features, and to allow their efficient detection.
+
+External links:
+===============
+
+- Tool homepage_
+- bio.tools_ entry
+
+.. _homepage: https://github.com/gem-pasteur/macsyfinder
+.. _bio.tools: https://bio.tools/tool/MacSyFinder]]></help>
   <citations>
     <citation type="doi">doi:10.1371/journal.pone.0110726</citation>
   </citations>
