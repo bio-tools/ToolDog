@@ -41,7 +41,7 @@ def parse_arguments():
     # Common arguments for analysis and annotations
     parser.add_argument('biotool_entry', help='bio.tools entry from online resource' +
                         ' (ID[/VERSION], e.g. integron_finder/1.5.1 or integron_finder,' +
-                        ' the last version will be fetched in the latter case)' +
+                        ' the latest version will be fetched in the latter case)' +
                         ' or from local file (ENTRY.json,' +
                         ' e.g. integron_finder.json)')
     ana_or_desc = parser.add_mutually_exclusive_group(required=False)
