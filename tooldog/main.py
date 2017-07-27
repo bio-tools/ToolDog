@@ -355,20 +355,13 @@ def run():
         elif ('/' in args.biotool_entry) and (len(args.biotool_entry.split('/')) == 2):
             # Importation from https://bio.tools
             tool_ids = args.biotool_entry.split('/')
-            if len(tool_ids) == 1:
-                json_tool = json_from_biotools(tool_ids[0])
-            elif len(tool_ids) == 2:
-                json_tool = json_from_biotools(tool_ids[0], tool_ids[1])
-            else:
-                # Wrong argument given for the entry
-                LOGGER.error('biotool_entry does not have the correct syntax. Exit')
-                parser.print_help()
-                sys.exit(1)
+            json_tool = json_from_biotools(tool_ids[0], tool_ids[1])
         else:
+            json_tool = json_from_biotools(args.biotool_entry)
             # Wrong argument given for the entry
-            LOGGER.error('biotool_entry does not have the correct syntax. Exit')
-            parser.print_help()
-            sys.exit(1)
+            # LOGGER.error('biotool_entry does not have the correct syntax. Exit')
+            # parser.print_help()
+            # sys.exit(1)
 
         # Load Biotool object
         biotool = json_to_biotool(json_tool)
