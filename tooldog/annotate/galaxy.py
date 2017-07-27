@@ -47,9 +47,19 @@ class GalaxyToolGen(object):
             LOGGER.info("Loading existing XML from " + existing_tool)
             gxp = GalaxyXmlParser()
             self.tool = gxp.import_xml(existing_tool)
+            # Add a description if missing from description
+            if self.tool.root.find('description').text is None:
+                self.tool.root.find('description').text = biotool.description.split('.')[0] + '.'
             # Add information about Tooldog version
             self.tool.add_comment("This tool descriptor has been annotated by ToolDog v" +
                                   __version__)
+            # Help if missing or TODO
+            if self.tool.help is None:
+                self.tool.help = biotool.generate_galaxy_help()
+            elif "TODO" in self.tool.help:
+                LOGGER.info("TODO has been found in help, content has been replaced.")
+                self.tool.help = biotool.generate_galaxy_help()
+
         else:
             LOGGER.info("Creating new GalaxyToolGen object...")
             # Initialize GalaxyInfo
@@ -63,8 +73,7 @@ class GalaxyToolGen(object):
             description = biotool.description.split('.')[0] + '.'
             self.tool = gxt.Tool(biotool.name, biotool.tool_id, biotool.version,
                                  description, "COMMAND", version_command="COMMAND --version")
-            self.tool.help = (biotool.description + "\n\nTool Homepage: " +
-                              biotool.homepage)
+            self.tool.help = biotool.generate_galaxy_help()
             #   Add information about Galaxy and EDAM in the XML
             self.tool.add_comment("Information was obtained from the Galaxy instance: " +
                                   self.etog.galaxy_url + " v" +
@@ -85,7 +94,8 @@ class GalaxyToolGen(object):
         if not hasattr(self.tool, 'edam_topics'):
             # First time we add topics to the tool
             self.tool.edam_topics = gxtp.EdamTopics()
-        self.tool.edam_topics.append(gxtp.EdamTopic(topic.get_edam_id()))
+        if not self.tool.edam_topics.has_topic(topic.get_edam_id()):
+            self.tool.edam_topics.append(gxtp.EdamTopic(topic.get_edam_id()))
 
     def add_edam_operation(self, operation):
         """
@@ -99,7 +109,8 @@ class GalaxyToolGen(object):
         if not hasattr(self.tool, 'edam_operations'):
             # First time we add operations to the tool
             self.tool.edam_operations = gxtp.EdamOperations()
-        self.tool.edam_operations.append(gxtp.EdamOperation(operation.get_edam_id()))
+        if not self.tool.edam_operations.has_operation(operation.get_edam_id()):
+            self.tool.edam_operations.append(gxtp.EdamOperation(operation.get_edam_id()))
 
     def add_input_file(self, input_obj):
         """
@@ -176,11 +187,15 @@ class GalaxyToolGen(object):
             self.tool.citations = gxtp.Citations()
         # Add citation depending the type (doi, pmid...)
         if publication.doi is not None:
-            self.tool.citations.append(gxtp.Citation('doi', publication.doi))
+            if not self.tool.citations.has_citation('doi', publication.doi):
+                self.tool.citations.append(gxtp.Citation('doi', publication.doi))
+        # <citation> only supports doi and bibtex as a type
         elif publication.pmid is not None:
-            self.tool.citations.append(gxtp.Citation('pmid', publication.pmid))
+            # self.tool.citations.append(gxtp.Citation('pmid', publication.pmid))
+            LOGGER.warn('pmid is not supported by <citation>, citation skipped')
         elif publication.pmcid is not None:
-            self.tool.citations.append(gxtp.Citation('pmcid', publication.pmcid))
+            # self.tool.citations.append(gxtp.Citation('pmcid', publication.pmcid))
+            LOGGER.warn('pmcid is not supported by <citation>, citation skipped')
 
     def write_xml(self, out_file=None, index=None, keep_old_command=False):
         """

@@ -232,16 +232,13 @@ def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_jso
     biotool_xml = GalaxyToolGen(biotool, galaxy_url=galaxy_url, edam_url=edam_url,
                                 mapping_json=mapping_json, existing_tool=existing_tool)
     # Add EDAM annotation and citations
-    if not getattr(biotool_xml, 'edam_topics', None):
-        for topic in biotool.topics:
-            biotool_xml.add_edam_topic(topic)
-    if not getattr(biotool_xml, 'edam_operations', None):
-        for function in biotool.functions:
-            for operation in function.operations:
-                biotool_xml.add_edam_operation(operation)
-    if not getattr(biotool_xml, 'citations', None):
-        for publi in biotool.informations.publications:
-            biotool_xml.add_citation(publi)
+    for topic in biotool.topics:
+        biotool_xml.add_edam_topic(topic)
+    for function in biotool.functions:
+        for operation in function.operations:
+            biotool_xml.add_edam_operation(operation)
+    for publi in biotool.informations.publications:
+        biotool_xml.add_citation(publi)
     # Add inputs and outputs
     if existing_tool:
         biotool_xml.write_xml(out_file=outfile, keep_old_command=True)

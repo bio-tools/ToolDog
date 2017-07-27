@@ -46,6 +46,23 @@ class Biotool(object):
         self.topics = []    # List of Topic objects
         self.informations = None  # Informations object
 
+    def generate_galaxy_help(self):
+        """
+        Generate a help message from the different informations found on the tool.
+
+        :return: a help message
+        :rtype: STRING
+        """
+        help_message = "\n\nWhat it is ?\n" + "============\n\n"
+        help_message += self.description + "\n\n"
+        help_message += "External links:\n" + "===============\n\n"
+        help_message += "- Tool homepage_\n"
+        help_message += "- bio.tools_ entry\n\n"
+        help_message += ".. _homepage: " + self.homepage + "\n"
+        help_message += ".. _bio.tools: https://bio.tools/tool/" + self.tool_id
+        return help_message
+        
+
     def set_informations(self, tool_credits, contacts, publications, docs,
                          language, links, download):
         '''

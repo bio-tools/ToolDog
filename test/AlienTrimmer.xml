@@ -24,8 +24,5 @@
   <help><![CDATA[Trimming and Clipping FASTQ-formatted read files
 
 Tool Homepage: https://research.pasteur.fr/en/software/alientrimmer/]]></help>
-  <citations>
-    <citation type="pmid">23912058</citation>
-    <citation type="pmid">24860597</citation>
-  </citations>
+  <citations/>
 </tool>

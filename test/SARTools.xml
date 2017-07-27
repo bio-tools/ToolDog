@@ -27,7 +27,5 @@
   <help><![CDATA[SARTools is a R package dedicated to the differential analysis of RNA-seq data. It provides tools to generate descriptive and diagnostic graphs, to run the differential analysis with one of the well known DESeq2 or edgeR packages and to export the results into easily readable tab-delimited files. It also facilitates the generation of a HTML report which displays all the figures produced, explains the statistical methods and gives the results of the differential analysis.
 
 Tool Homepage: https://github.com/PF2-pasteur-fr/SARTools]]></help>
-  <citations>
-    <citation type="pmid">27280887</citation>
-  </citations>
+  <citations/>
 </tool>
