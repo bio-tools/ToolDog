@@ -53,6 +53,13 @@ class GalaxyToolGen(object):
             # Add information about Tooldog version
             self.tool.add_comment("This tool descriptor has been annotated by ToolDog v" +
                                   __version__)
+            # Help if missing or TODO
+            if self.tool.help is None:
+                self.tool.help = biotool.generate_galaxy_help()
+            elif "TODO" in self.tool.help:
+                LOGGER.info("TODO has been found in help, content has been replaced.")
+                self.tool.help = biotool.generate_galaxy_help()
+
         else:
             LOGGER.info("Creating new GalaxyToolGen object...")
             # Initialize GalaxyInfo
@@ -66,8 +73,7 @@ class GalaxyToolGen(object):
             description = biotool.description.split('.')[0] + '.'
             self.tool = gxt.Tool(biotool.name, biotool.tool_id, biotool.version,
                                  description, "COMMAND", version_command="COMMAND --version")
-            self.tool.help = (biotool.description + "\n\nTool Homepage: " +
-                              biotool.homepage)
+            self.tool.help = biotool.generate_galaxy_help()
             #   Add information about Galaxy and EDAM in the XML
             self.tool.add_comment("Information was obtained from the Galaxy instance: " +
                                   self.etog.galaxy_url + " v" +

@@ -46,7 +46,7 @@ class Biotool(object):
         self.topics = []    # List of Topic objects
         self.informations = None  # Informations object
 
-    def _generate_galaxy_help(self):
+    def generate_galaxy_help(self):
         """
         Generate a help message from the different informations found on the tool.
 
