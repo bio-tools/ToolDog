@@ -53,7 +53,7 @@ class PythonAnalyzer(LanguageAnalyzer):
             LOGGER.warn("Trying to analyse code as python2")
             LOGGER.info("Trying to analyse code as python3")
             return self._analyse(3)
-        except Exception:
+        except Exception: # TODO: Add more fine-grained error handlers.
             LOGGER.warn("Unknown Docker client error: Docker is not installed/started or unable to use network due to the network restrictions.")
             LOGGER.info("Skipping analysis...")
             return None
