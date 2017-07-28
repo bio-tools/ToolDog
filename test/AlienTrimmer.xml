@@ -36,5 +36,7 @@ External links:
 
 .. _homepage: https://research.pasteur.fr/en/software/alientrimmer/
 .. _bio.tools: https://bio.tools/tool/AlienTrimmer]]></help>
-  <citations/>
+  <citations>
+    <citation type="doi">10.3389/fgene.2014.00130</citation>
+  </citations>
 </tool>

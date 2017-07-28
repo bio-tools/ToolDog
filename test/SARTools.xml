@@ -39,5 +39,7 @@ External links:
 
 .. _homepage: https://github.com/PF2-pasteur-fr/SARTools
 .. _bio.tools: https://bio.tools/tool/SARTools]]></help>
-  <citations/>
+  <citations>
+    <citation type="doi">10.1371/journal.pone.0157022</citation>
+  </citations>
 </tool>

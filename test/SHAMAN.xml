@@ -39,5 +39,7 @@ External links:
 
 .. _homepage: http://shaman.c3bi.pasteur.fr/
 .. _bio.tools: https://bio.tools/tool/SHAMAN]]></help>
-  <citations/>
+  <citations>
+    <citation type="doi">10.1073/pnas.1523899113</citation>
+  </citations>
 </tool>
