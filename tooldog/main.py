@@ -139,7 +139,7 @@ def config_logger(write_logs, log_level, log_file, verbose):
     # Configure loggers for everymodule
     modules = ['annotate.galaxy', 'annotate.cwl', 'annotate.edam_to_galaxy',
                'analyse', 'analyse.tool_analazer', 'analyse.code_collector',
-               'analyse.language_analyzer', 'main', 'analyse']
+               'analyse.language_analyzer', 'biotool_model', 'main', 'analyse']
     logger = {'handlers': ['stderr'],
               'propagate': False,
               'level': 'DEBUG'}
