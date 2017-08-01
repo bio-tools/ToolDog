@@ -47,12 +47,21 @@ class PythonAnalyzer(LanguageAnalyzer):
         """
 
         try:
-            LOGGER.info("Trying to analyse code as python2")
+            LOGGER.info("Trying to analyse the code as python2")
             return self._analyse(2)
         except DockerException:
-            LOGGER.warn("Trying to analyse code as python2")
-            LOGGER.info("Trying to analyse code as python3")
-            return self._analyse(3)
+            try:
+                LOGGER.warn("Unable to analyse the code as python2")
+                LOGGER.info("Trying to analyse the code as python3")
+                return self._analyse(3)
+            except DockerException:
+                LOGGER.warn("Unable to analyse the code as python3")
+                LOGGER.info("Skipping analysis...")
+                return None
+        except Exception: # TODO: Add more fine-grained error handlers.
+            LOGGER.warn("Unknown Docker client error: Docker is not installed/started or unable to use network due to the network restrictions.")
+            LOGGER.info("Skipping analysis...")
+            return None
 
     def _analyse(self, version):
         python_path = "/usr/local/lib/python3.5/dist-packages/" if version == 3 else \

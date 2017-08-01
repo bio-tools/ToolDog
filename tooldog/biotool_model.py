@@ -50,7 +50,10 @@ class Biotool(object):
         self.homepage = homepage
         self.functions = []  # List of Function objects
         self.topics = []    # List of Topic objects
-        self.informations = None  # Informations object
+        self.informations = Informations()  # Informations object
+        if self.homepage.startswith('https://github.com'):
+            link = Link({'url':self.homepage, 'type':'Repository', 'comment':''})
+            self.informations.links.append(link)
 
     def generate_galaxy_help(self):
         """
@@ -83,7 +86,6 @@ class Biotool(object):
         :param doc: list of different documentations.
         :type doc: LIST of DICT
         '''
-        self.informations = Informations()
         for cred in tool_credits:
             self.informations.tool_credits.append(Credit(cred))
         for cont in contacts:
