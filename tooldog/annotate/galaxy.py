@@ -179,7 +179,8 @@ class GalaxyToolGen(object):
                                                            edam_format=format_uri))
         formats = ', '.join(list_formats)
         # Create the parameter
-        param = gxtp.OutputData(name, format=formats, from_work_dir=name + '.ext')
+        param = gxtp.OutputData(name, format=formats, from_work_dir=name +\
+                                "." + formats.replace('.','/'))
         param.command_line_override = ''
         # Write comment about this param
         param.node.insert(0, etree.Comment(FIXME))

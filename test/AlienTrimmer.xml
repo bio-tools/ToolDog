@@ -25,7 +25,7 @@
     </param>
   </inputs>
   <outputs>
-    <data format="fastq" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1">
+    <data format="fastq" from_work_dir="OUTPUT1.fastq" hidden="false" name="OUTPUT1">
       <!--This parameter has been automatically generated from https://bio.tools/tool/AlienTrimmer by ToolDog v0.3.0.-->
       <!--FIXME: Please map this parameter to its command line argument.-->
     </data>
