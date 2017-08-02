@@ -3,6 +3,9 @@
 cwlVersion: v1.0
 id: AlienTrimmer
 label: Trimming and Clipping FASTQ-formatted read files.
+baseCommand: COMMAND
+doc: "Trimming and Clipping FASTQ-formatted read files\n\nTool Homepage: https://research.pasteur.fr/en/software/alientrimmer/"
+class: CommandLineTool
 inputs:
   INPUT1:
     label: DNA sequence (raw)
@@ -23,6 +26,11 @@ outputs:
     type: File
     outputBinding:
       glob: OUTPUT1.ext
-baseCommand: COMMAND
-doc: "Trimming and Clipping FASTQ-formatted read files\n\nTool Homepage: https://research.pasteur.fr/en/software/alientrimmer/"
-class: CommandLineTool
+s:name: AlienTrimmer
+s:about: Trimming and Clipping FASTQ-formatted read files
+s:url: https://research.pasteur.fr/en/software/alientrimmer/
+s:programmingLanguage:
+- Java
+s:publication: []
+$namespace:
+  s: http://schema.org/

@@ -3,6 +3,9 @@
 cwlVersion: v1.0
 id: BMGE
 label: Block Mapping and Gathering using Entropy.
+baseCommand: COMMAND
+doc: "Block Mapping and Gathering using Entropy\n\nTool Homepage: https://research.pasteur.fr/en/software/bmge-block-mapping-and-gathering-with-entropy/"
+class: CommandLineTool
 inputs:
   INPUT1:
     label: Sequence alignment
@@ -24,6 +27,11 @@ outputs:
     type: File
     outputBinding:
       glob: OUTPUT2.ext
-baseCommand: COMMAND
-doc: "Block Mapping and Gathering using Entropy\n\nTool Homepage: https://research.pasteur.fr/en/software/bmge-block-mapping-and-gathering-with-entropy/"
-class: CommandLineTool
+s:name: BMGE
+s:about: Block Mapping and Gathering using Entropy
+s:url: https://research.pasteur.fr/en/software/bmge-block-mapping-and-gathering-with-entropy/
+s:programmingLanguage:
+- Java
+s:publication: []
+$namespace:
+  s: http://schema.org/

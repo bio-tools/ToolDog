@@ -4,6 +4,14 @@ cwlVersion: v1.0
 id: MEMHDX
 label: This tool allows users to perform an automated workflow to analyze, validate
   and visualize large HDX-MS datasets.
+baseCommand: COMMAND
+doc: "This tool allows users to perform an automated workflow to analyze, validate\
+  \ and visualize large HDX-MS datasets. The input file is the output of DynamX software\
+  \ from Waters. Output files provide a plot of the data, the fitted model for each\
+  \ peptide, a plot of the calculated p -values, and a global visualization of the\
+  \ experiment. User could also obtain an overview of all peptides on the 3D structure.\n\
+  \nTool Homepage: http://memhdx.c3bi.pasteur.fr/"
+class: CommandLineTool
 inputs:
   INPUT1:
     label: Mass spectrometry data
@@ -18,11 +26,16 @@ outputs:
     type: File
     outputBinding:
       glob: OUTPUT1.ext
-baseCommand: COMMAND
-doc: "This tool allows users to perform an automated workflow to analyze, validate\
-  \ and visualize large HDX-MS datasets. The input file is the output of DynamX software\
-  \ from Waters. Output files provide a plot of the data, the fitted model for each\
-  \ peptide, a plot of the calculated p -values, and a global visualization of the\
-  \ experiment. User could also obtain an overview of all peptides on the 3D structure.\n\
-  \nTool Homepage: http://memhdx.c3bi.pasteur.fr/"
-class: CommandLineTool
+s:name: MEMHDX
+s:about: This tool allows users to perform an automated workflow to analyze, validate
+  and visualize large HDX-MS datasets. The input file is the output of DynamX software
+  from Waters. Output files provide a plot of the data, the fitted model for each
+  peptide, a plot of the calculated p -values, and a global visualization of the experiment.
+  User could also obtain an overview of all peptides on the 3D structure.
+s:url: http://memhdx.c3bi.pasteur.fr/
+s:programmingLanguage:
+- R
+s:publication:
+- id: http://dx.doi.org/10.1093/bioinformatics/btw420
+$namespace:
+  s: http://schema.org/
