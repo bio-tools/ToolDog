@@ -13,6 +13,7 @@ import copy
 import logging
 
 # External libraries
+from lxml import etree
 import galaxyxml.tool as gxt
 import galaxyxml.tool.parameters as gxtp
 from galaxyxml.tool.import_xml import GalaxyXmlParser
@@ -24,6 +25,9 @@ from tooldog import __version__
 #  Constant(s)  ------------------------------
 
 LOGGER = logging.getLogger(__name__)
+PARAM_COMMENT = "This parameter has been automatically generated from" \
+                " https://bio.tools/tool/%s by ToolDog v" + str(__version__) + "."
+FIXME = "FIXME: Please map this parameter to its command line argument."
 
 #  Class(es)  ------------------------------
 
@@ -43,6 +47,13 @@ class GalaxyToolGen(object):
         :param biotool: Biotool object of an entry from https://bio.tools.
         :type biotool: :class:`tooldog.model.Biotool`
         """
+        # Initialize GalaxyInfo
+        self.etog = EdamToGalaxy(galaxy_url=galaxy_url, edam_url=edam_url,
+                                 mapping_json=mapping_json)
+        # Initialize counters for inputs and outputs from bio.tools
+        self.input_ct = 0
+        self.output_ct = 0
+        self.biotool_id = biotool.tool_id
         if existing_tool:
             LOGGER.info("Loading existing XML from " + existing_tool)
             gxp = GalaxyXmlParser()
@@ -62,12 +73,6 @@ class GalaxyToolGen(object):
 
         else:
             LOGGER.info("Creating new GalaxyToolGen object...")
-            # Initialize GalaxyInfo
-            self.etog = EdamToGalaxy(galaxy_url=galaxy_url, edam_url=edam_url,
-                                     mapping_json=mapping_json)
-            # Initialize counters for inputs and outputs
-            self.input_ct = 0
-            self.output_ct = 0
             # Initialize tool
             #   Get the first sentence of the description only
             description = biotool.description.split('.')[0] + '.'
@@ -142,6 +147,9 @@ class GalaxyToolGen(object):
                                help=input_obj.description, format=formats)
         # Override the corresponding arguments in the command line
         param.command_line_override = '--' + name + ' $' + name
+        # Write comment about this param
+        param.node.insert(0, etree.Comment(FIXME))
+        param.node.insert(0, etree.Comment(PARAM_COMMENT % (self.biotool_id)))
         # Appends parameter to inputs
         self.tool.inputs.append(param)
 
@@ -173,6 +181,9 @@ class GalaxyToolGen(object):
         # Create the parameter
         param = gxtp.OutputData(name, format=formats, from_work_dir=name + '.ext')
         param.command_line_override = ''
+        # Write comment about this param
+        param.node.insert(0, etree.Comment(FIXME))
+        param.node.insert(0, etree.Comment(PARAM_COMMENT % (self.biotool_id)))
         self.tool.outputs.append(param)
 
     def add_citation(self, publication):

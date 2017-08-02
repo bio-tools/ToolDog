@@ -70,6 +70,11 @@ def parse_arguments():
                            help='Language of the tool.')
     analy_opt.add_argument('--source_code', dest='SOURCE',
                            help='Path the source code directory.')
+    # Group for annotation options
+    annot_opt = parser.add_argument_group('Options for tool description annotation')
+    annot_opt.add_argument('--inout_biotools', action='store_true',
+                           help='add inputs and outputs described in bio.tools to the description',
+                           dest='INOUT_BIOT', default=False)
     # Group for Galaxy options
     galaxy_opt = parser.add_argument_group('Options for Galaxy XML generation (-g/--galaxy)')
     galaxy_opt.add_argument('--galaxy_url', dest='GAL_URL',
@@ -219,7 +224,7 @@ def json_to_biotool(json_file):
 
 
 def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_json=None,
-              existing_tool=None):
+              existing_tool=None, inout_biotool=False):
     """
     This function uses :class:`tooldog.galaxy.GalaxyToolGen` to write XML using galaxyxml.
 
@@ -241,6 +246,12 @@ def write_xml(biotool, outfile=None, galaxy_url=None, edam_url=None, mapping_jso
         biotool_xml.add_citation(publi)
     # Add inputs and outputs
     if existing_tool:
+        if inout_biotool:
+            for function in biotool.functions:
+                for inpt in function.inputs:
+                    biotool_xml.add_input_file(inpt)
+                for output in function.outputs:
+                    biotool_xml.add_output_file(output)
         biotool_xml.write_xml(out_file=outfile, keep_old_command=True)
     else:
         # This will need to be changed when incorporating argparse2tool...
@@ -303,7 +314,7 @@ def annotate(biotool, args, existing_desc=None):
         # Probably need to check if existing_desc right format
         write_xml(biotool, outfile=args.OUTFILE, galaxy_url=args.GAL_URL,
                   edam_url=args.EDAM_URL, mapping_json=args.MAP_FILE,
-                  existing_tool=existing_desc)
+                  existing_tool=existing_desc, inout_biotool=args.INOUT_BIOT)
     elif args.CWL:
         # Write corresponding CWL
         write_cwl(biotool, args.OUTFILE, existing_tool=existing_desc)
