@@ -55,6 +55,7 @@ class CwlToolGen(object):
                                                base_command="COMMAND",
                                                doc=documentation,
                                                cwl_version='v1.0')
+        self._set_meta_from_biotool(biotool)
 
     def add_input_file(self, input_obj):
         """
@@ -106,6 +107,42 @@ class CwlToolGen(object):
                                               param_format=formats,
                                               output_binding=param_binding)
         self.tool.outputs.append(param)
+
+    def _set_meta_from_biotool(self, biotool):
+        """
+        Add first set of metadata found on bio.tools to the description.
+
+        :param biotool: Biotool object of an entry from https://bio.tools.
+        :type biotool: :class:`tooldog.model.Biotool`
+        """
+        self.tool.metadata = cwlgen.Metadata()
+        self.tool.metadata.name = biotool.name
+        self.tool.metadata.about = biotool.description
+        self.tool.metadata.url = biotool.homepage
+        if biotool.informations.language:
+            self.tool.metadata.programmingLanguage = biotool.informations.language
+        
+
+    def add_publication(self, publication):
+        """
+        Add publication to the tool (CWL: s:publication).
+
+        :param publication: Publication object.
+        :type publication: :class:`tooldog.model.Publication`
+        """
+        LOGGER.debug("Adding citation to CwlToolGen object...")
+        if not hasattr(self.tool.metadata, 'publication'):
+            self.tool.metadata.publication = []
+        # Add citation depending the type (doi, pmid...)
+        if publication.doi is not None:
+            self.tool.metadata.publication.append({'id': 'http://dx.doi.org/' + publication.doi})
+        # <citation> only supports doi and bibtex as a type
+        elif publication.pmid is not None:
+            # self.tool.citations.append(gxtp.Citation('pmid', publication.pmid))
+            LOGGER.warn('pmid is not supported by <citation>, citation skipped')
+        elif publication.pmcid is not None:
+            # self.tool.citations.append(gxtp.Citation('pmcid', publication.pmcid))
+            LOGGER.warn('pmcid is not supported by <citation>, citation skipped')
 
     def write_cwl(self, out_file=None, index=None):
         """
