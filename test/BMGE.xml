@@ -14,11 +14,20 @@
   <version_command>COMMAND --version</version_command>
   <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
   <inputs>
-    <param argument="INPUT1" format="data, txt" label="Sequence alignment" name="INPUT1" type="data"/>
+    <param argument="INPUT1" format="data, txt" label="Sequence alignment" name="INPUT1" type="data">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/BMGE by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </param>
   </inputs>
   <outputs>
-    <data format="data, data, txt" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
-    <data format="html" from_work_dir="OUTPUT2.ext" hidden="false" name="OUTPUT2"/>
+    <data format="data, data, txt" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/BMGE by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </data>
+    <data format="html" from_work_dir="OUTPUT2.ext" hidden="false" name="OUTPUT2">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/BMGE by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </data>
   </outputs>
   <help><![CDATA[
 
