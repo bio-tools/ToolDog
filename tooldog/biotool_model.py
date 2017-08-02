@@ -1,11 +1,17 @@
-#!/usr/bin/env python3
+#! /usr/bin/env python3
 
-'''
+"""
 Model used to process information contained in JSON from https://bio.tools description.
 
 The content of a description on https://bio.tools is contained in a JSON file and this
 model aims to store the different information.
-'''
+"""
+
+import requests
+import logging
+from lxml import etree
+
+LOGGER = logging.getLogger(__name__)
 
 #  Class(es)  ------------------------------
 
@@ -196,7 +202,26 @@ class Publication(object):
         self.pmid = publication['pmid']  # [STRING]
         self.pmcid = publication['pmcid']  # [STRING]
         self.type = publication['type']  # [STRING]
+        if self.doi is None:
+            self._fetch_doi()
 
+    def _fetch_doi(self):
+        """
+        fetch doi using pmid or pmcid using:
+        https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0
+        """
+        if self.pmid is not None:
+            id_query = self.pmid
+        elif self.pmcid is not None:
+            id_query = self.pmcid
+        req = "https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?ids=" + id_query
+        xml_req = etree.fromstring(requests.get(req).text)
+        if xml_req.find('record') is not None:
+            try:
+                self.doi = xml_req.find('record').attrib['doi']
+            except:
+                LOGGER.warning("Could not find doi corresponding to " + id_query)
+                
 
 class Documentation(object):
     '''

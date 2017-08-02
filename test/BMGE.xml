@@ -44,5 +44,7 @@ External links:
 
 .. _homepage: https://research.pasteur.fr/en/software/bmge-block-mapping-and-gathering-with-entropy/
 .. _bio.tools: https://bio.tools/tool/BMGE]]></help>
-  <citations/>
+  <citations>
+    <citation type="doi">10.1186/1471-2148-10-210</citation>
+  </citations>
 </tool>
