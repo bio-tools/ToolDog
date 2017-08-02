@@ -15,7 +15,10 @@
   <version_command>COMMAND --version</version_command>
   <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
   <inputs>
-    <param argument="INPUT1" format="json" label="Report" name="INPUT1" type="data"/>
+    <param argument="INPUT1" format="json" label="Report" name="INPUT1" type="data">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/MacSyFinder by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </param>
   </inputs>
   <help><![CDATA[
 

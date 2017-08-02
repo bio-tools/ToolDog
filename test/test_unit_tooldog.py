@@ -383,7 +383,7 @@ class TestGalaxyToolGen(unittest.TestCase):
         output_attrib = self.genxml.tool.outputs.children[0].node.attrib
         self.assertEqual(output_attrib['name'], 'OUTPUT1')
         self.assertEqual(output_attrib['format'], 'fastq')
-        self.assertEqual(output_attrib['from_work_dir'], 'OUTPUT1.ext')
+        self.assertEqual(output_attrib['from_work_dir'], 'OUTPUT1.fastq')
 
     def test_add_citation(self):
         # Create a Publication object
