@@ -284,6 +284,8 @@ def write_cwl(biotool, outfile=None, existing_tool=None):
     # Add different Metadata
     for publi in biotool.informations.publications:
         biotool_cwl.add_publication(publi)
+    for topic in biotool.topics:
+        biotool_cwl.add_edam_topic(topic)
     # Add operations and inputs
     if existing_tool:
         # For the moment, there is no way to add metadata to the cwl

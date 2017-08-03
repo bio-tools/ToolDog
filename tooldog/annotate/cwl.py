@@ -122,7 +122,6 @@ class CwlToolGen(object):
         if biotool.informations.language:
             self.tool.metadata.programmingLanguage = biotool.informations.language
         
-
     def add_publication(self, publication):
         """
         Add publication to the tool (CWL: s:publication).
@@ -130,7 +129,7 @@ class CwlToolGen(object):
         :param publication: Publication object.
         :type publication: :class:`tooldog.model.Publication`
         """
-        LOGGER.debug("Adding citation to CwlToolGen object...")
+        LOGGER.debug("Adding publication to CwlToolGen object...")
         if not hasattr(self.tool.metadata, 'publication'):
             self.tool.metadata.publication = []
         # Add citation depending the type (doi, pmid...)
@@ -138,11 +137,22 @@ class CwlToolGen(object):
             self.tool.metadata.publication.append({'id': 'http://dx.doi.org/' + publication.doi})
         # <citation> only supports doi and bibtex as a type
         elif publication.pmid is not None:
-            # self.tool.citations.append(gxtp.Citation('pmid', publication.pmid))
-            LOGGER.warn('pmid is not supported by <citation>, citation skipped')
+            LOGGER.warn('pmid is not supported by publication, publication skipped')
         elif publication.pmcid is not None:
-            # self.tool.citations.append(gxtp.Citation('pmcid', publication.pmcid))
-            LOGGER.warn('pmcid is not supported by <citation>, citation skipped')
+            LOGGER.warn('pmcid is not supported by publication, publication skipped')
+
+    def add_edam_topic(self, topic):
+        """
+        Add the EDAM topic to the tool (CWL: s:topic).
+
+        :param topic: Topic object.
+        :type topic: :class:`tooldog.biotool_model.Topic`
+        """
+        LOGGER.debug("Adding EDAM topic to CwlToolGen object...")
+        if not hasattr(self.tool.metadata, 'topic'):
+            self.tool.metadata.topic = []
+        self.tool.metadata.topic.append({'url': topic.uri})
+
 
     def write_cwl(self, out_file=None, index=None):
         """
