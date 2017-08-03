@@ -42,6 +42,7 @@ s:about: "SHAMAN is a SHiny application for Metagenomic ANalysis including the n
 s:url: http://shaman.c3bi.pasteur.fr/
 s:programmingLanguage:
 - R
-s:publication: []
+s:publication:
+- id: http://dx.doi.org/10.1073/pnas.1523899113
 $namespace:
   s: http://schema.org/

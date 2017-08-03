@@ -32,6 +32,7 @@ s:about: Block Mapping and Gathering using Entropy
 s:url: https://research.pasteur.fr/en/software/bmge-block-mapping-and-gathering-with-entropy/
 s:programmingLanguage:
 - Java
-s:publication: []
+s:publication:
+- id: http://dx.doi.org/10.1186/1471-2148-10-210
 $namespace:
   s: http://schema.org/

@@ -48,6 +48,7 @@ s:about: SARTools is a R package dedicated to the differential analysis of RNA-s
 s:url: https://github.com/PF2-pasteur-fr/SARTools
 s:programmingLanguage:
 - R
-s:publication: []
+s:publication:
+- id: http://dx.doi.org/10.1371/journal.pone.0157022
 $namespace:
   s: http://schema.org/

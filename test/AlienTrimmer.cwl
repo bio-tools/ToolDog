@@ -31,6 +31,7 @@ s:about: Trimming and Clipping FASTQ-formatted read files
 s:url: https://research.pasteur.fr/en/software/alientrimmer/
 s:programmingLanguage:
 - Java
-s:publication: []
+s:publication:
+- id: http://dx.doi.org/10.3389/fgene.2014.00130
 $namespace:
   s: http://schema.org/
