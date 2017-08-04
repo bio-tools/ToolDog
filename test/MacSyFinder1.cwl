@@ -67,5 +67,7 @@ s:programmingLanguage:
 - Python
 s:publication:
 - id: http://dx.doi.org/doi:10.1371/journal.pone.0110726
+s:edam_topic:
+- url: http://edamontology.org/topic_0085
 $namespace:
   s: http://schema.org/

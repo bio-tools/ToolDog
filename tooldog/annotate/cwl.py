@@ -149,9 +149,10 @@ class CwlToolGen(object):
         :type topic: :class:`tooldog.biotool_model.Topic`
         """
         LOGGER.debug("Adding EDAM topic to CwlToolGen object...")
-        if not hasattr(self.tool.metadata, 'topic'):
-            self.tool.metadata.topic = []
-        self.tool.metadata.topic.append({'url': topic.uri})
+        LOGGER.warning("Current way of writing edam in CWL is not correct.")
+        if not hasattr(self.tool.metadata, 'edam_topic'):
+            self.tool.metadata.edam_topic = []
+        self.tool.metadata.edam_topic.append({'url': topic.uri})
 
 
     def write_cwl(self, out_file=None, index=None):

@@ -33,5 +33,11 @@ s:programmingLanguage:
 - Python
 s:publication:
 - id: http://dx.doi.org/10.1093/nar/gkw319
+s:edam_topic:
+- url: http://edamontology.org/topic_0085
+- url: http://edamontology.org/topic_0798
+- url: http://edamontology.org/topic_3047
+- url: http://edamontology.org/topic_0091
+- url: http://edamontology.org/topic_0080
 $namespace:
   s: http://schema.org/

@@ -37,5 +37,7 @@ s:programmingLanguage:
 - R
 s:publication:
 - id: http://dx.doi.org/10.1093/bioinformatics/btw420
+s:edam_topic:
+- url: http://edamontology.org/topic_3520
 $namespace:
   s: http://schema.org/
