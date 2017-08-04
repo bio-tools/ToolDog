@@ -32,5 +32,8 @@ s:publication:
 - id: http://dx.doi.org/doi:10.1371/journal.pone.0110726
 s:edam_topic:
 - url: http://edamontology.org/topic_0085
+s:edam_operation:
+- url: http://edamontology.org/operation_3023
+- url: http://edamontology.org/operation_0337
 $namespace:
   s: http://schema.org/

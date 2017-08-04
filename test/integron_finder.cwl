@@ -39,5 +39,10 @@ s:edam_topic:
 - url: http://edamontology.org/topic_3047
 - url: http://edamontology.org/topic_0091
 - url: http://edamontology.org/topic_0080
+s:edam_operation:
+- url: http://edamontology.org/operation_3430
+- url: http://edamontology.org/operation_0239
+- url: http://edamontology.org/operation_3087
+- url: http://edamontology.org/operation_0362
 $namespace:
   s: http://schema.org/

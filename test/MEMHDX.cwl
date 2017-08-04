@@ -39,5 +39,9 @@ s:publication:
 - id: http://dx.doi.org/10.1093/bioinformatics/btw420
 s:edam_topic:
 - url: http://edamontology.org/topic_3520
+s:edam_operation:
+- url: http://edamontology.org/operation_2997
+- url: http://edamontology.org/operation_0337
+- url: http://edamontology.org/operation_2238
 $namespace:
   s: http://schema.org/

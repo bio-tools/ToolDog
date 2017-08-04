@@ -149,11 +149,23 @@ class CwlToolGen(object):
         :type topic: :class:`tooldog.biotool_model.Topic`
         """
         LOGGER.debug("Adding EDAM topic to CwlToolGen object...")
-        LOGGER.warning("Current way of writing edam in CWL is not correct.")
+        LOGGER.warning("Current way of writing EDAM topic in CWL is not correct.")
         if not hasattr(self.tool.metadata, 'edam_topic'):
             self.tool.metadata.edam_topic = []
         self.tool.metadata.edam_topic.append({'url': topic.uri})
 
+    def add_edam_operation(self, operation):
+        """
+        Add the EDAM operation to the tool (CWL: s:operation).
+
+        :param operation: Operation object.
+        :type operation: :class:`tooldog.biotool_model.Operation`
+        """
+        LOGGER.debug("Adding EDAM operation to CwlToolGen object...")
+        LOGGER.warning("Current way of writing EDAM operation in CWL is not correct.")
+        if not hasattr(self.tool.metadata, 'edam_operation'):
+            self.tool.metadata.edam_operation = []
+        self.tool.metadata.edam_operation.append({'url': operation.uri})
 
     def write_cwl(self, out_file=None, index=None):
         """

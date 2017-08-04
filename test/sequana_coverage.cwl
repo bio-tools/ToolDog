@@ -38,5 +38,7 @@ s:programmingLanguage:
 s:edam_topic:
 - url: http://edamontology.org/topic_3070
 - url: http://edamontology.org/topic_3316
+s:edam_operation:
+- url: http://edamontology.org/operation_0253
 $namespace:
   s: http://schema.org/
