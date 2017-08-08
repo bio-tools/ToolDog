@@ -10,7 +10,8 @@ doc: "MacSyFinder is a program to model and detect macromolecular systems, genet
   \ conserved properties: they are made of conserved components, and are encoded in\
   \ compact loci (conserved genetic architecture). The user models these systems with\
   \ MacSyFinder to reflect these conserved features, and to allow their efficient\
-  \ detection.\n\nTool Homepage: https://github.com/gem-pasteur/macsyfinder"
+  \ detection.\n\nExternal links:\nTool homepage: https://github.com/gem-pasteur/macsyfinder\n\
+  bio.tools_ entry: MacSyFinder\n\n"
 class: CommandLineTool
 inputs:
   INPUT1:

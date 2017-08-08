@@ -4,7 +4,9 @@ cwlVersion: v1.0
 id: integron_finder
 label: A tool to detect Integron in DNA sequences.
 baseCommand: COMMAND
-doc: "A tool to detect Integron in DNA sequences\n\nTool Homepage: https://github.com/gem-pasteur/Integron_Finder"
+doc: "A tool to detect Integron in DNA sequences\n\nExternal links:\nTool homepage:\
+  \ https://github.com/gem-pasteur/Integron_Finder\nbio.tools_ entry: integron_finder\n\
+  \n"
 class: CommandLineTool
 inputs:
   INPUT1:

@@ -40,6 +40,8 @@ class CwlToolGen(object):
             LOGGER.info("Loading existing CWL tool from " + existing_tool)
             ctp = CWLToolParser()
             self.tool = ctp.import_cwl(existing_tool)
+            if 'None' in self.tool.doc:
+                self.tool.doc = biotool.generate_cwl_doc()
         else:
             LOGGER.info("Creating new CwlToolGen object...")
             # Initialize counters for inputs and outputs
@@ -48,8 +50,7 @@ class CwlToolGen(object):
             # Initialize tool
             #   Get the first sentence of the description only
             description = biotool.description.split('.')[0] + '.'
-            documentation = (biotool.description + "\n\nTool Homepage: " +
-                             biotool.homepage)
+            documentation = biotool.generate_cwl_doc()
             self.tool = cwlgen.CommandLineTool(tool_id=biotool.tool_id,
                                                label=description,
                                                base_command="COMMAND",

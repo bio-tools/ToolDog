@@ -8,8 +8,9 @@ baseCommand: COMMAND
 doc: "Show coverage and interval of confidence to identify under and over represented\
   \ genomic regions. The tool also creates an HTML report with various images showing\
   \ the coverage and GC versus coverage plots. It also provides a set of CSV files\
-  \ with low or high coverage regions (as compared to the average coverage).\n\nTool\
-  \ Homepage: http://sequana.readthedocs.io"
+  \ with low or high coverage regions (as compared to the average coverage).\n\nExternal\
+  \ links:\nTool homepage: http://sequana.readthedocs.io\nbio.tools_ entry: sequana_coverage\n\
+  \n"
 class: CommandLineTool
 inputs:
   INPUT1:

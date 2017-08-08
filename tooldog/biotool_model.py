@@ -70,7 +70,19 @@ class Biotool(object):
         help_message += ".. _homepage: " + self.homepage + "\n"
         help_message += ".. _bio.tools: https://bio.tools/tool/" + self.tool_id
         return help_message
-        
+
+    def generate_cwl_doc(self):
+        """
+        Generate a doc from the different informations found on the tool.
+
+        :return: a doc
+        :rtype: STRING
+        """
+        help_message = self.description + "\n\n"
+        help_message += "External links:\n"
+        help_message += "Tool homepage: " + self.homepage + "\n"
+        help_message += "bio.tools entry: " + self.tool_id + "\n\n"
+        return help_message
 
     def set_informations(self, tool_credits, contacts, publications, docs,
                          language, links, download):
