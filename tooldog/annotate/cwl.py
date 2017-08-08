@@ -141,6 +141,11 @@ class CwlToolGen(object):
         elif publication.pmcid is not None:
             LOGGER.warn('pmcid is not supported by publication, publication skipped')
 
+    '''
+    Commented for the moment since we did not figure out the best way to integrate
+    EDAM operations and topics within CWL tools. It will be added in the Documentation
+    for the moment...
+
     def add_edam_topic(self, topic):
         """
         Add the EDAM topic to the tool (CWL: s:topic).
@@ -166,6 +171,7 @@ class CwlToolGen(object):
         if not hasattr(self.tool.metadata, 'edam_operation'):
             self.tool.metadata.edam_operation = []
         self.tool.metadata.edam_operation.append({'url': operation.uri})
+    '''
 
     def write_cwl(self, out_file=None, index=None):
         """
