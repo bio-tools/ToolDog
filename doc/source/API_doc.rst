@@ -13,30 +13,58 @@ main.py
    :special-members:
    :exclude-members: __weakref__
 
-model.py
-========
-.. automodule:: tooldog.model
+biotool_model.py
+================
+.. automodule:: tooldog.biotool_model
    :members:
    :special-members:
    :exclude-members: __weakref__
 
-galaxy.py
-=========
-.. automodule:: tooldog.galaxy
+analyse/code_collector.py
+=========================
+.. automodule:: tooldog.analyse.code_collector
    :members:
    :special-members:
    :exclude-members: __weakref__
 
-cwl.py
-======
-.. automodule:: tooldog.cwl
+analyse/container.py
+====================
+.. automodule:: tooldog.analyse.container
    :members:
    :special-members:
    :exclude-members: __weakref__
 
-edam_to_galaxy.py
-=================
-.. automodule:: tooldog.edam_to_galaxy
+analyse/tool_analyzer.py
+========================
+.. automodule:: tooldog.analyse.tool_analyzer
+   :members:
+   :special-members:
+   :exclude-members: __weakref__
+
+analyse/language_analyzer.py
+============================
+.. automodule:: tooldog.analyse.language_analyzer
+   :members:
+   :special-members:
+   :exclude-members: __weakref__
+
+annotate/galaxy.py
+==================
+.. automodule:: tooldog.annotate.galaxy
+   :members:
+   :special-members:
+   :exclude-members: __weakref__
+
+annotate/cwl.py
+===============
+.. automodule:: tooldog.annotate.cwl
+   :members:
+   :special-members:
+   :exclude-members: __weakref__
+
+annotate/edam_to_galaxy.py
+==========================
+.. automodule:: tooldog.annotate.edam_to_galaxy
    :members:
    :special-members:
    :exclude-members: __weakref__
