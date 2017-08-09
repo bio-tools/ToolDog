@@ -34,7 +34,7 @@ FIXME = "FIXME: Please map this parameter to its command line argument."
 
 class GalaxyToolGen(object):
     """
-    Class to support generation of XML from :class:`tooldog.model.Biotool` object.
+    Class to support generation of XML from :class:`tooldog.biotool_model.Biotool` object.
     """
 
     def __init__(self, biotool, galaxy_url=None, edam_url=None, mapping_json=None,
@@ -45,7 +45,7 @@ class GalaxyToolGen(object):
         and a help).
 
         :param biotool: Biotool object of an entry from https://bio.tools.
-        :type biotool: :class:`tooldog.model.Biotool`
+        :type biotool: :class:`tooldog.biotool_model.Biotool`
         """
         # Initialize GalaxyInfo
         self.etog = EdamToGalaxy(galaxy_url=galaxy_url, edam_url=edam_url,
@@ -90,10 +90,10 @@ class GalaxyToolGen(object):
 
     def add_edam_topic(self, topic):
         """
-        Add the EDAM topic to the tool (XML: edam_topics).
+        Add the EDAM topic to the tool (XML: <edam_topics>).
 
         :param topic: Topic object.
-        :type topic: :class:`tooldog.model.Topic`
+        :type topic: :class:`tooldog.biotool_model.Topic`
         """
         LOGGER.debug("Adding EDAM topic " + topic.get_edam_id() + " to GalaxyToolGen object.")
         if not hasattr(self.tool, 'edam_topics'):
@@ -104,10 +104,10 @@ class GalaxyToolGen(object):
 
     def add_edam_operation(self, operation):
         """
-        Add the EDAM operation to the tool (XML: edam_operations).
+        Add the EDAM operation to the tool (XML: <edam_operations>).
 
         :param topic: Operation object.
-        :type topic: :class:`tooldog.model.Operation`
+        :type topic: :class:`tooldog.biotool_model.Operation`
         """
         LOGGER.debug("Adding EDAM operation " + operation.get_edam_id() +
                      " to GalaxyToolGen object.")
@@ -122,7 +122,7 @@ class GalaxyToolGen(object):
         Add an input to the tool (XML: <inputs>).
 
         :param input_obj: Input object.
-        :type input_obj: :class:`tooldog.model.Input`
+        :type input_obj: :class:`tooldog.biotool_model.Input`
         """
         LOGGER.debug("Adding input to GalaxyToolGen object...")
         if not hasattr(self.tool, 'inputs'):
@@ -158,7 +158,7 @@ class GalaxyToolGen(object):
         Add an output to the tool (XML: <outputs>).
 
         :param output: Output object.
-        :type output: :class:`tooldog.model.Output`
+        :type output: :class:`tooldog.biotool_model.Output`
         """
         LOGGER.debug("Adding output to GalaxyToolGen object...")
         if not hasattr(self.tool, 'outputs'):
@@ -179,8 +179,8 @@ class GalaxyToolGen(object):
                                                            edam_format=format_uri))
         formats = ', '.join(list_formats)
         # Create the parameter
-        param = gxtp.OutputData(name, format=formats, from_work_dir=name +\
-                                "." + formats.replace('.','/'))
+        param = gxtp.OutputData(name, format=formats, from_work_dir=name +
+                                "." + formats.replace('.', '/'))
         param.command_line_override = ''
         # Write comment about this param
         param.node.insert(0, etree.Comment(FIXME))
@@ -192,7 +192,7 @@ class GalaxyToolGen(object):
         Add publication(s) to the tool (XML: <citations>).
 
         :param publication: Publication object.
-        :type publication: :class:`tooldog.model.Publication`
+        :type publication: :class:`tooldog.biotool_model.Publication`
         """
         LOGGER.debug("Adding citation to GalaxyToolGen object...")
         if not hasattr(self.tool, 'citations'):

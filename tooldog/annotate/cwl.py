@@ -26,7 +26,7 @@ LOGGER = logging.getLogger(__name__)
 
 class CwlToolGen(object):
     """
-    Class to support generation of CWL from :class:`tooldog.model.Biotool` object.
+    Class to support generation of CWL from :class:`tooldog.biotool_model.Biotool` object.
     """
 
     def __init__(self, biotool, existing_tool=None):
@@ -34,7 +34,7 @@ class CwlToolGen(object):
         Initialize a [CommandLineTool] object from cwlgen.
 
         :param biotool: Biotool object of an entry from https://bio.tools.
-        :type biotool: :class:`tooldog.model.Biotool`
+        :type biotool: :class:`tooldog.biotool_model.Biotool`
         """
         if existing_tool:
             LOGGER.info("Loading existing CWL tool from " + existing_tool)
@@ -63,7 +63,7 @@ class CwlToolGen(object):
         Add an input to the CWL tool.
 
         :param input_obj: Input object.
-        :type input_obj: :class:`tooldog.model.Input`
+        :type input_obj: :class:`tooldog.biotool_model.Input`
         """
         LOGGER.info("Adding input to CwlToolGen object...")
         # Build parameter
@@ -89,7 +89,7 @@ class CwlToolGen(object):
         Add an output to the CWL tool.
 
         :param output: Output object.
-        :type output: :class:`tooldog.model.Output`
+        :type output: :class:`tooldog.biotool_model.Output`
         """
         LOGGER.info("Adding output to CwlToolGen object...")
         # Build parameter
@@ -114,7 +114,7 @@ class CwlToolGen(object):
         Add first set of metadata found on bio.tools to the description.
 
         :param biotool: Biotool object of an entry from https://bio.tools.
-        :type biotool: :class:`tooldog.model.Biotool`
+        :type biotool: :class:`tooldog.biotool_model.Biotool`
         """
         self.tool.metadata = cwlgen.Metadata()
         self.tool.metadata.name = biotool.name
@@ -122,13 +122,13 @@ class CwlToolGen(object):
         self.tool.metadata.url = biotool.homepage
         if biotool.informations.language:
             self.tool.metadata.programmingLanguage = biotool.informations.language
-        
+
     def add_publication(self, publication):
         """
         Add publication to the tool (CWL: s:publication).
 
         :param publication: Publication object.
-        :type publication: :class:`tooldog.model.Publication`
+        :type publication: :class:`tooldog.biotool_model.Publication`
         """
         LOGGER.debug("Adding publication to CwlToolGen object...")
         if not hasattr(self.tool.metadata, 'publication'):
