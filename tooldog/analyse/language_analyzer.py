@@ -8,10 +8,10 @@ from tooldog import TMP_DIR
 
 LOGGER = logging.getLogger(__name__)
 
+
 class LanguageAnalyzer(object):
     """
-    This should be the abstract class for all analyzer
-    I have to check the way to properly do that you might be able to help for that :).
+    This should be the abstract class for all analyzer.
     """
 
     def __init__(self, biotool):
@@ -23,7 +23,7 @@ class LanguageAnalyzer(object):
 
     def analyse(self):
         """
-        Run source code analysis
+        Run source code analysis.
         """
         pass
 
@@ -37,13 +37,15 @@ class PythonAnalyzer(LanguageAnalyzer):
         """
         :param gen_format: tool description language (Galaxy XML or CWL)
         :type gen_format: STRING
+        :param source_code: path to source code.
+        :type source_code: STRING
         """
         self.gen_format = gen_format  # To be used as an option when running Docker
         self.source_code = source_code
 
     def analyse(self):
         """
-        Run source code analysis
+        Run source code analysis.
         """
 
         try:
@@ -58,7 +60,7 @@ class PythonAnalyzer(LanguageAnalyzer):
                 LOGGER.warn("Unable to analyse the code as python3")
                 LOGGER.info("Skipping analysis...")
                 return None
-        except Exception: # TODO: Add more fine-grained error handlers.
+        except Exception:  # TODO: Add more fine-grained error handlers.
             LOGGER.warn("Unknown Docker client error: Docker is not installed/started or unable to use network due to the network restrictions.")
             LOGGER.info("Skipping analysis...")
             return None
@@ -96,5 +98,3 @@ class PythonAnalyzer(LanguageAnalyzer):
             return output_path
         else:
             raise DockerException("Tool was not installed properly")
-
-
