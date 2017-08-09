@@ -11,7 +11,7 @@ doc: "MacSyFinder is a program to model and detect macromolecular systems, genet
   \ compact loci (conserved genetic architecture). The user models these systems with\
   \ MacSyFinder to reflect these conserved features, and to allow their efficient\
   \ detection.\n\nExternal links:\nTool homepage: https://github.com/gem-pasteur/macsyfinder\n\
-  bio.tools_ entry: MacSyFinder\n\n"
+  bio.tools entry: MacSyFinder\n\nedam_topic list:\n- http://edamontology.org/topic_0085\n"
 class: CommandLineTool
 inputs:
   INPUT1:

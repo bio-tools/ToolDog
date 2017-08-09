@@ -10,8 +10,8 @@ doc: "This tool allows users to perform an automated workflow to analyze, valida
   \ from Waters. Output files provide a plot of the data, the fitted model for each\
   \ peptide, a plot of the calculated p -values, and a global visualization of the\
   \ experiment. User could also obtain an overview of all peptides on the 3D structure.\n\
-  \nExternal links:\nTool homepage: http://memhdx.c3bi.pasteur.fr/\nbio.tools_ entry:\
-  \ MEMHDX\n\n"
+  \nExternal links:\nTool homepage: http://memhdx.c3bi.pasteur.fr/\nbio.tools entry:\
+  \ MEMHDX\n\nedam_topic list:\n- http://edamontology.org/topic_3520\n"
 class: CommandLineTool
 inputs:
   INPUT1:

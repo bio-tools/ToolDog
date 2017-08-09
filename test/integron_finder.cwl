@@ -5,8 +5,9 @@ id: integron_finder
 label: A tool to detect Integron in DNA sequences.
 baseCommand: COMMAND
 doc: "A tool to detect Integron in DNA sequences\n\nExternal links:\nTool homepage:\
-  \ https://github.com/gem-pasteur/Integron_Finder\nbio.tools_ entry: integron_finder\n\
-  \n"
+  \ https://github.com/gem-pasteur/Integron_Finder\nbio.tools entry: integron_finder\n\
+  \nedam_topic list:\n- http://edamontology.org/topic_0085\n- http://edamontology.org/topic_0798\n\
+  - http://edamontology.org/topic_3047\n- http://edamontology.org/topic_0091\n- http://edamontology.org/topic_0080\n"
 class: CommandLineTool
 inputs:
   INPUT1:

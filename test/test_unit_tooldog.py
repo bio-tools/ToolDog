@@ -503,8 +503,6 @@ class TestCwlToolGen(unittest.TestCase):
         self.assertEqual(tool.id, "an_id")
         self.assertEqual(tool.label, "a_description.")
         self.assertEqual(tool.baseCommand, "COMMAND")
-        self.assertEqual(tool.doc, self.biotool.description + \
-                         "\n\nTool Homepage: " + self.biotool.homepage)
         self.assertListEqual(tool.inputs, [])
         self.assertListEqual(tool.outputs, [])
 
