@@ -4,6 +4,15 @@ cwlVersion: v1.0
 id: MacSyFinder
 label: MacSyFinder is a program to model and detect macromolecular systems, genetic
   pathways.
+baseCommand: COMMAND
+doc: "MacSyFinder is a program to model and detect macromolecular systems, genetic\
+  \ pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily\
+  \ conserved properties: they are made of conserved components, and are encoded in\
+  \ compact loci (conserved genetic architecture). The user models these systems with\
+  \ MacSyFinder to reflect these conserved features, and to allow their efficient\
+  \ detection.\n\nExternal links:\nTool homepage: https://github.com/gem-pasteur/macsyfinder\n\
+  bio.tools entry: MacSyFinder\n\nedam_topic list:\n- http://edamontology.org/topic_0085\n"
+class: CommandLineTool
 inputs:
   INPUT1:
     label: Protein sequence record
@@ -48,11 +57,16 @@ outputs:
     type: File
     outputBinding:
       glob: OUTPUT4.ext
-baseCommand: COMMAND
-doc: "MacSyFinder is a program to model and detect macromolecular systems, genetic\
-  \ pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily\
-  \ conserved properties: they are made of conserved components, and are encoded in\
-  \ compact loci (conserved genetic architecture). The user models these systems with\
-  \ MacSyFinder to reflect these conserved features, and to allow their efficient\
-  \ detection.\n\nTool Homepage: https://github.com/gem-pasteur/macsyfinder"
-class: CommandLineTool
+s:name: MacSyFinder
+s:about: 'MacSyFinder is a program to model and detect macromolecular systems, genetic
+  pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily
+  conserved properties: they are made of conserved components, and are encoded in
+  compact loci (conserved genetic architecture). The user models these systems with
+  MacSyFinder to reflect these conserved features, and to allow their efficient detection.'
+s:url: https://github.com/gem-pasteur/macsyfinder
+s:programmingLanguage:
+- Python
+s:publication:
+- id: http://dx.doi.org/doi:10.1371/journal.pone.0110726
+$namespace:
+  s: http://schema.org/
