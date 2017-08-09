@@ -18,17 +18,17 @@ import shutil
 # External libraries
 import requests
 
+from tooldog import __version__, Biotool, TMP_DIR
+from tooldog.annotate.galaxy import GalaxyToolGen
+from tooldog.annotate.cwl import CwlToolGen
+from tooldog.analyse.tool_analyzer import ToolAnalyzer
+
+
 # Constant(s)  ------------------------------
 
 LOG_FILE = os.path.dirname(__file__) + '/tooldog.log'
 global LOGGER
 LOGGER = logging.getLogger(__name__)  # for tests
-
-# Class and Objects
-from tooldog import __version__, Biotool, TMP_DIR
-from tooldog.annotate.galaxy import GalaxyToolGen
-from tooldog.annotate.cwl import CwlToolGen
-from tooldog.analyse.tool_analyzer import ToolAnalyzer
 
 #  Function(s)  ------------------------------
 
@@ -337,7 +337,7 @@ def annotate(biotool, args, existing_desc=None):
 
 
 def analyse(biotool, args):
-    """ 
+    """
     Run analysis of the source code from bio.tools or given locally.
 
     :param biotool: Biotool object.
@@ -356,6 +356,7 @@ def analyse(biotool, args):
     output = ta.run_analysis()  # Here it depends on how the method works
     # Return path to generated file / descriptor
     return output
+
 
 def run():
     """
