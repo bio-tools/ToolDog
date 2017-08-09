@@ -4,6 +4,14 @@ cwlVersion: v1.0
 id: sequana_coverage
 label: Show coverage and interval of confidence to identify under and over represented
   genomic regions.
+baseCommand: COMMAND
+doc: "Show coverage and interval of confidence to identify under and over represented\
+  \ genomic regions. The tool also creates an HTML report with various images showing\
+  \ the coverage and GC versus coverage plots. It also provides a set of CSV files\
+  \ with low or high coverage regions (as compared to the average coverage).\n\nExternal\
+  \ links:\nTool homepage: http://sequana.readthedocs.io\nbio.tools entry: sequana_coverage\n\
+  \nedam_topic list:\n- http://edamontology.org/topic_3070\n- http://edamontology.org/topic_3316\n"
+class: CommandLineTool
 inputs:
   INPUT1:
     label: Position-specific scoring matrix
@@ -19,10 +27,14 @@ outputs:
     type: File
     outputBinding:
       glob: OUTPUT1.ext
-baseCommand: COMMAND
-doc: "Show coverage and interval of confidence to identify under and over represented\
-  \ genomic regions. The tool also creates an HTML report with various images showing\
-  \ the coverage and GC versus coverage plots. It also provides a set of CSV files\
-  \ with low or high coverage regions (as compared to the average coverage).\n\nTool\
-  \ Homepage: http://sequana.readthedocs.io"
-class: CommandLineTool
+s:name: sequana_coverage
+s:about: Show coverage and interval of confidence to identify under and over represented
+  genomic regions. The tool also creates an HTML report with various images showing
+  the coverage and GC versus coverage plots. It also provides a set of CSV files with
+  low or high coverage regions (as compared to the average coverage).
+s:url: http://sequana.readthedocs.io
+s:programmingLanguage:
+- Javascript
+- Python
+$namespace:
+  s: http://schema.org/
