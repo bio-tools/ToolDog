@@ -11,9 +11,10 @@ from .utils import *
 
 LOGGER = logging.getLogger(__name__)
 
+
 class CodeCollector(object):
     """
-    Class to download source code from a https://bio.tools entry 
+    Class to download source code from a https://bio.tools entry
     """
 
     ZIP_NAME = "tool.zip"
@@ -80,7 +81,7 @@ class CodeCollector(object):
         """
         links = self.biotool.informations.links
         for link in links:
-            link_type = link.type.lower().translate(str.maketrans(' ','_'))
+            link_type = link.type.lower().translate(str.maketrans(' ', '_'))
             try:
                 source_code = getattr(self, '_get_from_{}'.format(link_type))(link.url)
             except AttributeError:

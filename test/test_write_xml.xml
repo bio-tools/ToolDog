@@ -7,7 +7,19 @@
   </stdio>
   <version_command>COMMAND --version</version_command>
   <command><![CDATA[COMMAND]]></command>
-  <help><![CDATA[a_description.
+  <help><![CDATA[
 
-Tool Homepage: a_homepage]]></help>
+What it is ?
+============
+
+a_description.
+
+External links:
+===============
+
+- Tool homepage_
+- bio.tools_ entry
+
+.. _homepage: a_homepage
+.. _bio.tools: https://bio.tools/tool/an_id]]></help>
 </tool>

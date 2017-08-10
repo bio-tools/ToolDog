@@ -1,11 +1,18 @@
-#!/usr/bin/env python3
+#! /usr/bin/env python3
 
-'''
+"""
 Model used to process information contained in JSON from https://bio.tools description.
 
 The content of a description on https://bio.tools is contained in a JSON file and this
 model aims to store the different information.
-'''
+"""
+
+import requests
+import logging
+from lxml import etree
+from ruamel.yaml.scalarstring import PreservedScalarString
+
+LOGGER = logging.getLogger(__name__)
 
 #  Class(es)  ------------------------------
 
@@ -28,14 +35,14 @@ class Biotool(object):
         :param homepage: URL to homepage.
         :type homepage: STRING
 
-        :class:`tooldog.model.Biotool` object is also initialized with two empty
+        :class:`tooldog.biotool_model.Biotool` object is also initialized with two empty
         list of objects:
 
-        * functions: list of :class:`tooldog.model.Function`
-        * topics: list of :class:`tooldog.model.Topic`
+        * functions: list of :class:`tooldog.biotool_model.Function`
+        * topics: list of :class:`tooldog.biotool_model.Topic`
 
-        More information (:class:`tooldog.model.Informations` object) can be specified
-        using :meth:`tooldog.model.Biotool.set_informations`.
+        More information (:class:`tooldog.biotool_model.Informations` object) can be specified
+        using :meth:`tooldog.biotool_model.Biotool.set_informations`.
         '''
         self.name = name
         self.tool_id = tool_id
@@ -44,12 +51,48 @@ class Biotool(object):
         self.homepage = homepage
         self.functions = []  # List of Function objects
         self.topics = []    # List of Topic objects
-        self.informations = None  # Informations object
+        self.informations = Informations()  # Informations object
+        if self.homepage.startswith('https://github.com'):
+            link = Link({'url': self.homepage, 'type': 'Repository', 'comment': ''})
+            self.informations.links.append(link)
+
+    def generate_galaxy_help(self):
+        """
+        Generate a help message from the different informations found on the tool.
+
+        :return: a help message for Galaxy XML.
+        :rtype: STRING
+        """
+        help_message = "\n\nWhat it is ?\n" + "============\n\n"
+        help_message += self.description + "\n\n"
+        help_message += "External links:\n" + "===============\n\n"
+        help_message += "- Tool homepage_\n"
+        help_message += "- bio.tools_ entry\n\n"
+        help_message += ".. _homepage: " + self.homepage + "\n"
+        help_message += ".. _bio.tools: https://bio.tools/tool/" + self.tool_id
+        return help_message
+
+    def generate_cwl_doc(self):
+        """
+        Generate a doc from the different informations found on the tool.
+
+        :return: a doc for CWL tool description.
+        :rtype: STRING
+        """
+        doc_message = self.description + "\n\n"
+        doc_message += "External links:\n"
+        doc_message += "Tool homepage: " + self.homepage + "\n"
+        doc_message += "bio.tools entry: " + self.tool_id + "\n\n"
+        # Add EDAM topics
+        doc_message += "edam_topic list:\n"
+        for topic in self.topics:
+            doc_message += "- " + topic.uri + "\n"
+        return doc_message
 
     def set_informations(self, tool_credits, contacts, publications, docs,
                          language, links, download):
         '''
-        Add an :class:`tooldog.model.Informations` object to the Biotool.
+        Add an :class:`tooldog.biotool_model.Informations` object to the Biotool.
 
         :param tool_credits: list of different tool_credits.
         :type tool_credits: LIST of DICT
@@ -60,7 +103,6 @@ class Biotool(object):
         :param doc: list of different documentations.
         :type doc: LIST of DICT
         '''
-        self.informations = Informations()
         for cred in tool_credits:
             self.informations.tool_credits.append(Credit(cred))
         for cont in contacts:
@@ -77,7 +119,7 @@ class Biotool(object):
 
     def add_functions(self, functions):
         '''
-        Add :class:`tooldog.model.Function` objects to the list of functions of the
+        Add :class:`tooldog.biotool_model.Function` objects to the list of functions of the
         Biotool object.
 
         :param functions: list of functions description from https://bio.tools.
@@ -93,7 +135,7 @@ class Biotool(object):
 
     def add_topics(self, topics):
         '''
-        Add :class:`tooldog.model.Topic` objects to the list of topics of the
+        Add :class:`tooldog.biotool_model.Topic` objects to the list of topics of the
         Biotool object.
 
         :param topics: list of topics description from https://bio.tools.
@@ -110,15 +152,15 @@ class Informations(object):
 
     def __init__(self):
         '''
-        :class:`tooldog.model.Informations` object is initialized with four empty
+        :class:`tooldog.biotool_model.Informations` object is initialized with four empty
         list of objects:
 
-        * publications: list of :class:`tooldog.model.Publication`
-        * documentations: list of :class:`tooldog.model.Documentation`
-        * contacts: list of :class:`tooldog.model.Contact`
-        * tool_credits: list of :class:`tooldog.model.Credit`
+        * publications: list of :class:`tooldog.biotool_model.Publication`
+        * documentations: list of :class:`tooldog.biotool_model.Documentation`
+        * contacts: list of :class:`tooldog.biotool_model.Contact`
+        * tool_credits: list of :class:`tooldog.biotool_model.Credit`
         * language: list of coding language
-        * link: list of :class:`tooldog.model.Link`
+        * link: list of :class:`tooldog.biotool_model.Link`
         '''
         self.publications = []
         self.documentations = []
@@ -177,6 +219,25 @@ class Publication(object):
         self.pmid = publication['pmid']  # [STRING]
         self.pmcid = publication['pmcid']  # [STRING]
         self.type = publication['type']  # [STRING]
+        if self.doi is None:
+            self._fetch_doi()
+
+    def _fetch_doi(self):
+        """
+        fetch doi using pmid or pmcid using:
+        https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0
+        """
+        if self.pmid is not None:
+            id_query = self.pmid
+        elif self.pmcid is not None:
+            id_query = self.pmcid
+        req = "https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?ids=" + id_query
+        xml_req = etree.fromstring(requests.get(req).text)
+        if xml_req.find('record') is not None:
+            try:
+                self.doi = xml_req.find('record').attrib['doi']
+            except:
+                LOGGER.warning("Could not find doi corresponding to " + id_query)
 
 
 class Documentation(object):
@@ -220,11 +281,11 @@ class Function(object):
         '''
         :param edams: EDAM ontology for operation(s) with uri and term.
         :type edams: LIST of DICT
-        :class:`tooldog.model.Function` object is initialized with two empty
+        :class:`tooldog.biotool_model.Function` object is initialized with two empty
         list of objects:
 
-        * inputs: list of :class:`tooldog.model.Input`
-        * outputs: list of :class:`tooldog.model.Output`
+        * inputs: list of :class:`tooldog.biotool_model.Input`
+        * outputs: list of :class:`tooldog.biotool_model.Output`
         '''
         self.operations = []
         for edam in edams:
@@ -234,7 +295,7 @@ class Function(object):
 
     def add_inputs(self, inputs):
         '''
-        Add inputs to the :class:`tooldog.model.Function` object.
+        Add inputs to the :class:`tooldog.biotool_model.Function` object.
 
         :param inputs: inputs part of one function from http://bio.tools.
         :type inputs: LIST of DICT
@@ -245,7 +306,7 @@ class Function(object):
 
     def add_outputs(self, outputs):
         '''
-        Add outputs to the :class:`tooldog.model.Function` object.
+        Add outputs to the :class:`tooldog.biotool_model.Function` object.
 
         :param outputs: inputs part of one function from http://bio.tools.
         :type outputs: LIST of DICT

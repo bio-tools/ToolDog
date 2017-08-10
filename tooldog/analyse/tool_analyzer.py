@@ -7,6 +7,7 @@ from .language_analyzer import PythonAnalyzer
 
 LOGGER = logging.getLogger(__name__)
 
+
 class ToolAnalyzer(object):
     """
     Class to perform appropriate source code analysis of a tool.
@@ -78,7 +79,6 @@ class ToolAnalyzer(object):
         if source is not None:
             self.source_code = source
 
-
     def run_analysis(self):
         """
         Method to run analysis of source code of the entry.
@@ -91,7 +91,7 @@ class ToolAnalyzer(object):
 
             if self.language is None:
                 self.set_language()
-            language = self.language.lower().translate(str.maketrans(' ','_'))
+            language = self.language.lower().translate(str.maketrans(' ', '_'))
             try:
                 output = getattr(self, '_analyse_{}'.format(language))()
             except AttributeError:

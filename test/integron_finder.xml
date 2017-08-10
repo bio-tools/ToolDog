@@ -21,15 +21,36 @@
   <version_command>COMMAND --version</version_command>
   <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
   <inputs>
-    <param argument="INPUT1" format="fasta" label="DNA sequence (raw)" name="INPUT1" type="data"/>
+    <param argument="INPUT1" format="fasta" label="DNA sequence (raw)" name="INPUT1" type="data">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/integron_finder by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </param>
   </inputs>
   <outputs>
-    <data format="genbank" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
-    <data format="tabular" from_work_dir="OUTPUT2.ext" hidden="false" name="OUTPUT2"/>
+    <data format="genbank" from_work_dir="OUTPUT1.genbank" hidden="false" name="OUTPUT1">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/integron_finder by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </data>
+    <data format="tabular" from_work_dir="OUTPUT2.tabular" hidden="false" name="OUTPUT2">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/integron_finder by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </data>
   </outputs>
-  <help><![CDATA[A tool to detect Integron in DNA sequences
+  <help><![CDATA[
 
-Tool Homepage: https://github.com/gem-pasteur/Integron_Finder]]></help>
+What it is ?
+============
+
+A tool to detect Integron in DNA sequences
+
+External links:
+===============
+
+- Tool homepage_
+- bio.tools_ entry
+
+.. _homepage: https://github.com/gem-pasteur/Integron_Finder
+.. _bio.tools: https://bio.tools/tool/integron_finder]]></help>
   <citations>
     <citation type="doi">10.1093/nar/gkw319</citation>
   </citations>

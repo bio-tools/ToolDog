@@ -2,6 +2,8 @@
 .idea
 doc/build
 test/__pycache__
+test/update_xml_endtoend.sh
+test/update_cwl_endtoend.sh
 tooldog/__pycache__
 tooldog/annotate/__pycache__
 tooldog/analyse/__pycache__

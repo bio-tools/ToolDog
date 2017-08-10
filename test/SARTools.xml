@@ -17,17 +17,41 @@
   <version_command>COMMAND --version</version_command>
   <command><![CDATA[COMMAND --INPUT1 $INPUT1]]></command>
   <inputs>
-    <param argument="INPUT1" format="tabular" label="Gene expression data" name="INPUT1" type="data"/>
+    <param argument="INPUT1" format="tabular" label="Gene expression data" name="INPUT1" type="data">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/SARTools by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </param>
   </inputs>
   <outputs>
-    <data format="data" from_work_dir="OUTPUT1.ext" hidden="false" name="OUTPUT1"/>
-    <data format="html" from_work_dir="OUTPUT2.ext" hidden="false" name="OUTPUT2"/>
-    <data format="tabular" from_work_dir="OUTPUT3.ext" hidden="false" name="OUTPUT3"/>
+    <data format="data" from_work_dir="OUTPUT1.data" hidden="false" name="OUTPUT1">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/SARTools by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </data>
+    <data format="html" from_work_dir="OUTPUT2.html" hidden="false" name="OUTPUT2">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/SARTools by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </data>
+    <data format="tabular" from_work_dir="OUTPUT3.tabular" hidden="false" name="OUTPUT3">
+      <!--This parameter has been automatically generated from https://bio.tools/tool/SARTools by ToolDog v0.3.0.-->
+      <!--FIXME: Please map this parameter to its command line argument.-->
+    </data>
   </outputs>
-  <help><![CDATA[SARTools is a R package dedicated to the differential analysis of RNA-seq data. It provides tools to generate descriptive and diagnostic graphs, to run the differential analysis with one of the well known DESeq2 or edgeR packages and to export the results into easily readable tab-delimited files. It also facilitates the generation of a HTML report which displays all the figures produced, explains the statistical methods and gives the results of the differential analysis.
+  <help><![CDATA[
 
-Tool Homepage: https://github.com/PF2-pasteur-fr/SARTools]]></help>
+What it is ?
+============
+
+SARTools is a R package dedicated to the differential analysis of RNA-seq data. It provides tools to generate descriptive and diagnostic graphs, to run the differential analysis with one of the well known DESeq2 or edgeR packages and to export the results into easily readable tab-delimited files. It also facilitates the generation of a HTML report which displays all the figures produced, explains the statistical methods and gives the results of the differential analysis.
+
+External links:
+===============
+
+- Tool homepage_
+- bio.tools_ entry
+
+.. _homepage: https://github.com/PF2-pasteur-fr/SARTools
+.. _bio.tools: https://bio.tools/tool/SARTools]]></help>
   <citations>
-    <citation type="pmid">27280887</citation>
+    <citation type="doi">10.1371/journal.pone.0157022</citation>
   </citations>
 </tool>

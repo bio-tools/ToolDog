@@ -36,10 +36,10 @@ for Galaxy and CWL tool but also annotates existing ones (only support XML so fa
 usage: tooldog [-h] [-g/--galaxy] [-c/--cwl] [-f OUTFILE] biotool_entry
 ```
 
-To import from [bio.tools](https://bio.tools), specify the `biotool_entry` with the following format: `id/version`:
+To import from [bio.tools](https://bio.tools), specify the `biotool_entry` with its `id` or by specifying the version with the following format: `id/version`:
 
 ```bash
-tooldog --galaxy integron_finder/1.5.1 > integron_finder.xml
+tooldog --galaxy integron_finder > integron_finder.xml
 ```
 
 You can also use local file downloaded from [bio.tools](https://bio.tools) API

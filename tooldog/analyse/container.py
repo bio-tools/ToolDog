@@ -15,7 +15,6 @@ import docker
 class Container:
     """
     Class to represent docker container and expose simple API to it.
-
     """
 
     def __init__(self, image, command, environment=None):
@@ -70,9 +69,9 @@ class Container:
     def exec(self, command):
         """
         Execute the command inside container cid
-    
+
         :param str command: String representation of bash command
-        
+
         :return: Returns a generator of output of the result of running bash command in bytes
         :rtype: iter
         """

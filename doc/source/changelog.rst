@@ -11,6 +11,17 @@ Summary of developments of ToolDog software.
 v0.3
 ====
 
+v0.3.1
+------
+
+* DOI are not fetched when only PMID or PMCID is given on bio.tools through this `API`_
+* Addition of ``--inout_biotools`` to also write inputs and outputs from https://bio.tools in the tool description
+* Namespaces have been added to cwlgen library so more information can be written in the CWL tool description
+* Better errors and warnings handling for code analysis part
+* ToolDog is not asking for ``id/version`` anymore but only ``id`` instead
+
+.. _API: https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/
+
 v0.3.0
 ------
 
