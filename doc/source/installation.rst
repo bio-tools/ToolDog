@@ -9,12 +9,13 @@ Installation
 Requirements
 ============
 
-ToolDog is built with Python 3.6.0 and uses the following libraries:
+ToolDog is built with Python 3.6.0 and uses the following Python libraries:
 
-- galaxyxml_ (>=0.4.0)
-- cwlgen_ (>=0.1.0)
+- galaxyxml_ (>=0.4.3)
+- cwlgen_ (>=0.2.2)
 - requests (>=2.13.0)
 - rdflib (>=4.2.2)
+- docker (==0.2.1)
 
 .. _galaxyxml: https://github.com/erasche/galaxyxml
 .. _cwlgen: https://github.com/common-workflow-language/python-cwlgen
@@ -36,7 +37,7 @@ Installation procedure
 Pip
 ---
 
-You can use pip to install ToolDog:
+You can use pip to install ToolDog of the latest stable version:
 
 .. code-block:: bash
 
@@ -44,6 +45,10 @@ You can use pip to install ToolDog:
 
 Manually
 --------
+
+.. Note::
+    This is particularly useful when you wish to install a version under development from
+    any branches of the Github repository.
 
 Clone the repository and install ToolDog with the following commands:
 
