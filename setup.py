@@ -14,7 +14,7 @@ setup(name="tooldog",
         author_email='kehillio@pasteur.fr and hmenager@pasteur.fr',
         license='MIT',
         keywords = ['biotools','galaxy','xml','cwl'],
-        install_requires=['rdflib', 'requests', 'galaxyxml', 'cwlgen==0.2.2', 'docker==2.1.0'],
+        install_requires=['rdflib', 'requests', 'galaxyxml', 'cwlgen>=0.2.3', 'docker==2.1.0'],
         packages=["tooldog", "tooldog.annotate", "tooldog.analyse"],
         package_data={
         'tooldog': ['annotate/data/*'],
