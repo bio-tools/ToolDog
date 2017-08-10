@@ -10,7 +10,7 @@ if sys.argv[-1] == 'publish':
 setup(name="tooldog",
         version=__version__,
         description='Tool description generator (from https//bio.tools to XML and CWL)',
-        author='Kenzo-Hugo Hillion and Herve Menager',
+        author='Kenzo-Hugo Hillion, Ivan Kuzmin and Herve Menager',
         author_email='kehillio@pasteur.fr and hmenager@pasteur.fr',
         license='MIT',
         keywords = ['biotools','galaxy','xml','cwl'],
