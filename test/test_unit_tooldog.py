@@ -506,6 +506,14 @@ class TestCwlToolGen(unittest.TestCase):
         self.assertListEqual(tool.inputs, [])
         self.assertListEqual(tool.outputs, [])
 
+    def test_init_existing(self):
+        gencwl = cwl.CwlToolGen(self.biotool,
+                                existing_tool=os.path.dirname(__file__) +
+                                              '/test_write_cwl.cwl')
+        self.assertEqual(gencwl.tool.id, 'an_id')
+        self.assertEqual(gencwl.tool.label, 'a_description.')
+        self.assertEqual(gencwl.tool.cwlVersion, 'v1.0')
+
     def test_add_input_file(self):
         # Create a Input object (Warning both Type and Format will be a topic)
         input = biotool_model.Input(EDAM_DATA, [EDAM_FORMAT])
