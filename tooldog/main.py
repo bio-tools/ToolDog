@@ -102,7 +102,7 @@ def parse_arguments():
         sys.exit(1)
 
 
-def config_logger(write_logs, log_level, log_file, verbose):
+def config_logger(write_logs, log_level, log_file, verbose, biotool_id):
     """
     Initialize the logger for ToolDog. By default, only WARNING, ERROR and CRITICAL are
     written on STDERR. You can also write logs to a log file.
@@ -119,8 +119,8 @@ def config_logger(write_logs, log_level, log_file, verbose):
     :rtype: DICT
     """
     cfg = {'version': 1,
-           'formatters': {'written': {'format': '%(asctime)s :: %(name)s ' +
-                                                ':: %(levelname)s :: %(message)s'},
+           'formatters': {'written': {'format': '%(asctime)s :: ToolDog on ' + biotool_id +
+                                                ' :: %(name)s :: %(levelname)s :: %(message)s'},
                           'printed': {'format': '%(name)s :: ' +
                                       '%(levelname)s :: %(message)s'}},
            'handlers': {},
@@ -370,7 +370,7 @@ def run():
         # Logger configuration
         import logging.config
         logging.config.dictConfig(config_logger(args.LOGS, args.LOG_LEVEL,
-                                                args.LOG_FILE, args.VERBOSE))
+                                                args.LOG_FILE, args.VERBOSE, args.biotool_entry))
         # Reset LOGGER with new config
         LOGGER = logging.getLogger(__name__)
 
