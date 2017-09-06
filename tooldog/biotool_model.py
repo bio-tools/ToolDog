@@ -14,6 +14,12 @@ from ruamel.yaml.scalarstring import PreservedScalarString
 
 LOGGER = logging.getLogger(__name__)
 
+#Constant(s)  ------------------------------
+
+EDAM_ROOTS = ['http://edamontology.org/topic_0003',
+              'http://edamontology.org/operation_0004']
+
+
 #  Class(es)  ------------------------------
 
 
@@ -142,7 +148,11 @@ class Biotool(object):
         :type topics: LIST of DICT
         '''
         for topic in topics:
-            self.topics.append(Topic(topic))
+            if topic['uri'] in EDAM_ROOTS:
+                LOGGER.info(topic['uri'] +
+                            " as a topic is not informative, information discarded.")
+            else:
+                self.topics.append(Topic(topic))
 
 
 class Informations(object):
@@ -289,7 +299,11 @@ class Function(object):
         '''
         self.operations = []
         for edam in edams:
-            self.operations.append(Operation(edam))
+            if edam['uri'] in EDAM_ROOTS:
+                LOGGER.info(edam['uri'] +
+                            " as an operation is not informative, information discarded.")
+            else:
+                self.operations.append(Operation(edam))
         self.inputs = []
         self.outputs = []
 
