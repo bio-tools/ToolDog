@@ -14,4 +14,4 @@ deploy:
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: bio-tools/tooldog
+    repo: bio-tools/ToolDog
