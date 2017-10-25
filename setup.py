@@ -3,10 +3,6 @@ import sys, os
 
 exec(open('tooldog/version.py').read())
 
-if sys.argv[-1] == 'publish':
-    os.system("python setup.py sdist bdist_wheel upload; git push")
-    sys.exit()
-
 setup(name="tooldog",
         version=__version__,
         description='Tool description generator (from https//bio.tools to XML and CWL)',
