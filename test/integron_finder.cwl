@@ -4,19 +4,17 @@ $namespace: {s: http://schema.org/}
 baseCommand: COMMAND
 class: CommandLineTool
 cwlVersion: v1.0
-doc: |
+doc: |+
   A tool to detect Integron in DNA sequences
 
   External links:
   Tool homepage: https://github.com/gem-pasteur/Integron_Finder
   bio.tools entry: integron_finder
 
-  edam_topic list:
-  - http://edamontology.org/topic_0085
-  - http://edamontology.org/topic_0798
-  - http://edamontology.org/topic_3047
-  - http://edamontology.org/topic_0091
-  - http://edamontology.org/topic_0080
+edam:
+  operations: []
+  topics: [http://edamontology.org/topic_0085, http://edamontology.org/topic_0798,
+    http://edamontology.org/topic_3047, http://edamontology.org/topic_0091, http://edamontology.org/topic_0080]
 id: integron_finder
 inputs:
   INPUT1:

@@ -142,11 +142,6 @@ class CwlToolGen(object):
         elif publication.pmcid is not None:
             LOGGER.warn('pmcid is not supported by publication, publication skipped')
 
-    '''
-    Commented for the moment since we did not figure out the best way to integrate
-    EDAM operations and topics within CWL tools. It will be added in the Documentation
-    for the moment...
-
     def add_edam_topic(self, topic):
         """
         Add the EDAM topic to the tool (CWL: s:topic).
@@ -155,10 +150,9 @@ class CwlToolGen(object):
         :type topic: :class:`tooldog.biotool_model.Topic`
         """
         LOGGER.debug("Adding EDAM topic to CwlToolGen object...")
-        LOGGER.warning("Current way of writing EDAM topic in CWL is not correct.")
-        if not hasattr(self.tool.metadata, 'edam_topic'):
-            self.tool.metadata.edam_topic = []
-        self.tool.metadata.edam_topic.append({'url': topic.uri})
+        if self.tool.edam is None:
+            self.tool.edam = cwlgen.Edam()
+        self.tool.edam.topics.append(topic.uri)
 
     def add_edam_operation(self, operation):
         """
@@ -169,10 +163,9 @@ class CwlToolGen(object):
         """
         LOGGER.debug("Adding EDAM operation to CwlToolGen object...")
         LOGGER.warning("Current way of writing EDAM operation in CWL is not correct.")
-        if not hasattr(self.tool.metadata, 'edam_operation'):
-            self.tool.metadata.edam_operation = []
-        self.tool.metadata.edam_operation.append({'url': operation.uri})
-    '''
+        if self.tool.edam is None:
+            self.tool.edam = cwlgen.Edam()
+        self.tool.edam.operations.append(operation.uri)
 
     def write_cwl(self, out_file=None, index=None):
         """

@@ -295,6 +295,8 @@ def write_cwl(biotool, outfile=None, existing_tool=None):
     LOGGER.info("Writing CWL file with cwl.py module...")
     biotool_cwl = CwlToolGen(biotool, existing_tool=existing_tool)
     # Add different Metadata
+    for topic in biotool.topics:
+        biotool_cwl.add_edam_topic(topic)
     for publi in biotool.informations.publications:
         biotool_cwl.add_publication(publi)
     if existing_tool:

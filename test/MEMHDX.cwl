@@ -4,15 +4,16 @@ $namespace: {s: http://schema.org/}
 baseCommand: COMMAND
 class: CommandLineTool
 cwlVersion: v1.0
-doc: |
+doc: |+
   This tool allows users to perform an automated workflow to analyze, validate and visualize large HDX-MS datasets. The input file is the output of DynamX software from Waters. Output files provide a plot of the data, the fitted model for each peptide, a plot of the calculated p -values, and a global visualization of the experiment. User could also obtain an overview of all peptides on the 3D structure.
 
   External links:
   Tool homepage: http://memhdx.c3bi.pasteur.fr/
   bio.tools entry: MEMHDX
 
-  edam_topic list:
-  - http://edamontology.org/topic_3520
+edam:
+  operations: []
+  topics: [http://edamontology.org/topic_3520]
 id: MEMHDX
 inputs:
   INPUT1:

@@ -4,16 +4,16 @@ $namespace: {s: http://schema.org/}
 baseCommand: COMMAND
 class: CommandLineTool
 cwlVersion: v1.0
-doc: |
+doc: |+
   Show coverage and interval of confidence to identify under and over represented genomic regions. The tool also creates an HTML report with various images showing the coverage and GC versus coverage plots. It also provides a set of CSV files with low or high coverage regions (as compared to the average coverage).
 
   External links:
   Tool homepage: http://sequana.readthedocs.io
   bio.tools entry: sequana_coverage
 
-  edam_topic list:
-  - http://edamontology.org/topic_3070
-  - http://edamontology.org/topic_3316
+edam:
+  operations: []
+  topics: [http://edamontology.org/topic_3070, http://edamontology.org/topic_3316]
 id: sequana_coverage
 inputs:
   INPUT1:

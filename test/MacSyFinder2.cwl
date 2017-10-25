@@ -4,15 +4,16 @@ $namespace: {s: http://schema.org/}
 baseCommand: COMMAND
 class: CommandLineTool
 cwlVersion: v1.0
-doc: |
+doc: |+
   MacSyFinder is a program to model and detect macromolecular systems, genetic pathways... in protein datasets. In prokaryotes, these systems have often evolutionarily conserved properties: they are made of conserved components, and are encoded in compact loci (conserved genetic architecture). The user models these systems with MacSyFinder to reflect these conserved features, and to allow their efficient detection.
 
   External links:
   Tool homepage: https://github.com/gem-pasteur/macsyfinder
   bio.tools entry: MacSyFinder
 
-  edam_topic list:
-  - http://edamontology.org/topic_0085
+edam:
+  operations: []
+  topics: [http://edamontology.org/topic_0085]
 id: MacSyFinder
 inputs:
   INPUT1:

@@ -83,10 +83,6 @@ class Biotool(object):
         doc_message += "External links:\n"
         doc_message += "Tool homepage: " + self.homepage + "\n"
         doc_message += "bio.tools entry: " + self.tool_id + "\n\n"
-        # Add EDAM topics
-        doc_message += "edam_topic list:\n"
-        for topic in self.topics:
-            doc_message += "- " + topic.uri + "\n"
         return doc_message
 
     def set_informations(self, tool_credits, contacts, publications, docs,
