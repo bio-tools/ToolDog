@@ -34,5 +34,5 @@ s:programmingLanguage:
 - Java
 s:publication:
 - id: http://dx.doi.org/10.1186/1471-2148-10-210
-$namespace:
+$namespaces:
   s: http://schema.org/

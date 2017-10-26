@@ -33,5 +33,5 @@ s:programmingLanguage:
 - Java
 s:publication:
 - id: http://dx.doi.org/10.3389/fgene.2014.00130
-$namespace:
+$namespaces:
   s: http://schema.org/

@@ -1,6 +1,6 @@
 #!/usr/bin/env cwl-runner
 
-$namespace: {s: http://schema.org/}
+$namespaces: {edam: https://edamontology.org/, s: http://schema.org/}
 baseCommand: COMMAND
 class: CommandLineTool
 cwlVersion: v1.0
@@ -11,10 +11,6 @@ doc: |+
   Tool homepage: https://github.com/gem-pasteur/Integron_Finder
   bio.tools entry: integron_finder
 
-edam:
-  operations: []
-  topics: [http://edamontology.org/topic_0085, http://edamontology.org/topic_0798,
-    http://edamontology.org/topic_3047, http://edamontology.org/topic_0091, http://edamontology.org/topic_0080]
 id: integron_finder
 inputs:
   INPUT1:
@@ -35,6 +31,7 @@ outputs:
     outputBinding: {glob: OUTPUT2.ext}
     type: File
 s:about: A tool to detect Integron in DNA sequences
+s:keywords: [edam:topic_0085, edam:topic_0798, edam:topic_3047, edam:topic_0091, edam:topic_0080]
 s:name: Integron Finder
 s:programmingLanguage: [Python]
 s:publication:

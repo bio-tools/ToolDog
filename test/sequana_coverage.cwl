@@ -1,6 +1,6 @@
 #!/usr/bin/env cwl-runner
 
-$namespace: {s: http://schema.org/}
+$namespaces: {edam: https://edamontology.org/, s: http://schema.org/}
 baseCommand: COMMAND
 class: CommandLineTool
 cwlVersion: v1.0
@@ -11,9 +11,6 @@ doc: |+
   Tool homepage: http://sequana.readthedocs.io
   bio.tools entry: sequana_coverage
 
-edam:
-  operations: []
-  topics: [http://edamontology.org/topic_3070, http://edamontology.org/topic_3316]
 id: sequana_coverage
 inputs:
   INPUT1:
@@ -34,6 +31,7 @@ s:about: Show coverage and interval of confidence to identify under and over rep
   genomic regions. The tool also creates an HTML report with various images showing
   the coverage and GC versus coverage plots. It also provides a set of CSV files with
   low or high coverage regions (as compared to the average coverage).
+s:keywords: [edam:topic_3070, edam:topic_3316]
 s:name: sequana_coverage
 s:programmingLanguage: [Javascript, Python]
 s:url: http://sequana.readthedocs.io

@@ -44,5 +44,5 @@ s:programmingLanguage:
 - R
 s:publication:
 - id: http://dx.doi.org/10.1073/pnas.1523899113
-$namespace:
+$namespaces:
   s: http://schema.org/

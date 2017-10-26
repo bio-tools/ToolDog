@@ -50,5 +50,5 @@ s:programmingLanguage:
 - R
 s:publication:
 - id: http://dx.doi.org/10.1371/journal.pone.0157022
-$namespace:
+$namespaces:
   s: http://schema.org/

@@ -1,6 +1,6 @@
 #!/usr/bin/env cwl-runner
 
-$namespace: {s: http://schema.org/}
+$namespaces: {s: http://schema.org/}
 baseCommand: COMMAND
 class: CommandLineTool
 cwlVersion: v1.0

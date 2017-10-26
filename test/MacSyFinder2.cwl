@@ -1,6 +1,6 @@
 #!/usr/bin/env cwl-runner
 
-$namespace: {s: http://schema.org/}
+$namespaces: {edam: https://edamontology.org/, s: http://schema.org/}
 baseCommand: COMMAND
 class: CommandLineTool
 cwlVersion: v1.0
@@ -11,9 +11,6 @@ doc: |+
   Tool homepage: https://github.com/gem-pasteur/macsyfinder
   bio.tools entry: MacSyFinder
 
-edam:
-  operations: []
-  topics: [http://edamontology.org/topic_0085]
 id: MacSyFinder
 inputs:
   INPUT1:
@@ -28,6 +25,7 @@ s:about: 'MacSyFinder is a program to model and detect macromolecular systems, g
   conserved properties: they are made of conserved components, and are encoded in
   compact loci (conserved genetic architecture). The user models these systems with
   MacSyFinder to reflect these conserved features, and to allow their efficient detection.'
+s:keywords: [edam:topic_0085]
 s:name: MacSyFinder
 s:programmingLanguage: [Python]
 s:publication:
