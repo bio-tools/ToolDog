@@ -182,7 +182,7 @@ class CwlToolGen(object):
             if index is not None:
                 print('########## CWL number ' + str(index) + ' ##########')
             LOGGER.info("Writing CWL file to STDOUT...")
-            print(self.tool.export())
+            self.tool.export()
         else:
             # Format name for output file(s)
             if index is not None:
