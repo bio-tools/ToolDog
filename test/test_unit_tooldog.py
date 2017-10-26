@@ -433,11 +433,11 @@ class TestGalaxyInfo(unittest.TestCase):
         self.assertEqual(self.gi.galaxy_url, 'https://usegalaxy.org')
         self.assertEqual(self.gi_url.galaxy_url, 'http://supergalaxy.com')
         # Tests one EDAM format
-        self.assertEqual(self.gi.edam_formats['format_1930'][0], 'fastqcssanger.gz')
-        self.assertEqual(self.gi_url.edam_formats['format_1930'][0], 'fastqcssanger.gz')
+        self.assertEqual(self.gi.edam_formats['format_3579'][0], 'jpg')
+        self.assertEqual(self.gi_url.edam_formats['format_3579'][0], 'jpg')
         # Tests one EDAM data
-        self.assertEqual(self.gi.edam_data['data_2044'][1], 'fastqcssanger.gz')
-        self.assertEqual(self.gi_url.edam_data['data_2044'][1], 'fastqcssanger.gz')
+        self.assertEqual(self.gi.edam_data['data_0848'][0], 'twobit')
+        self.assertEqual(self.gi_url.edam_data['data_0848'][0], 'twobit')
         # Tests class names
         self.assertEqual(self.gi.class_names['fasta'], 'galaxy.datatypes.sequence.Fasta')
         self.assertEqual(self.gi_url.class_names['fasta'], 'galaxy.datatypes.sequence.Fasta')
