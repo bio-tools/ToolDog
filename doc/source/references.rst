@@ -9,8 +9,10 @@ References
 Articles
 ========
 
+- Hillion KH, Kuzmin I, Khodak A et al. Using bio.tools to generate and annotate workbench tool descriptions [version 1; referees: 2 approved]. F1000Research 2017, 6(ELIXIR):2074 doi: `10.12688/f1000research.12974.1`_
 - Hervé Ménager, Matúš Kalaš, Kristoffer Rapacki and Jon Ison. Using registries to integrate bioinformatics tools and services into workbench environments. International Journal on Software Tools for Technology Transfer (2016) doi: `10.1007/s10009-015-0392-z`_
 
+.. _10.12688/f1000research.12974.1: https://f1000research.com/articles/6-2074/v1
 .. _10.1007/s10009-015-0392-z: http://link.springer.com/article/10.1007/s10009-015-0392-z
 
 Posters and presentations
