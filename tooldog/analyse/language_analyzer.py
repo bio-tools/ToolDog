@@ -2,6 +2,7 @@
 
 import logging
 import os
+import codecs
 from .container import Container
 from .utils import *
 from tooldog import TMP_DIR
@@ -66,7 +67,7 @@ class PythonAnalyzer(LanguageAnalyzer):
             return None
 
     def _analyse(self, version):
-        python_path = "/usr/local/lib/python3.5/dist-packages/" if version == 3 else \
+        python_path = "/usr/local/lib/python3.6/dist-packages/" if version == 3 else \
             "/usr/local/lib/python2.7/dist-packages/"
 
         c = Container("tooldog/analyser",
@@ -89,8 +90,10 @@ class PythonAnalyzer(LanguageAnalyzer):
                     cd(workdir, pip(version, "install git+https://github.com/erasche/argparse2tool")))
 
             output = execute(c, cd(workdir, gen_cmd(toolname, self.gen_format)))
-
-        if if_installed(toolname, output):
+            # Deals with the bytes output of export from etree (used in galaxyxml)
+            if output.startswith("b'"):
+                output = codecs.decode(output, 'unicode_escape')[2:-1]
+        if if_installed(toolname, output) and not output.lstrip().startswith('Traceback'):
             output_path = os.path.join(TMP_DIR, tool_filename(toolname, self.gen_format))
 
             write_to_file(output_path, output, 'w')

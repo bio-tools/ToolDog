@@ -17,7 +17,7 @@ def execute(ctx, cmd):
     result = ''
     exe = ctx.exec(cmd)
     for line in exe:
-        output = line.decode("utf-8")[:-1]
+        output = line.decode("utf-8").rstrip()
         LOGGER.info(output)
         result += output
     return result
