@@ -86,8 +86,8 @@ class PythonAnalyzer(LanguageAnalyzer):
 
             execute(c,
                     cd(workdir, pip(version, "install .")))
-            execute(c,
-                    cd(workdir, pip(version, "install git+https://github.com/erasche/argparse2tool")))
+            #execute(c,
+            #        cd(workdir, pip(version, "install git+https://github.com/erasche/argparse2tool")))
 
             output = execute(c, cd(workdir, gen_cmd(toolname, self.gen_format)))
             # Deals with the bytes output of export from etree (used in galaxyxml)
