@@ -79,6 +79,7 @@ class CodeCollector(object):
         """
         Retrieve source code of the tool using links provided in https://bio.tools
         """
+        source_code = None
         links = self.biotool.informations.links
         for link in links:
             link_type = link.type.lower().translate(str.maketrans(' ', '_'))
